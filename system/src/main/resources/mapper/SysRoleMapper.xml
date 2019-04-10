@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geyl.dao.SysRoleMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.geyl.bean.model.system.SysRole">
+		<id column="role_id" property="roleId" />
+		<result column="name" property="name" />
+		<result column="value" property="value" />
+		<result column="remark" property="remark" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+		<result column="status" property="status" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		role_id, name, value, remark, status, create_time, update_time
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List"/>
+		from sys_role where role_id =#{roleId}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from sys_role
+	</select>
+
+	<select id="selectListByPage" parameterType="SysRole" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from sys_role
+		<where>
+			<if test="name!=null and name!=''"> and name like CONCAT('%',#{name},'%')</if>
+		</where>
+	</select>
+
+	<insert id="insertSelective" parameterType="SysRole">
+		insert into sys_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				name,
+			</if>
+			<if test="value != null">
+				value,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="value != null">
+				#{value},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+		</trim>
+		<selectKey resultType="Integer" keyProperty="roleId" order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="SysRole">
+		update sys_role
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="value != null">
+				value = #{value},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where role_id = #{roleId}
+	</update>
+</mapper>

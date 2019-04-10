@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geyl.dao.SysOperationLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.geyl.bean.model.system.SysOperationLog">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="operation" property="operation"/>
+        <result column="method" property="method"/>
+        <result column="args" property="args"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+    <insert id="insert">
+     insert into sys_operation_log
+     (user_id, user_name,  operation,method, args, create_time)
+     value (#{userId},#{userName},#{operation},#{method},#{args},#{createTime})
+    </insert>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geyl.dao.SysDepartmentUserMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.geyl.bean.model.system.SysDepartmentUser">
+		<id column="id" property="id" />
+		<result column="department_id" property="departmentId" />
+		<result column="user_id" property="userId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, department_id,user_id
+	</sql>
+	<insert id="insertSelective" parameterType="SysRoleMenu">
+		insert into sys_department_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="departmentId != null">
+				department_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="departmentId != null">
+				#{departmentId},
+			</if>
+			<if test="userId != null">
+				#{userId},
+			</if>
+		</trim>
+	</insert>
+	<delete id="deleteByUserId" parameterType="java.lang.String">
+		delete from sys_department_user where user_id=#{userId}
+	</delete>
+</mapper>

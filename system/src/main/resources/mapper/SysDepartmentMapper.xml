@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geyl.dao.SysDepartmentMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.geyl.bean.model.system.SysDepartment">
+		<id column="department_id" property="departmentId" />
+		<result column="company_id" property="companyId" />
+		<result column="company_name" property="companyName" />
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="parent_code" property="parentCode" />
+		<result column="comment" property="comment" />
+		<result column="status" property="status" />
+		<result column="create_time" property="createTime" />
+		<result column="create_by" property="createBy" />
+		<result column="update_time" property="updateTime" />
+		<result column="update_by" property="updateBy" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		department_id,company_id,company_name, code,name,parent_code, comment,status, create_time, update_time,create_by,update_by
+	</sql>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from sys_department where department_id =#{departmentId}
+	</select>
+
+	<select id="selectListByPage" parameterType="SysDepartment" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from sys_department
+		<where>
+			<if test="name!=null and name!=''"> and name like CONCAT('%',#{name},'%')</if>
+			<if test="companyName!=null and companyName!=''"> and company_name like CONCAT('%',#{companyName},'%')</if>
+		</where>
+	</select>
+
+	<insert id="insertSelective" parameterType="SysDepartment">
+		insert into sys_department
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="code != null">
+				code,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="companyName != null">
+				company_name,
+			</if>
+			<if test="parentCode != null">
+				parent_code,
+			</if>
+			<if test="companyId != null">
+				company_id,
+			</if>
+			<if test="comment != null">
+				comment,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="code != null">
+				#{code},
+			</if>
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="companyName != null">
+				#{companyName},
+			</if>
+			<if test="parentCode != null">
+				#{parentCode},
+			</if>
+			<if test="companyId != null">
+				#{companyId},
+			</if>
+			<if test="comment != null">
+				#{comment},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="createBy != null">
+				#{createBy},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+		</trim>
+		<selectKey resultType="Integer" keyProperty="departmentId" order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="SysDepartment">
+		update sys_department
+		<set>
+			<if test="code != null">
+				code = #{code},
+			</if>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="companyName != null">
+				company_name = #{companyName},
+			</if>
+			<if test="parentCode != null">
+				parent_code = #{parentCode},
+			</if>
+			<if test="companyId != null">
+				company_id = #{companyId},
+			</if>
+			<if test="comment != null">
+				comment = #{comment},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where department_id = #{departmentId}
+	</update>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select  <include refid="Base_Column_List"/>
+		from sys_department
+	</select>
+</mapper>
