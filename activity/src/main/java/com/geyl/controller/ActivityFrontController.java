@@ -4,6 +4,7 @@ import com.geyl.bean.Result;
 import com.geyl.exception.MyException;
 import com.geyl.service.ActivityService;
 import com.geyl.service.WxService;
+import com.geyl.vo.OrderAdd;
 import com.geyl.vo.OrderInfoVO;
 import com.lly835.bestpay.model.PayResponse;
 import com.lly835.bestpay.service.impl.BestPayServiceImpl;
@@ -56,8 +57,8 @@ public class ActivityFrontController {
      * 下单
      */
     @PostMapping("order/add")
-    public Result addOrder(OrderInfoVO orderInfoVO) {
-        return activityService.addOrder(orderInfoVO);
+    public Result addOrder(@RequestBody OrderAdd orderAdd) {
+        return activityService.addOrder(orderAdd);
     }
 
     /**

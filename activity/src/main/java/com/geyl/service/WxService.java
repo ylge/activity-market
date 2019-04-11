@@ -3,6 +3,8 @@ package com.geyl.service;
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.api.config.annotation.NacosValue;
+import com.geyl.bean.model.ClientUser;
+import com.geyl.dao.ClientUserMapper;
 import com.geyl.dao.OrderInfoMapper;
 import com.geyl.exception.MyException;
 import com.geyl.vo.OrderInfoVO;
@@ -40,6 +42,8 @@ public class WxService {
     private OrderInfoMapper orderInfoMapper;
     @Autowired
     private BestPayServiceImpl bestPayService;
+    @Autowired
+    private ClientUserMapper clientUserMapper;
 
     public Object getSession(String code) throws MyException {
         Map<String, Object> response = new HashMap<>();
@@ -59,7 +63,15 @@ public class WxService {
         }
         response.put("openid", openid);
         response.put("sessionKey", sessionKey);
+        createUser(openid);
         return response;
+    }
+
+    public void createUser(String openid){
+        ClientUser clientUser = new ClientUser();
+        clientUser.setStatus(1);
+        clientUser.setOpenid(openid);
+        clientUserMapper.insertSelective(clientUser);
     }
 
     /**

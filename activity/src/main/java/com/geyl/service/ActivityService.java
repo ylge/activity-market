@@ -6,6 +6,7 @@ import com.geyl.bean.PageResult;
 import com.geyl.bean.Result;
 import com.geyl.bean.model.ActivityGoods;
 import com.geyl.bean.model.ClientUser;
+import com.geyl.bean.model.OrderInfo;
 import com.geyl.bean.model.StoreInfo;
 import com.geyl.dao.ActivityGoodsMapper;
 import com.geyl.dao.ClientUserMapper;
@@ -13,7 +14,7 @@ import com.geyl.dao.OrderInfoMapper;
 import com.geyl.util.CamelCaseUtil;
 import com.geyl.util.FileUploadUtil;
 import com.geyl.vo.ActivityGoodsVO;
-import com.geyl.vo.OrderInfoVO;
+import com.geyl.vo.OrderAdd;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -22,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author geyl
@@ -102,16 +105,34 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         return Result.OK();
     }
 
-    public Result addOrder(OrderInfoVO orderInfoVO) {
-        ClientUser clientUser = clientUserMapper.selectByPrimaryKey(orderInfoVO.getUserId());
+    public Result addOrder(OrderAdd orderAdd) {
+        ActivityGoods activityGoods = activityGoodsMapper.selectByPrimaryKey(orderAdd.getGoodsId());
+        ClientUser clientUser = clientUserMapper.selectByPrimaryKey(orderAdd.getUserId());
         if (clientUser == null) {//新建用户
-            clientUser.setUserName(orderInfoVO.getUserName());
-            clientUser.setPhone(orderInfoVO.getPhone());
+            clientUser = new ClientUser();
+            clientUser.setUserName(orderAdd.getUserName());
+            clientUser.setPhone(orderAdd.getPhone());
             clientUser.setStatus(1);
+            clientUser.setOpenid(orderAdd.getOpenid());
             clientUserMapper.insertSelective(clientUser);
-            orderInfoVO.setUserId(clientUser.getUserId());
+            orderAdd.setUserId(clientUser.getUserId().toString());
+        }else{
+            clientUser.setUserName(orderAdd.getUserName());
+            clientUser.setPhone(orderAdd.getPhone());
+            clientUserMapper.updateByPrimaryKeySelective(clientUser);
         }
-        orderInfoMapper.insertSelective(orderInfoVO);
-        return Result.OK(orderInfoVO.getOrderNo());
+        OrderInfo orderInfo = new OrderInfo();
+        BeanUtils.copyProperties(orderAdd,orderInfo);
+        orderInfo.setBuyCount(1);
+        orderInfo.setOrderAmount(activityGoods.getGoodsPrice());
+        orderInfo.setCreateTime(new Date());
+        orderInfo.setStatus(1);
+        orderInfo.setPaymentAmount(activityGoods.getGoodsPrice());
+        orderInfo.setStoreId(activityGoods.getStoreId());
+        String orderNo = UUID.randomUUID().toString();
+        orderInfo.setOrderNo(orderNo);
+        orderInfo.setOrderCode(orderNo);
+        orderInfoMapper.insertSelective(orderInfo);
+        return Result.OK(orderInfo.getOrderNo());
     }
 }

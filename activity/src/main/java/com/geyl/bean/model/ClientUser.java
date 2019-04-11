@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 @Data
 public class ClientUser implements Serializable {
-    private String userId;
+    private Integer userId;
 
     private String openid;
 

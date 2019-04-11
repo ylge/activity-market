@@ -10,6 +10,4 @@ import lombok.Data;
 @Data
 public class OrderInfoVO extends OrderInfo {
     private String goodsName;
-    private String phone;
-    private String userName;
 }
