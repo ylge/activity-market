@@ -165,6 +165,12 @@
             <version>7.2.14</version>
         </dependency>
         <!--七牛云end-->
+
+        <dependency>
+            <groupId>cn.springboot</groupId>
+            <artifactId>best-pay-sdk</artifactId>
+            <version>1.2.0</version>
+        </dependency>
     </dependencies>
 
 </project>
