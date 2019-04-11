@@ -8,17 +8,17 @@ import java.math.BigDecimal;
 import java.util.Date;
 @Data
 public class OrderInfo extends PageRequest implements Serializable {
-    private Integer orderId;
+    private String orderId;
 
     private String orderNo;
 
-    private Integer storeId;
+    private String storeId;
 
-    private Integer pUserId;
+    private String pUserId;
 
-    private Integer userId;
+    private String  userId;
 
-    private Integer goodsId;
+    private String goodsId;
 
     private String payAccount;
 
@@ -26,11 +26,11 @@ public class OrderInfo extends PageRequest implements Serializable {
 
     private BigDecimal paymentAmount;
 
-    private Boolean payType;
+    private Integer payType;
 
     private BigDecimal orderAmount;
 
-    private Boolean status;
+    private Integer status;
 
     private String orderCode;
 

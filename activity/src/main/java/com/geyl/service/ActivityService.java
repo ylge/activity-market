@@ -5,11 +5,15 @@ import com.geyl.base.impl.BaseServiceImpl;
 import com.geyl.bean.PageResult;
 import com.geyl.bean.Result;
 import com.geyl.bean.model.ActivityGoods;
+import com.geyl.bean.model.ClientUser;
 import com.geyl.bean.model.StoreInfo;
 import com.geyl.dao.ActivityGoodsMapper;
+import com.geyl.dao.ClientUserMapper;
+import com.geyl.dao.OrderInfoMapper;
 import com.geyl.util.CamelCaseUtil;
 import com.geyl.util.FileUploadUtil;
 import com.geyl.vo.ActivityGoodsVO;
+import com.geyl.vo.OrderInfoVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -33,6 +37,10 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     private StoreService storeService;
     @Autowired
     private FileUploadUtil fileUploadUtil;
+    @Autowired
+    private OrderInfoMapper orderInfoMapper;
+    @Autowired
+    private ClientUserMapper clientUserMapper;
 
     @Override
     public BaseMapper<ActivityGoods, String> getMappser() {
@@ -51,32 +59,32 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     public Result save(ActivityGoodsVO activityGoods, MultipartFile goodsFile, MultipartFile goodsDetailFile, MultipartFile storeCodeFile) throws IOException {
         //商品图片
-        if(goodsFile.getSize()>0){
+        if (goodsFile.getSize() > 0) {
             String url = fileUploadUtil.upload(goodsFile.getInputStream());
             activityGoods.setGoodsImage(url);
         }
         //商品详情
-        if(goodsDetailFile.getSize()>0){
+        if (goodsDetailFile.getSize() > 0) {
             String url = fileUploadUtil.upload(goodsDetailFile.getInputStream());
             activityGoods.setGoodsDetail(url);
         }
         //商家二维码
-        if(storeCodeFile.getSize()>0){
+        if (storeCodeFile.getSize() > 0) {
             String url = fileUploadUtil.upload(storeCodeFile.getInputStream());
             activityGoods.setStoreCode(url);
         }
-        if(activityGoods.getGoodsId() == null){
+        if (activityGoods.getGoodsId() == null) {
             //新增店铺信息
             StoreInfo storeInfo = new StoreInfo();
-            BeanUtils.copyProperties(activityGoods,storeInfo);
+            BeanUtils.copyProperties(activityGoods, storeInfo);
             storeService.insertSelective(storeInfo);
             activityGoods.setStoreId(storeInfo.getStoreId());
             //新增活动
             this.insertSelective(activityGoods);
-        }else{
+        } else {
             this.updateByPrimaryKeySelective(activityGoods);
             StoreInfo storeInfo = new StoreInfo();
-            BeanUtils.copyProperties(activityGoods,storeInfo);
+            BeanUtils.copyProperties(activityGoods, storeInfo);
             storeService.updateByPrimaryKeySelective(storeInfo);
         }
         return Result.OK();
@@ -92,5 +100,18 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         activityGoods.setStatus(status);
         this.updateByPrimaryKeySelective(activityGoods);
         return Result.OK();
+    }
+
+    public Result addOrder(OrderInfoVO orderInfoVO) {
+        ClientUser clientUser = clientUserMapper.selectByPrimaryKey(orderInfoVO.getUserId());
+        if (clientUser == null) {//新建用户
+            clientUser.setUserName(orderInfoVO.getUserName());
+            clientUser.setPhone(orderInfoVO.getPhone());
+            clientUser.setStatus(1);
+            clientUserMapper.insertSelective(clientUser);
+            orderInfoVO.setUserId(clientUser.getUserId());
+        }
+        orderInfoMapper.insertSelective(orderInfoVO);
+        return Result.OK(orderInfoVO.getOrderNo());
     }
 }

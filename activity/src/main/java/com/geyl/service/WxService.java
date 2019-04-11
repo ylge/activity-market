@@ -36,8 +36,6 @@ public class WxService {
     private String wx_appid;
     @NacosValue(value = "${wx_secret:0c1a156ec46de1943d2bd6b3eb157e79}", autoRefreshed = true)
     private String wx_secret;
-    @NacosValue(value = "${notify_url}", autoRefreshed = true)
-    private String notify_url;
     @Autowired
     private OrderInfoMapper orderInfoMapper;
     @Autowired
@@ -71,15 +69,6 @@ public class WxService {
      * @return o
      */
     public Object getPayInfo(String orderNo, String openid) {
-        WxPayH5Config wxPayH5Config = new WxPayH5Config();
-        wxPayH5Config.setAppId(wx_appid);
-        wxPayH5Config.setAppSecret(wx_secret);
-        wxPayH5Config.setMchId("xxxxxx");
-        wxPayH5Config.setMchKey("xxxxxxx");
-        wxPayH5Config.setNotifyUrl(notify_url);
-        //支付类, 所有方法都在这个类里
-        bestPayService.setWxPayH5Config(wxPayH5Config);
-
         OrderInfoVO orderInfo = orderInfoMapper.getOrderDetailByNo(orderNo);
         PayRequest request = new PayRequest();
         request.setPayTypeEnum(BestPayTypeEnum.WXPAY_H5);
