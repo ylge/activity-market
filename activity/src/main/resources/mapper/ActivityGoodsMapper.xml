@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geyl.dao.ActivityGoodsMapper">
+    <resultMap id="BaseResultMap" type="com.geyl.bean.model.ActivityGoods">
+        <id column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="goods_name" jdbcType="VARCHAR" property="goodsName"/>
+        <result column="goods_image" jdbcType="VARCHAR" property="goodsImage"/>
+        <result column="goods_detail" jdbcType="VARCHAR" property="goodsDetail"/>
+        <result column="original_price" jdbcType="DECIMAL" property="originalPrice"/>
+        <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice"/>
+        <result column="purchase_limit" jdbcType="INTEGER" property="purchaseLimit"/>
+        <result column="inventory" jdbcType="INTEGER" property="inventory"/>
+        <result column="activity_music" jdbcType="VARCHAR" property="activityMusic"/>
+        <result column="background_image" jdbcType="VARCHAR" property="backgroundImage"/>
+        <result column="join_number" jdbcType="INTEGER" property="joinNumber"/>
+        <result column="scan_number" jdbcType="INTEGER" property="scanNumber"/>
+        <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="status" jdbcType="BIT" property="status"/>
+        <result column="store_id" jdbcType="INTEGER" property="storeId"/>
+        <result column="remark_1" jdbcType="VARCHAR" property="remark1"/>
+        <result column="remark_2" jdbcType="VARCHAR" property="remark2"/>
+        <result column="remark_3" jdbcType="VARCHAR" property="remark3"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.geyl.bean.model.ActivityGoods">
+        <result column="activity_rule" jdbcType="LONGVARCHAR" property="activityRule"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    goods_id, goods_name, goods_image, goods_detail, original_price, goods_price, purchase_limit, 
+    inventory, activity_music, background_image, join_number, scan_number, begin_time, 
+    end_time, status, store_id, remark_1, remark_2, remark_3, create_time, create_by, 
+    update_time, update_by
+  </sql>
+    <sql id="Blob_Column_List">
+    activity_rule
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from activity_goods
+        where goods_id = #{goodsId}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from activity_goods
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.geyl.bean.model.ActivityGoods">
+    insert into activity_goods (goods_id, goods_name, goods_image, 
+      goods_detail, original_price, goods_price, 
+      purchase_limit, inventory, activity_music, 
+      background_image, join_number, scan_number, 
+      begin_time, end_time, status, 
+      store_id, remark_1, remark_2, 
+      remark_3, create_time, create_by, 
+      update_time, update_by, activity_rule
+      )
+    values (#{goodsId,jdbcType=INTEGER}, #{goodsName,jdbcType=VARCHAR}, #{goodsImage,jdbcType=VARCHAR}, 
+      #{goodsDetail,jdbcType=VARCHAR}, #{originalPrice,jdbcType=DECIMAL}, #{goodsPrice,jdbcType=DECIMAL}, 
+      #{purchaseLimit,jdbcType=INTEGER}, #{inventory,jdbcType=INTEGER}, #{activityMusic,jdbcType=VARCHAR}, 
+      #{backgroundImage,jdbcType=VARCHAR}, #{joinNumber,jdbcType=INTEGER}, #{scanNumber,jdbcType=INTEGER}, 
+      #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=BIT}, 
+      #{storeId,jdbcType=INTEGER}, #{remark1,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, 
+      #{remark3,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{activityRule,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.geyl.bean.model.ActivityGoods">
+        insert into activity_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">
+                goods_id,
+            </if>
+            <if test="goodsName != null">
+                goods_name,
+            </if>
+            <if test="goodsImage != null">
+                goods_image,
+            </if>
+            <if test="goodsDetail != null">
+                goods_detail,
+            </if>
+            <if test="originalPrice != null">
+                original_price,
+            </if>
+            <if test="goodsPrice != null">
+                goods_price,
+            </if>
+            <if test="purchaseLimit != null">
+                purchase_limit,
+            </if>
+            <if test="inventory != null">
+                inventory,
+            </if>
+            <if test="activityMusic != null">
+                activity_music,
+            </if>
+            <if test="backgroundImage != null">
+                background_image,
+            </if>
+            <if test="joinNumber != null">
+                join_number,
+            </if>
+            <if test="scanNumber != null">
+                scan_number,
+            </if>
+            <if test="beginTime != null">
+                begin_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="storeId != null">
+                store_id,
+            </if>
+            <if test="remark1 != null">
+                remark_1,
+            </if>
+            <if test="remark2 != null">
+                remark_2,
+            </if>
+            <if test="remark3 != null">
+                remark_3,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="activityRule != null">
+                activity_rule,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsName != null">
+                #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsImage != null">
+                #{goodsImage,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsDetail != null">
+                #{goodsDetail,jdbcType=VARCHAR},
+            </if>
+            <if test="originalPrice != null">
+                #{originalPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsPrice != null">
+                #{goodsPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="purchaseLimit != null">
+                #{purchaseLimit,jdbcType=INTEGER},
+            </if>
+            <if test="inventory != null">
+                #{inventory,jdbcType=INTEGER},
+            </if>
+            <if test="activityMusic != null">
+                #{activityMusic,jdbcType=VARCHAR},
+            </if>
+            <if test="backgroundImage != null">
+                #{backgroundImage,jdbcType=VARCHAR},
+            </if>
+            <if test="joinNumber != null">
+                #{joinNumber,jdbcType=INTEGER},
+            </if>
+            <if test="scanNumber != null">
+                #{scanNumber,jdbcType=INTEGER},
+            </if>
+            <if test="beginTime != null">
+                #{beginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=BIT},
+            </if>
+            <if test="storeId != null">
+                #{storeId,jdbcType=INTEGER},
+            </if>
+            <if test="remark1 != null">
+                #{remark1,jdbcType=VARCHAR},
+            </if>
+            <if test="remark2 != null">
+                #{remark2,jdbcType=VARCHAR},
+            </if>
+            <if test="remark3 != null">
+                #{remark3,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="activityRule != null">
+                #{activityRule,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.geyl.bean.model.ActivityGoods">
+        update activity_goods
+        <set>
+            <if test="goodsName != null">
+                goods_name = #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsImage != null">
+                goods_image = #{goodsImage,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsDetail != null">
+                goods_detail = #{goodsDetail,jdbcType=VARCHAR},
+            </if>
+            <if test="originalPrice != null">
+                original_price = #{originalPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsPrice != null">
+                goods_price = #{goodsPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="purchaseLimit != null">
+                purchase_limit = #{purchaseLimit,jdbcType=INTEGER},
+            </if>
+            <if test="inventory != null">
+                inventory = #{inventory,jdbcType=INTEGER},
+            </if>
+            <if test="activityMusic != null">
+                activity_music = #{activityMusic,jdbcType=VARCHAR},
+            </if>
+            <if test="backgroundImage != null">
+                background_image = #{backgroundImage,jdbcType=VARCHAR},
+            </if>
+            <if test="joinNumber != null">
+                join_number = #{joinNumber,jdbcType=INTEGER},
+            </if>
+            <if test="scanNumber != null">
+                scan_number = #{scanNumber,jdbcType=INTEGER},
+            </if>
+            <if test="beginTime != null">
+                begin_time = #{beginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=BIT},
+            </if>
+            <if test="storeId != null">
+                store_id = #{storeId,jdbcType=INTEGER},
+            </if>
+            <if test="remark1 != null">
+                remark_1 = #{remark1,jdbcType=VARCHAR},
+            </if>
+            <if test="remark2 != null">
+                remark_2 = #{remark2,jdbcType=VARCHAR},
+            </if>
+            <if test="remark3 != null">
+                remark_3 = #{remark3,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="activityRule != null">
+                activity_rule = #{activityRule,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where goods_id = #{goodsId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.geyl.bean.model.ActivityGoods">
+    update activity_goods
+    set goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_image = #{goodsImage,jdbcType=VARCHAR},
+      goods_detail = #{goodsDetail,jdbcType=VARCHAR},
+      original_price = #{originalPrice,jdbcType=DECIMAL},
+      goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      purchase_limit = #{purchaseLimit,jdbcType=INTEGER},
+      inventory = #{inventory,jdbcType=INTEGER},
+      activity_music = #{activityMusic,jdbcType=VARCHAR},
+      background_image = #{backgroundImage,jdbcType=VARCHAR},
+      join_number = #{joinNumber,jdbcType=INTEGER},
+      scan_number = #{scanNumber,jdbcType=INTEGER},
+      begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=BIT},
+      store_id = #{storeId,jdbcType=INTEGER},
+      remark_1 = #{remark1,jdbcType=VARCHAR},
+      remark_2 = #{remark2,jdbcType=VARCHAR},
+      remark_3 = #{remark3,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR}
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
+
+    <select id="getAcitvityGoodsList" resultType="com.geyl.vo.ActivityGoodsVO">
+        select
+        ag.goods_id goodsId,
+        ag.goods_image goodsImage,
+        ag.goods_detail goodsDetail,
+        ag.original_price originalPrice,
+        ag.goods_price goodsPrice,
+        ag.goods_name goodsName,
+        ag.purchase_limit purchaseLimit,
+        ag.inventory,
+        ag.activity_music activityMusic,
+        ag.background_image backgroundImage,
+        ag.join_number joinNumber,
+        ag.scan_number scanNumber,
+        date(ag.begin_time) beginTime,
+        date(ag.end_time) endTime,
+        ag.status,
+        ag.store_id storeId,
+        ag.create_time createTime,
+        ag.create_by createBy,
+        ag.update_time updateTime,
+        ag.update_by updateBy,
+        si.store_name storeName,
+        si.store_phone storePhone,
+        si.store_address storeAddress,
+        si.store_code storeCode
+        from activity_goods ag
+        left join store_info si
+        on ag.store_id = si.store_id
+        <where>
+            <if test="goodsName!=null and goodsName!=''">and ag.goods_name like CONCAT('%',#{goodsName},'%')</if>
+            <if test="storeName!=null and storeName!=''">and si.store_name like CONCAT('%',#{storeName},'%')</if>
+            <if test="storePhone!=null and storePhone!=''">and si.store_phone = #{storePhone}</if>
+            <if test="status!=null and status!=''">and ag.status=#{status}</if>
+        </where>
+    </select>
+    <select id="getGoodsDetail" resultType="com.geyl.vo.ActivityGoodsVO">
+        select
+        ag.goods_id goodsId,
+        ag.goods_image goodsImage,
+        ag.goods_detail goodsDetail,
+        ag.original_price originalPrice,
+        ag.goods_price goodsPrice,
+        ag.goods_name goodsName,
+        ag.purchase_limit purchaseLimit,
+        ag.inventory,
+        ag.activity_music activityMusic,
+        ag.background_image backgroundImage,
+        ag.join_number joinNumber,
+        ag.scan_number scanNumber,
+        date(ag.begin_time) beginTime,
+        date(ag.end_time) endTime,
+        ag.status,
+        ag.activity_rule activityRule,
+        ag.store_id storeId,
+        ag.create_time createTime,
+        ag.create_by createBy,
+        ag.update_time updateTime,
+        ag.update_by updateBy,
+        si.store_name storeName,
+        si.store_phone storePhone,
+        si.store_address storeAddress,
+        si.store_code storeCode,
+        si.link_name linkName
+        from activity_goods ag
+        left join store_info si
+        on ag.store_id = si.store_id
+        where ag.goods_id = #{goodsId}
+    </select>
+</mapper>

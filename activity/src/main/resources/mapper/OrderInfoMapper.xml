@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geyl.dao.OrderInfoMapper">
+  <resultMap id="BaseResultMap" type="com.geyl.bean.model.OrderInfo">
+    <id column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="store_id" jdbcType="INTEGER" property="storeId" />
+    <result column="p_user_id" jdbcType="INTEGER" property="pUserId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="pay_account" jdbcType="VARCHAR" property="payAccount" />
+    <result column="buy_count" jdbcType="INTEGER" property="buyCount" />
+    <result column="payment_amount" jdbcType="DECIMAL" property="paymentAmount" />
+    <result column="pay_type" jdbcType="BIT" property="payType" />
+    <result column="order_amount" jdbcType="DECIMAL" property="orderAmount" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark_1" jdbcType="VARCHAR" property="remark1" />
+    <result column="remark_2" jdbcType="VARCHAR" property="remark2" />
+    <result column="remark_3" jdbcType="VARCHAR" property="remark3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    order_id, order_no, store_id, p_user_id, user_id, goods_id, pay_account, buy_count, 
+    payment_amount, pay_type, order_amount, status, order_code, create_time, pay_time, 
+    update_time, remark_1, remark_2, remark_3
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_info
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order_info
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.geyl.bean.model.OrderInfo">
+    insert into order_info (order_id, order_no, store_id, 
+      p_user_id, user_id, goods_id, 
+      pay_account, buy_count, payment_amount, 
+      pay_type, order_amount, status, 
+      order_code, create_time, pay_time, 
+      update_time, remark_1, remark_2, 
+      remark_3)
+    values (#{orderId,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{storeId,jdbcType=INTEGER}, 
+      #{pUserId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, 
+      #{payAccount,jdbcType=VARCHAR}, #{buyCount,jdbcType=INTEGER}, #{paymentAmount,jdbcType=DECIMAL}, 
+      #{payType,jdbcType=BIT}, #{orderAmount,jdbcType=DECIMAL}, #{status,jdbcType=BIT}, 
+      #{orderCode,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{remark1,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, 
+      #{remark3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.geyl.bean.model.OrderInfo">
+    insert into order_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="storeId != null">
+        store_id,
+      </if>
+      <if test="pUserId != null">
+        p_user_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="payAccount != null">
+        pay_account,
+      </if>
+      <if test="buyCount != null">
+        buy_count,
+      </if>
+      <if test="paymentAmount != null">
+        payment_amount,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="orderAmount != null">
+        order_amount,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="orderCode != null">
+        order_code,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="remark1 != null">
+        remark_1,
+      </if>
+      <if test="remark2 != null">
+        remark_2,
+      </if>
+      <if test="remark3 != null">
+        remark_3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null">
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="pUserId != null">
+        #{pUserId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="payAccount != null">
+        #{payAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="buyCount != null">
+        #{buyCount,jdbcType=INTEGER},
+      </if>
+      <if test="paymentAmount != null">
+        #{paymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=BIT},
+      </if>
+      <if test="orderAmount != null">
+        #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark1 != null">
+        #{remark1,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null">
+        #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null">
+        #{remark3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.geyl.bean.model.OrderInfo">
+    update order_info
+    <set>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null">
+        store_id = #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="pUserId != null">
+        p_user_id = #{pUserId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="payAccount != null">
+        pay_account = #{payAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="buyCount != null">
+        buy_count = #{buyCount,jdbcType=INTEGER},
+      </if>
+      <if test="paymentAmount != null">
+        payment_amount = #{paymentAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=BIT},
+      </if>
+      <if test="orderAmount != null">
+        order_amount = #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="orderCode != null">
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark1 != null">
+        remark_1 = #{remark1,jdbcType=VARCHAR},
+      </if>
+      <if test="remark2 != null">
+        remark_2 = #{remark2,jdbcType=VARCHAR},
+      </if>
+      <if test="remark3 != null">
+        remark_3 = #{remark3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.geyl.bean.model.OrderInfo">
+    update order_info
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      store_id = #{storeId,jdbcType=INTEGER},
+      p_user_id = #{pUserId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      pay_account = #{payAccount,jdbcType=VARCHAR},
+      buy_count = #{buyCount,jdbcType=INTEGER},
+      payment_amount = #{paymentAmount,jdbcType=DECIMAL},
+      pay_type = #{payType,jdbcType=BIT},
+      order_amount = #{orderAmount,jdbcType=DECIMAL},
+      status = #{status,jdbcType=BIT},
+      order_code = #{orderCode,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark_1 = #{remark1,jdbcType=VARCHAR},
+      remark_2 = #{remark2,jdbcType=VARCHAR},
+      remark_3 = #{remark3,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+</mapper>

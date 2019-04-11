@@ -37,7 +37,7 @@ public class QinNiuUtil {
             //解析上传成功的结果
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
             log.info(putRet.hash);
-            return putRet.hash;
+            return "http://ppqnam2qx.bkt.clouddn.com/" + putRet.hash;
         } catch (QiniuException ex) {
             Response r = ex.response;
             log.error(r.toString());
