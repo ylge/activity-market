@@ -3,6 +3,8 @@ package com.geyl.vo;
 import com.geyl.bean.model.ActivityGoods;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author geyl
  * @Package com.geyl.vo
@@ -16,5 +18,7 @@ public class ActivityGoodsVO extends ActivityGoods {
     private String storePhone;
     private String linkName;
     private String storeCode;
+    private List<ScanUserVO> scanUserVOS;
+    private List<UserRedVO> userRedVOS;
 
 }

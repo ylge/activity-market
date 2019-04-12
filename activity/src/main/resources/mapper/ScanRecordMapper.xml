@@ -24,6 +24,14 @@
         from scan_record
         where user_id = #{userId}
     </select>
+    <select id="getActivityUser" resultType="com.geyl.vo.ScanUserVO">
+        select
+          cu.nick_name nickName,
+          cu.avatar
+        from scan_record sr
+        left join client_user cu on sr.user_id = cu.user_id
+        where goods_id = #{goodsId}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from scan_record
     where id = #{id,jdbcType=BIGINT}

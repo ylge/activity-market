@@ -2,7 +2,6 @@ package com.geyl.service;
 
 import com.alibaba.nacos.api.config.annotation.NacosValue;
 import com.geyl.bean.wx.WxResponse;
-import com.geyl.dao.ClientUserMapper;
 import com.geyl.dao.OrderInfoMapper;
 import com.geyl.vo.OrderInfoVO;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
@@ -38,8 +37,6 @@ public class WxService {
     private OrderInfoMapper orderInfoMapper;
     @Autowired
     private BestPayServiceImpl bestPayService;
-    @Autowired
-    private ClientUserMapper clientUserMapper;
     @Autowired
     private RestTemplate restTemplate;
 

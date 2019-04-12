@@ -1,35 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.geyl.dao.UserAccountRecordMapper">
-  <resultMap id="BaseResultMap" type="com.geyl.bean.model.UserAccountRecord">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="account" jdbcType="VARCHAR" property="account" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="amount" jdbcType="DECIMAL" property="amount" />
-    <result column="balance" jdbcType="DECIMAL" property="balance" />
-    <result column="trade_no" jdbcType="VARCHAR" property="tradeNo" />
-    <result column="desc" jdbcType="VARCHAR" property="desc" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="remark_1" jdbcType="VARCHAR" property="remark1" />
-    <result column="remark_2" jdbcType="VARCHAR" property="remark2" />
-    <result column="remark_3" jdbcType="VARCHAR" property="remark3" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.geyl.bean.model.UserAccountRecord">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="balance" jdbcType="DECIMAL" property="balance"/>
+        <result column="trade_no" jdbcType="VARCHAR" property="tradeNo"/>
+        <result column="desc" jdbcType="VARCHAR" property="desc"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="remark_1" jdbcType="VARCHAR" property="remark1"/>
+        <result column="remark_2" jdbcType="VARCHAR" property="remark2"/>
+        <result column="remark_3" jdbcType="VARCHAR" property="remark3"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, account, user_id, type, amount, balance, trade_no, desc, create_time, remark_1, 
     remark_2, remark_3
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from user_account_record
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_account_record
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="getActivityUserRed" resultType="com.geyl.vo.UserRedVO">
+        select
+         cu.nick_name nickName,
+         cu.avatar,
+         sum(uar.amount) redAmount
+        from user_account_record uar left join client_user cu
+        on uar.user_id = cu.user_id
+        where uar.remark_1 = #{goodsId} and uar.type = 1
+        group by uar.user_id
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from user_account_record
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.geyl.bean.model.UserAccountRecord">
+    <insert id="insert" parameterType="com.geyl.bean.model.UserAccountRecord">
     insert into user_account_record (id, account, user_id, 
       type, amount, balance, 
       trade_no, desc, create_time, 
@@ -41,125 +51,125 @@
       #{remark1,jdbcType=VARCHAR}, #{remark2,jdbcType=VARCHAR}, #{remark3,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.geyl.bean.model.UserAccountRecord">
-    insert into user_account_record
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="account != null">
-        account,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="type != null">
-        type,
-      </if>
-      <if test="amount != null">
-        amount,
-      </if>
-      <if test="balance != null">
-        balance,
-      </if>
-      <if test="tradeNo != null">
-        trade_no,
-      </if>
-      <if test="desc != null">
-        desc,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="remark1 != null">
-        remark_1,
-      </if>
-      <if test="remark2 != null">
-        remark_2,
-      </if>
-      <if test="remark3 != null">
-        remark_3,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="account != null">
-        #{account,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=INTEGER},
-      </if>
-      <if test="amount != null">
-        #{amount,jdbcType=DECIMAL},
-      </if>
-      <if test="balance != null">
-        #{balance,jdbcType=DECIMAL},
-      </if>
-      <if test="tradeNo != null">
-        #{tradeNo,jdbcType=VARCHAR},
-      </if>
-      <if test="desc != null">
-        #{desc,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remark1 != null">
-        #{remark1,jdbcType=VARCHAR},
-      </if>
-      <if test="remark2 != null">
-        #{remark2,jdbcType=VARCHAR},
-      </if>
-      <if test="remark3 != null">
-        #{remark3,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.geyl.bean.model.UserAccountRecord">
-    update user_account_record
-    <set>
-      <if test="account != null">
-        account = #{account,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="type != null">
-        type = #{type,jdbcType=INTEGER},
-      </if>
-      <if test="amount != null">
-        amount = #{amount,jdbcType=DECIMAL},
-      </if>
-      <if test="balance != null">
-        balance = #{balance,jdbcType=DECIMAL},
-      </if>
-      <if test="tradeNo != null">
-        trade_no = #{tradeNo,jdbcType=VARCHAR},
-      </if>
-      <if test="desc != null">
-        desc = #{desc,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remark1 != null">
-        remark_1 = #{remark1,jdbcType=VARCHAR},
-      </if>
-      <if test="remark2 != null">
-        remark_2 = #{remark2,jdbcType=VARCHAR},
-      </if>
-      <if test="remark3 != null">
-        remark_3 = #{remark3,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.geyl.bean.model.UserAccountRecord">
+    <insert id="insertSelective" parameterType="com.geyl.bean.model.UserAccountRecord">
+        insert into user_account_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="account != null">
+                account,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="balance != null">
+                balance,
+            </if>
+            <if test="tradeNo != null">
+                trade_no,
+            </if>
+            <if test="desc != null">
+                desc,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="remark1 != null">
+                remark_1,
+            </if>
+            <if test="remark2 != null">
+                remark_2,
+            </if>
+            <if test="remark3 != null">
+                remark_3,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="account != null">
+                #{account,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="balance != null">
+                #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="tradeNo != null">
+                #{tradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="desc != null">
+                #{desc,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark1 != null">
+                #{remark1,jdbcType=VARCHAR},
+            </if>
+            <if test="remark2 != null">
+                #{remark2,jdbcType=VARCHAR},
+            </if>
+            <if test="remark3 != null">
+                #{remark3,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.geyl.bean.model.UserAccountRecord">
+        update user_account_record
+        <set>
+            <if test="account != null">
+                account = #{account,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="balance != null">
+                balance = #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="tradeNo != null">
+                trade_no = #{tradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="desc != null">
+                desc = #{desc,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark1 != null">
+                remark_1 = #{remark1,jdbcType=VARCHAR},
+            </if>
+            <if test="remark2 != null">
+                remark_2 = #{remark2,jdbcType=VARCHAR},
+            </if>
+            <if test="remark3 != null">
+                remark_3 = #{remark3,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.geyl.bean.model.UserAccountRecord">
     update user_account_record
     set account = #{account,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=INTEGER},

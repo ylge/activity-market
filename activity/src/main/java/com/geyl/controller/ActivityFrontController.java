@@ -83,6 +83,8 @@ public class ActivityFrontController {
         if (response != null) {
             //TODO 更新订单状态
             activityService.updateOrderStatus(response.getOrderId(), response.getOutTradeNo());
+            //判断是否返现
+            activityService.rewardRed(response.getOrderId());
         }
         log.info("【异步回调】response={}", JsonUtil.toJson(response));
     }

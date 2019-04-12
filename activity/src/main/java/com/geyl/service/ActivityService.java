@@ -6,14 +6,12 @@ import com.geyl.bean.PageResult;
 import com.geyl.bean.Result;
 import com.geyl.bean.model.*;
 import com.geyl.bean.wx.WxResponse;
-import com.geyl.dao.ActivityGoodsMapper;
-import com.geyl.dao.ClientUserMapper;
-import com.geyl.dao.OrderInfoMapper;
-import com.geyl.dao.ScanRecordMapper;
+import com.geyl.dao.*;
 import com.geyl.util.CamelCaseUtil;
 import com.geyl.util.FileUploadUtil;
 import com.geyl.vo.ActivityGoodsVO;
 import com.geyl.vo.OrderAdd;
+import com.geyl.vo.OrderInfoVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -47,6 +46,8 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     private WxService wxService;
     @Autowired
     private ScanRecordMapper scanRecordMapper;
+    @Autowired
+    private UserAccountRecordMapper userAccountRecordMapper;
 
     @Override
     public BaseMapper<ActivityGoods, String> getMappser() {
@@ -106,7 +107,10 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     }
 
     public ActivityGoodsVO getGoodsDetail(String goodsId) {
-        return activityGoodsMapper.getGoodsDetail(goodsId);
+        ActivityGoodsVO activityGoodsVO = activityGoodsMapper.getGoodsDetail(goodsId);
+        activityGoodsVO.setScanUserVOS(scanRecordMapper.getActivityUser(goodsId));
+        activityGoodsVO.setUserRedVOS(userAccountRecordMapper.getActivityUserRed(goodsId));
+        return activityGoodsVO;
     }
 
     /**
@@ -204,5 +208,20 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         orderInfo.setRemark1(outTradeNo);
         orderInfo.setUpdateTime(new Date());
         orderInfoMapper.updateOrderStatusByOrderNo(orderInfo);
+    }
+
+    public void rewardRed(String orderId) {
+        OrderInfoVO orderInfoVO = orderInfoMapper.getOrderDetailByNo(orderId);
+        if(orderInfoVO.getPUserId()!=null){
+            //发红包
+            UserAccountRecord userAccountRecord = new UserAccountRecord();
+            userAccountRecord.setAmount(BigDecimal.ONE);
+            userAccountRecord.setCreateTime(new Date());
+            userAccountRecord.setTradeNo(orderInfoVO.getOrderNo());
+            userAccountRecord.setUserId(orderInfoVO.getPUserId());
+            userAccountRecord.setRemark1(orderInfoVO.getGoodsId());
+            userAccountRecord.setRemark2(orderInfoVO.getUserId());
+            userAccountRecordMapper.insert(userAccountRecord);
+        }
     }
 }
