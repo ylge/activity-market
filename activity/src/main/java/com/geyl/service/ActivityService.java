@@ -169,7 +169,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
      */
     public Result getOpenId(String code, String goodsId) {
         WxResponse wxResponse = wxService.getSession(code);
-        //TODO 判断用户是否新用户
+        //判断用户是否新用户
         ClientUser clientUser = clientUserMapper.getUserByOpenid(wxResponse.getOpenid());
         if (clientUser == null) {
             clientUser = new ClientUser();
