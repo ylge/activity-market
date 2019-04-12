@@ -27,6 +27,12 @@
         from client_user
         where user_id = #{userId}
     </select>
+    <select id="getUserByOpenid" resultType="com.geyl.bean.model.ClientUser">
+        select
+        <include refid="Base_Column_List"/>
+        from client_user
+        where openid = #{openid}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from client_user
     where user_id = #{userId,jdbcType=INTEGER}

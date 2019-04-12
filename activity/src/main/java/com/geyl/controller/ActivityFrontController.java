@@ -49,8 +49,8 @@ public class ActivityFrontController {
      * @throws MyException
      */
     @GetMapping("getOpenid")
-    public Result getOpenId(@RequestParam("code") String code) throws MyException {
-        return Result.OK(wxService.getSession(code));
+    public Result getOpenId(@RequestParam("code") String code, @RequestParam("goodsId") String goodsId) throws MyException {
+        return activityService.getOpenId(code, goodsId);
     }
 
     /**
@@ -80,6 +80,10 @@ public class ActivityFrontController {
     public void notify(@RequestBody String notifyData) {
         log.info("【异步回调】request={}", notifyData);
         PayResponse response = bestPayService.asyncNotify(notifyData);
+        if (response != null) {
+            //TODO 更新订单状态
+            activityService.updateOrderStatus(response.getOrderId(), response.getOutTradeNo());
+        }
         log.info("【异步回调】response={}", JsonUtil.toJson(response));
     }
 }

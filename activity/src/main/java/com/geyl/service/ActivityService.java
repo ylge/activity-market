@@ -4,13 +4,12 @@ import com.geyl.base.BaseMapper;
 import com.geyl.base.impl.BaseServiceImpl;
 import com.geyl.bean.PageResult;
 import com.geyl.bean.Result;
-import com.geyl.bean.model.ActivityGoods;
-import com.geyl.bean.model.ClientUser;
-import com.geyl.bean.model.OrderInfo;
-import com.geyl.bean.model.StoreInfo;
+import com.geyl.bean.model.*;
+import com.geyl.bean.wx.WxResponse;
 import com.geyl.dao.ActivityGoodsMapper;
 import com.geyl.dao.ClientUserMapper;
 import com.geyl.dao.OrderInfoMapper;
+import com.geyl.dao.ScanRecordMapper;
 import com.geyl.util.CamelCaseUtil;
 import com.geyl.util.FileUploadUtil;
 import com.geyl.vo.ActivityGoodsVO;
@@ -44,6 +43,10 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     private OrderInfoMapper orderInfoMapper;
     @Autowired
     private ClientUserMapper clientUserMapper;
+    @Autowired
+    private WxService wxService;
+    @Autowired
+    private ScanRecordMapper scanRecordMapper;
 
     @Override
     public BaseMapper<ActivityGoods, String> getMappser() {
@@ -60,6 +63,15 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         return new PageResult<>(new PageInfo<>(tList));
     }
 
+    /**
+     * 新建或编辑活动
+     * @param activityGoods
+     * @param goodsFile
+     * @param goodsDetailFile
+     * @param storeCodeFile
+     * @return
+     * @throws IOException
+     */
     public Result save(ActivityGoodsVO activityGoods, MultipartFile goodsFile, MultipartFile goodsDetailFile, MultipartFile storeCodeFile) throws IOException {
         //商品图片
         if (goodsFile.getSize() > 0) {
@@ -97,6 +109,12 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         return activityGoodsMapper.getGoodsDetail(goodsId);
     }
 
+    /**
+     * 关闭活动
+     * @param goodsId
+     * @param status
+     * @return
+     */
     public Result closeActivityById(String goodsId, Integer status) {
         ActivityGoods activityGoods = new ActivityGoods();
         activityGoods.setGoodsId(goodsId);
@@ -105,6 +123,11 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         return Result.OK();
     }
 
+    /**
+     * 下单
+     * @param orderAdd
+     * @return
+     */
     public Result addOrder(OrderAdd orderAdd) {
         ActivityGoods activityGoods = activityGoodsMapper.selectByPrimaryKey(orderAdd.getGoodsId());
         ClientUser clientUser = clientUserMapper.selectByPrimaryKey(orderAdd.getUserId());
@@ -116,13 +139,13 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             clientUser.setOpenid(orderAdd.getOpenid());
             clientUserMapper.insertSelective(clientUser);
             orderAdd.setUserId(clientUser.getUserId().toString());
-        }else{
+        } else {
             clientUser.setUserName(orderAdd.getUserName());
             clientUser.setPhone(orderAdd.getPhone());
             clientUserMapper.updateByPrimaryKeySelective(clientUser);
         }
         OrderInfo orderInfo = new OrderInfo();
-        BeanUtils.copyProperties(orderAdd,orderInfo);
+        BeanUtils.copyProperties(orderAdd, orderInfo);
         orderInfo.setBuyCount(1);
         orderInfo.setOrderAmount(activityGoods.getGoodsPrice());
         orderInfo.setCreateTime(new Date());
@@ -134,5 +157,52 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         orderInfo.setOrderCode(orderNo);
         orderInfoMapper.insertSelective(orderInfo);
         return Result.OK(orderInfo.getOrderNo());
+    }
+
+    /**
+     * 获取用户微信信息
+     * 创建系统用户
+     * 创建浏览记录
+     * @param code
+     * @param goodsId
+     * @return
+     */
+    public Result getOpenId(String code, String goodsId) {
+        WxResponse wxResponse = wxService.getSession(code);
+        //TODO 判断用户是否新用户
+        ClientUser clientUser = clientUserMapper.getUserByOpenid(wxResponse.getOpenid());
+        if (clientUser == null) {
+            clientUser = new ClientUser();
+            clientUser.setStatus(1);
+            clientUser.setOpenid(wxResponse.getOpenid());
+            clientUserMapper.insertSelective(clientUser);
+        }
+        ScanRecord scanRecord = scanRecordMapper.getRecordByUserId(clientUser.getUserId());
+        if (scanRecord == null) {
+            //浏览记录
+            scanRecord = new ScanRecord();
+            scanRecord.setGoodsId(Integer.parseInt(goodsId));
+            scanRecord.setUserId(clientUser.getUserId());
+            scanRecord.setCreateTime(new Date());
+            scanRecordMapper.insertSelective(scanRecord);
+        } else {
+            scanRecord.setUpdateTime(new Date());
+            scanRecordMapper.updateByPrimaryKeySelective(scanRecord);
+        }
+        return Result.OK(wxResponse);
+    }
+
+    /**
+     * 更新订单状态
+     * @param orderId
+     * @param outTradeNo
+     */
+    public void updateOrderStatus(String orderId, String outTradeNo) {
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setOrderNo(orderId);
+        orderInfo.setStatus(2);
+        orderInfo.setRemark1(outTradeNo);
+        orderInfo.setUpdateTime(new Date());
+        orderInfoMapper.updateOrderStatusByOrderNo(orderInfo);
     }
 }

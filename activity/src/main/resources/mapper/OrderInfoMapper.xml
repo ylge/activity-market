@@ -257,6 +257,13 @@
       remark_3 = #{remark3,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=INTEGER}
   </update>
+    <update id="updateOrderStatusByOrderNo">
+        update order_info set
+        status = #{status},
+        update_time =#{updateTime},
+        remark_1 = #{remark1}
+        where order_no = #{orderNo}
+    </update>
 
     <select id="getOrderDetailByNo" resultType="com.geyl.vo.OrderInfoVO">
       select * from
