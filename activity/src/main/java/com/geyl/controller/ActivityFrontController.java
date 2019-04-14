@@ -5,7 +5,6 @@ import com.geyl.exception.MyException;
 import com.geyl.service.ActivityService;
 import com.geyl.service.WxService;
 import com.geyl.vo.OrderAdd;
-import com.geyl.vo.OrderInfoVO;
 import com.lly835.bestpay.model.PayResponse;
 import com.lly835.bestpay.service.impl.BestPayServiceImpl;
 import com.lly835.bestpay.utils.JsonUtil;

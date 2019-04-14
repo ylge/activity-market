@@ -213,7 +213,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     public void rewardRed(String orderId) {
         OrderInfoVO orderInfoVO = orderInfoMapper.getOrderDetailByNo(orderId);
         if(orderInfoVO.getPUserId()!=null){
-            //发红包
+            //TODO 发现金红包
             UserAccountRecord userAccountRecord = new UserAccountRecord();
             userAccountRecord.setAmount(BigDecimal.ONE);
             userAccountRecord.setCreateTime(new Date());
