@@ -28,7 +28,7 @@
     </dependencies>
 
     <build>
-        <finalName>activity-web</finalName>
+        <finalName>ROOT</finalName>
         <plugins>
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
