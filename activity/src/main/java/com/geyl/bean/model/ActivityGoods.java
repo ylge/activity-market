@@ -19,6 +19,7 @@ public class ActivityGoods extends PageRequest implements Serializable {
     private BigDecimal originalPrice;
 
     private BigDecimal goodsPrice;
+    private BigDecimal rewardAmount;
 
     private Integer purchaseLimit;
 

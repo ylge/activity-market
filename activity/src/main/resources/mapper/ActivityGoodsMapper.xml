@@ -17,6 +17,7 @@
         <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime"/>
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="status" jdbcType="BIT" property="status"/>
+        <result column="reward_amount" jdbcType="DECIMAL" property="rewardAmount"/>
         <result column="store_id" jdbcType="INTEGER" property="storeId"/>
         <result column="remark_1" jdbcType="VARCHAR" property="remark1"/>
         <result column="remark_2" jdbcType="VARCHAR" property="remark2"/>
@@ -32,7 +33,7 @@
     <sql id="Base_Column_List">
     goods_id, goods_name, goods_image, goods_detail, original_price, goods_price, purchase_limit, 
     inventory, activity_music, background_image, join_number, scan_number, begin_time, 
-    end_time, status, store_id, remark_1, remark_2, remark_3, create_time, create_by, 
+    end_time, status, reward_amount,store_id, remark_1, remark_2, remark_3, create_time, create_by,
     update_time, update_by
   </sql>
     <sql id="Blob_Column_List">
@@ -119,6 +120,9 @@
             <if test="status != null">
                 status,
             </if>
+            <if test="rewardAmount != null">
+                reward_amount,
+            </if>
             <if test="storeId != null">
                 store_id,
             </if>
@@ -192,6 +196,9 @@
             </if>
             <if test="status != null">
                 #{status,jdbcType=BIT},
+            </if>
+            <if test="rewardAmount != null">
+                #{rewardAmount},
             </if>
             <if test="storeId != null">
                 #{storeId,jdbcType=INTEGER},
@@ -267,6 +274,9 @@
             <if test="status != null">
                 status = #{status,jdbcType=BIT},
             </if>
+            <if test="rewardAmount != null">
+                reward_amount = #{rewardAmount},
+            </if>
             <if test="storeId != null">
                 store_id = #{storeId,jdbcType=INTEGER},
             </if>
@@ -334,6 +344,7 @@
         ag.goods_name goodsName,
         ag.purchase_limit purchaseLimit,
         ag.inventory,
+        ag.reward_amount rewardAmount,
         ag.activity_music activityMusic,
         ag.background_image backgroundImage,
         ag.join_number joinNumber,
@@ -349,7 +360,9 @@
         si.store_name storeName,
         si.store_phone storePhone,
         si.store_address storeAddress,
-        si.store_code storeCode
+        si.store_code storeCode,
+        (select sum(payment_amount) from order_info where goods_id = ag.goods_id and status in(2,3) ) storeIncome,
+        (select sum(amount) from user_account_record where remark_1 = ag.goods_id) storeWithdraw
         from activity_goods ag
         left join store_info si
         on ag.store_id = si.store_id
@@ -374,6 +387,7 @@
         ag.background_image backgroundImage,
         ag.join_number joinNumber,
         ag.scan_number scanNumber,
+        ag.reward_amount rewardAmount,
         date(ag.begin_time) beginTime,
         date(ag.end_time) endTime,
         ag.status,

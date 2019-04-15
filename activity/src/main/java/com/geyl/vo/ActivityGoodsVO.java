@@ -18,6 +18,8 @@ public class ActivityGoodsVO extends ActivityGoods {
     private String storePhone;
     private String linkName;
     private String storeCode;
+    private String storeIncome;
+    private String storeWithdraw;
     private List<ScanUserVO> scanUserVOS;
     private List<UserRedVO> userRedVOS;
 

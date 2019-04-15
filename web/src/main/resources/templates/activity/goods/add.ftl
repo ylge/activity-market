@@ -45,13 +45,17 @@
                    placeholder="详细地址" required>
         </div>
         <div class="form-group">
-            <label><span style="color: red">*</span>联系方式</label>
+            <label><span style="color: red">*</span>商家电话</label>
             <input type="text" class="form-control" name="storePhone" placeholder="只能输入数字"
                    onblur="isPoneAvailable(this)" required>
         </div>
         <div class="form-group">
             <label><span style="color: red">*</span>联系人</label>
             <input type="text" class="form-control" name="linkName" placeholder="联系人" required>
+        </div>
+        <div class="form-group">
+            <label><span style="color: red">*</span>商家名称</label>
+            <input type="text" class="form-control" name="storeName" placeholder="店铺名称" required>
         </div>
         <div class="form-group">
             <label>活动时间</label><br>
@@ -64,8 +68,8 @@
             <input type="hidden" name="endTime">
         </div>
         <div class="form-group">
-            <label>活动规则</label>
-            <input type="text" class="form-control" name="activityRule">
+            <label>返现红包金额</label>
+            <input type="text" class="form-control" name="rewardAmount">
         </div>
     </div>
     <div class="modal-footer">

@@ -27,7 +27,7 @@
                     <button type="button" onclick="goodsReload()" class="btn btn-primary">搜索</button>
                         <@shiro.hasPermission name="activity/goods/add">
                         <a class="btn btn-primary" onclick="goodsToListAjax()" target="modal"
-                           href="activity/goods/add">添加</a>
+                           href="activity/goods/add">添加活动</a>
                         </@shiro.hasPermission>
                 </div>
             </div>
@@ -74,8 +74,9 @@
                 {title: "开始时间", field: "beginTime"},
                 {title: "结束时间", field: "endTime"},
                 {title: "参与人数", field: "joinNumber"},
-                // {title: "商家", field: "storeName"},
-                {title: "商家地址", field: "storeAddress"},
+                {title: "收入", field: "storeIncome"},
+                {title: "支出", field: "storeWithdraw"},
+                {title: "商家", field: "storeName"},
                 {title: "商家联系方式", field: "storePhone"},
                 {title: "状态", field: "status", formatter: tableModel.getState},
                 {title: "操作", field: "operate", align: 'center', formatter: operateFormatter}
@@ -99,6 +100,15 @@
             '<i class="fa fa-edit"></i>详情',
             '</a>  ',
             </@shiro.hasPermission>
+            '<a target="modal"  href="activity/report/income/' + row.goodsId + '" >',
+            '<i class="fa fa-edit"></i>收入列表',
+            '</a>  ',
+            '<a target="modal"  href="activity/report/withdraw/' + row.goodsId + '" >',
+            '<i class="fa fa-edit"></i>支出列表',
+            '</a>  ',
+            '<a target="modal"  href="activity/report/withdraw/' + row.goodsId + '" >',
+            '<i class="fa fa-edit"></i>兑换券列表',
+            '</a>  ',
         ];
         if (row.status === 1) {
             <@shiro.hasPermission name="activity/goods/delete">

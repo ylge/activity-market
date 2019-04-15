@@ -9,4 +9,5 @@ import java.util.List;
 public interface UserAccountRecordMapper extends BaseMapper<UserAccountRecord,String> {
     List<UserRedVO> getActivityUserRed(String goodsId);
 
+    int getGetRewardInfoByOrderNo(String orderNo);
 }

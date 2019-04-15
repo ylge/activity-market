@@ -35,6 +35,9 @@
         where uar.remark_1 = #{goodsId} and uar.type = 1
         group by uar.user_id
     </select>
+    <select id="getGetRewardInfoByOrderNo" resultType="java.lang.Integer">
+        select count(*) from user_account_record where trade_no = #{orderNo} and type =1
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from user_account_record
     where id = #{id,jdbcType=BIGINT}

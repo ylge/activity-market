@@ -66,14 +66,16 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     /**
      * 新建或编辑活动
+     *
      * @param activityGoods
      * @param goodsFile
      * @param goodsDetailFile
      * @param storeCodeFile
+     * @param activityMusicFile
      * @return
      * @throws IOException
      */
-    public Result save(ActivityGoodsVO activityGoods, MultipartFile goodsFile, MultipartFile goodsDetailFile, MultipartFile storeCodeFile) throws IOException {
+    public Result save(ActivityGoodsVO activityGoods, MultipartFile goodsFile, MultipartFile goodsDetailFile, MultipartFile storeCodeFile, MultipartFile activityMusicFile) throws IOException {
         //商品图片
         if (goodsFile.getSize() > 0) {
             String url = fileUploadUtil.upload(goodsFile.getInputStream());
@@ -83,6 +85,11 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         if (goodsDetailFile.getSize() > 0) {
             String url = fileUploadUtil.upload(goodsDetailFile.getInputStream());
             activityGoods.setGoodsDetail(url);
+        }
+        //音乐
+        if (activityMusicFile.getSize() > 0) {
+            String url = fileUploadUtil.upload(activityMusicFile.getInputStream());
+            activityGoods.setActivityMusic(url);
         }
         //商家二维码
         if (storeCodeFile.getSize() > 0) {
@@ -115,6 +122,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     /**
      * 关闭活动
+     *
      * @param goodsId
      * @param status
      * @return
@@ -129,6 +137,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     /**
      * 下单
+     *
      * @param orderAdd
      * @return
      */
@@ -167,6 +176,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
      * 获取用户微信信息
      * 创建系统用户
      * 创建浏览记录
+     *
      * @param code
      * @param goodsId
      * @return
@@ -198,6 +208,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     /**
      * 更新订单状态
+     *
      * @param orderId
      * @param outTradeNo
      */
@@ -212,7 +223,11 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     public void rewardRed(String orderId) {
         OrderInfoVO orderInfoVO = orderInfoMapper.getOrderDetailByNo(orderId);
-        if(orderInfoVO.getPUserId()!=null){
+        int i = userAccountRecordMapper.getGetRewardInfoByOrderNo(orderInfoVO.getOrderNo());
+        if(i>0){//以返现
+            return;
+        }
+        if (orderInfoVO.getPUserId() != null) {
             //TODO 发现金红包
             UserAccountRecord userAccountRecord = new UserAccountRecord();
             userAccountRecord.setAmount(BigDecimal.ONE);
