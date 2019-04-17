@@ -24,6 +24,12 @@
                    required>
         </div>
         <div class="form-group">
+            <label><span style="color: red">*</span>活动背景图</label><br>
+            <img src="/adminlte/dist/img/timg.jpg" style="width: 80px;height: 60px"
+                 onclick="imageClick('backgroundImageImg')" class="backgroundImageImg">
+            <input id="backgroundImageImg" name="backgroundImageFile" type="file" style="display: none" required>
+        </div>
+        <div class="form-group">
             <label><span style="color: red">*</span>活动详情图</label><br>
             <img src="/adminlte/dist/img/timg.jpg" style="width: 80px;height: 60px"
                  onclick="imageClick('goodsDetailImg')" class="goodsDetailImg">

@@ -20,7 +20,8 @@ public class ActivityGoodsVO extends ActivityGoods {
     private String storeCode;
     private String storeIncome;
     private String storeWithdraw;
-    private List<ScanUserVO> scanUserVOS;
-    private List<UserRedVO> userRedVOS;
+    private List<ScanUserVO> scan_user;
+    private List<JoinUserVO> join_user;
+    private List<RewardVO> reward_list;
 
 }

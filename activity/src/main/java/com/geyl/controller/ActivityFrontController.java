@@ -41,7 +41,18 @@ public class ActivityFrontController {
     }
 
     /**
-     * 获取授权code
+     * 查询活动后台数据
+     *
+     * @param goodsId
+     * @return
+     */
+    @GetMapping("manage/{userId}/{goodsId}")
+    public Result getActivityData(@PathVariable String userId, @PathVariable String goodsId) throws MyException {
+        return Result.OK(activityService.getActivityData(userId, goodsId));
+    }
+
+    /**
+     * 获取用户信息
      *
      * @param code
      * @return

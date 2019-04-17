@@ -80,9 +80,10 @@ public class ActivityController {
     Result addgoods(ActivityGoodsVO activityGoods,
                     @RequestParam("goodsFile") MultipartFile goodsFile,
                     @RequestParam("goodsDetailFile") MultipartFile goodsDetailFile,
+                    @RequestParam("backgroundImageFile") MultipartFile backgroundImageFile,
                     @RequestParam("activityMusicFile") MultipartFile activityMusicFile,
                     @RequestParam("storeCodeFile") MultipartFile storeCodeFile) throws IOException {
-        return activityService.save(activityGoods,goodsFile,goodsDetailFile,storeCodeFile,activityMusicFile);
+        return activityService.save(activityGoods,goodsFile,goodsDetailFile,storeCodeFile,activityMusicFile,backgroundImageFile);
     }
 
     /**
@@ -98,9 +99,10 @@ public class ActivityController {
     Result updategoods(ActivityGoodsVO activityGoods,
                        @RequestParam("goodsFile") MultipartFile goodsFile,
                        @RequestParam("goodsDetailFile") MultipartFile goodsDetailFile,
+                       @RequestParam("backgroundImageFile") MultipartFile backgroundImageFile,
                        @RequestParam("activityMusicFile") MultipartFile activityMusicFile,
                        @RequestParam("storeCodeFile") MultipartFile storeCodeFile) throws IOException {
-        return activityService.save(activityGoods,goodsFile,goodsDetailFile,storeCodeFile, activityMusicFile);
+        return activityService.save(activityGoods,goodsFile,goodsDetailFile,storeCodeFile, activityMusicFile,backgroundImageFile);
     }
 
     /**

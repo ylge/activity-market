@@ -31,6 +31,7 @@
         from scan_record sr
         left join client_user cu on sr.user_id = cu.user_id
         where goods_id = #{goodsId}
+        limit 20
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from scan_record

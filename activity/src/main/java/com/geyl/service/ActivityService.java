@@ -7,11 +7,10 @@ import com.geyl.bean.Result;
 import com.geyl.bean.model.*;
 import com.geyl.bean.wx.WxResponse;
 import com.geyl.dao.*;
+import com.geyl.exception.MyException;
 import com.geyl.util.CamelCaseUtil;
 import com.geyl.util.FileUploadUtil;
-import com.geyl.vo.ActivityGoodsVO;
-import com.geyl.vo.OrderAdd;
-import com.geyl.vo.OrderInfoVO;
+import com.geyl.vo.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -21,9 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author geyl
@@ -72,10 +69,11 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
      * @param goodsDetailFile
      * @param storeCodeFile
      * @param activityMusicFile
+     * @param backgroundImageFile
      * @return
      * @throws IOException
      */
-    public Result save(ActivityGoodsVO activityGoods, MultipartFile goodsFile, MultipartFile goodsDetailFile, MultipartFile storeCodeFile, MultipartFile activityMusicFile) throws IOException {
+    public Result save(ActivityGoodsVO activityGoods, MultipartFile goodsFile, MultipartFile goodsDetailFile, MultipartFile storeCodeFile, MultipartFile activityMusicFile, MultipartFile backgroundImageFile) throws IOException {
         //商品图片
         if (goodsFile.getSize() > 0) {
             String url = fileUploadUtil.upload(goodsFile.getInputStream());
@@ -90,6 +88,11 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         if (activityMusicFile.getSize() > 0) {
             String url = fileUploadUtil.upload(activityMusicFile.getInputStream());
             activityGoods.setActivityMusic(url);
+        }
+        //背景图
+        if (backgroundImageFile.getSize() > 0) {
+            String url = fileUploadUtil.upload(backgroundImageFile.getInputStream());
+            activityGoods.setBackgroundImage(url);
         }
         //商家二维码
         if (storeCodeFile.getSize() > 0) {
@@ -115,8 +118,13 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     public ActivityGoodsVO getGoodsDetail(String goodsId) {
         ActivityGoodsVO activityGoodsVO = activityGoodsMapper.getGoodsDetail(goodsId);
-        activityGoodsVO.setScanUserVOS(scanRecordMapper.getActivityUser(goodsId));
-        activityGoodsVO.setUserRedVOS(userAccountRecordMapper.getActivityUserRed(goodsId));
+        activityGoodsVO.setScan_user(scanRecordMapper.getActivityUser(goodsId));
+        activityGoodsVO.setJoin_user(orderInfoMapper.getJoinUser(goodsId));
+        List<RewardVO> rewardVOS = userAccountRecordMapper.getActivityUserRed(goodsId);
+        rewardVOS.sort(Comparator.comparing(RewardVO::getRewardAmount).reversed());
+        activityGoodsVO.setReward_list(rewardVOS);
+        activityGoodsVO.setScanNumber(activityGoodsVO.getScan_user().size());
+        activityGoodsVO.setJoinNumber(activityGoodsVO.getJoin_user().size());
         return activityGoodsVO;
     }
 
@@ -165,7 +173,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         orderInfo.setStatus(1);
         orderInfo.setPaymentAmount(activityGoods.getGoodsPrice());
         orderInfo.setStoreId(activityGoods.getStoreId());
-        String orderNo = UUID.randomUUID().toString();
+        String orderNo = "YSG"+UUID.randomUUID().toString().substring(0,8);
         orderInfo.setOrderNo(orderNo);
         orderInfo.setOrderCode(orderNo);
         orderInfoMapper.insertSelective(orderInfo);
@@ -203,7 +211,16 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             scanRecord.setUpdateTime(new Date());
             scanRecordMapper.updateByPrimaryKeySelective(scanRecord);
         }
-        return Result.OK(wxResponse);
+        Map<String, Object> result = new HashMap<>();
+        result.put("openid", wxResponse.getOpenid());
+        result.put("userId", clientUser.getUserId());
+        OrderInfoVO orderInfoVO = new OrderInfoVO();
+        orderInfoVO.setUserId(clientUser.getUserId().toString());
+        orderInfoVO.setGoodsId(goodsId);
+        result.put("isOrder", orderInfoMapper.checkIsOrder(orderInfoVO));
+        result.put("unionid", wxResponse.getUnionid());
+        result.put("accessToken", wxResponse.getAccess_token());
+        return Result.OK(result);
     }
 
     /**
@@ -238,5 +255,19 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             userAccountRecord.setRemark2(orderInfoVO.getUserId());
             userAccountRecordMapper.insert(userAccountRecord);
         }
+    }
+
+    public ActivityManageVO getActivityData(String userId, String goodsId) throws MyException {
+        ClientUser clientUser = clientUserMapper.selectByPrimaryKey(userId);
+        if(clientUser==null || clientUser.getPassword()==null){
+            throw new MyException("用户信息有误");
+        }
+        ActivityManageVO manageVO = orderInfoMapper.getActivityData(goodsId);
+        manageVO.setOrder_list(orderInfoMapper.getOrderList(goodsId));
+        Map<String, Object> param = new HashMap<>();
+        param.put("userId", userId);
+        param.put("goodsId", goodsId);
+        manageVO.setStore_user(orderInfoMapper.getStoreUser(param));
+        return manageVO;
     }
 }

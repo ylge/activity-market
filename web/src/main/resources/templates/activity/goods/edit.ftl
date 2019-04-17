@@ -36,6 +36,12 @@
             <input id="goodsDetailImg" name="goodsDetailFile" type="file" style="display: none" required>
         </div>
         <div class="form-group">
+            <label><span style="color: red">*</span>活动背景图</label><br>
+            <img src="${goods.backgroundImage!'/adminlte/dist/img/timg.jpg'}" style="width: 80px;height: 60px"
+                 onclick="imageClick('backgroundImageImg')" class="backgroundImageImg">
+            <input id="backgroundImageImg" name="backgroundImageFile" type="file" style="display: none" required>
+        </div>
+        <div class="form-group">
             <label>页面音乐</label>
             <input type="file" class="form-control" name="activityMusicFile">
         </div>

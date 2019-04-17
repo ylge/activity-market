@@ -41,7 +41,6 @@ public class WxService {
     private RestTemplate restTemplate;
 
     WxResponse getSession(String code) {
-        Map<String, Object> response = new HashMap<>();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
         StringBuffer info = appendUrl(code);
@@ -49,8 +48,7 @@ public class WxService {
         String strbody = restTemplate.exchange(info.toString().replace("\"", ""), HttpMethod.GET, entity, String.class)
                 .getBody();
         log.info(strbody);
-        WxResponse wxResponse = JsonUtil.toObject(strbody,WxResponse.class);
-        return wxResponse;
+        return JsonUtil.toObject(strbody,WxResponse.class);
     }
 
     private static StringBuffer appendUrl(String code) {

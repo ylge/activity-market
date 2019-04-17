@@ -25,15 +25,16 @@
         from user_account_record
         where id = #{id,jdbcType=BIGINT}
     </select>
-    <select id="getActivityUserRed" resultType="com.geyl.vo.UserRedVO">
+    <select id="getActivityUserRed" resultType="com.geyl.vo.RewardVO">
         select
-         cu.nick_name nickName,
+         cu.user_name userName,
          cu.avatar,
-         sum(uar.amount) redAmount
+         sum(uar.amount) rewardAmount
         from user_account_record uar left join client_user cu
         on uar.user_id = cu.user_id
         where uar.remark_1 = #{goodsId} and uar.type = 1
         group by uar.user_id
+        limit 20;
     </select>
     <select id="getGetRewardInfoByOrderNo" resultType="java.lang.Integer">
         select count(*) from user_account_record where trade_no = #{orderNo} and type =1

@@ -8,8 +8,9 @@ import lombok.Data;
  * @date 2019-4-12 15:44
  */
 @Data
-public class UserRedVO {
-    private String nickName;
+public class RewardVO {
+    private String userName;
     private String avatar;
-    private String redAmount;
+    private String childNum;
+    private String rewardAmount;
 }
