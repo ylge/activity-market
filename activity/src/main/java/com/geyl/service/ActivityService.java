@@ -270,4 +270,20 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         manageVO.setStore_user(orderInfoMapper.getStoreUser(param));
         return manageVO;
     }
+
+    public Result closeOrder(String userId, String orderCode) throws MyException {
+        ClientUser clientUser = clientUserMapper.selectByPrimaryKey(userId);
+        if(clientUser==null || clientUser.getPassword()==null){
+            throw new MyException("用户信息有误");
+        }
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setOrderNo(orderCode);
+        orderInfo.setStatus(3);
+        orderInfo.setUpdateTime(new Date());
+        int i = orderInfoMapper.updateOrderStatusByOrderNo(orderInfo);
+        if(i==0){
+            throw new MyException("该核销码不存在");
+        }
+        return Result.OK();
+    }
 }

@@ -13,7 +13,7 @@ import java.util.Map;
 public interface OrderInfoMapper extends BaseMapper<OrderInfo,String> {
     OrderInfoVO getOrderDetailByNo(String orderNo);
 
-    void updateOrderStatusByOrderNo(OrderInfo orderInfo);
+    int updateOrderStatusByOrderNo(OrderInfo orderInfo);
 
     List<JoinUserVO> getJoinUser(String goodsId);
 

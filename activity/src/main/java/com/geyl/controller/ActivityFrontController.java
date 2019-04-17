@@ -84,6 +84,15 @@ public class ActivityFrontController {
     }
 
     /**
+     * 核销
+     */
+    @PostMapping("order/close")
+    public Result closeOrder(@RequestParam("userId") String userId, @RequestParam("orderCode") String orderCode) throws MyException {
+        return activityService.closeOrder(userId, orderCode);
+    }
+
+
+    /**
      * 异步回调
      */
     @PostMapping(value = "/notify")
