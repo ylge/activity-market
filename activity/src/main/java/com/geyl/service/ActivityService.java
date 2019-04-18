@@ -260,7 +260,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     public ActivityManageVO getActivityData(String userId, String goodsId) throws MyException {
         ClientUser clientUser = clientUserMapper.selectByPrimaryKey(userId);
-        if (clientUser == null || clientUser.getGoodsId() != Integer.parseInt(goodsId)) {
+        if (clientUser == null || clientUser.getGoodsId()==null|| clientUser.getGoodsId() != Integer.parseInt(goodsId)) {
             throw new MyException("用户信息有误");
         }
         ActivityManageVO manageVO = orderInfoMapper.getActivityData(goodsId);

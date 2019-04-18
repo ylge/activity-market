@@ -256,7 +256,7 @@
       remark_2 = #{remark2,jdbcType=VARCHAR},
       remark_3 = #{remark3,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=INTEGER}
-  </update>
+    </update>
     <update id="updateOrderStatusByOrderNo">
         update order_info set
         status = #{status},
@@ -295,7 +295,7 @@
        oi.status
       from order_info oi
       left join client_user cu on oi.user_id = cu.user_id
-      where goods_id = #{goodsId}
+      where oi.goods_id = #{goodsId}
       limit 20
     </select>
     <select id="checkIsOrder" resultType="java.lang.Integer">
@@ -324,9 +324,10 @@
       select
         cu.user_name userName,
         count(oi.order_id) countNum
-       from
-      order_info oi left join client_user cu on oi.p_user_id = cu.user_id
-       where cu.user_id = #{userId}
+      from
+      order_info oi left join client_user cu
+      on oi.p_user_id = cu.user_id
+      where cu.user_id = #{userId}
         and oi.goods_id = #{goodsId}
     </select>
 </mapper>
