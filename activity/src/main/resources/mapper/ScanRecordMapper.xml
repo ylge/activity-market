@@ -125,6 +125,7 @@
          cu.user_id userId,
          cu.phone,
          cu.status,
+         cu.goods_id goodsId,
          cu.user_name userName,
          cu.nick_name nickName,
          cu.avatar
@@ -132,5 +133,7 @@
         left join client_user cu
         on sr.user_id = cu.user_id
         where sr.goods_id = #{goodsId}
+        <if test="phone!=null and phone !=''"> and cu.phone = #{phone}</if>
+        <if test="nickName!=null and nickName!=''"> and cu.nick_name like concat("%",#{nickName},"%")</if>
     </select>
 </mapper>

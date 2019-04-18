@@ -11,6 +11,7 @@ import lombok.Data;
 @Data
 public class StoreUserVO extends PageRequest {
     private String userId;
+    private String goodsId;
     private String userName;
     //推广人数
     private String countNum;

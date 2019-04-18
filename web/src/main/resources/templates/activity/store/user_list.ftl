@@ -6,19 +6,19 @@
         <div class="box-body">
             <input type="hidden" name="goodsId" value="${goodsId!}">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                         <input type="text" class="form-control" name="nickName" placeholder="微信昵称...">
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                         <input type="text" class="form-control" name="phone" placeholder="用户手机号...">
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <button type="button" onclick="storeUserReload()" class="btn btn-primary">搜索</button>
                 </div>
             </div>
@@ -54,13 +54,14 @@
                         var s;
                         if (row.avatar != null) {
                             var url = row.avatar;
-                            s = '<img onclick="imageView(\'' + url + '\')" style="width:60px;height:40px;margin:-5px auto;" src="' + url + '" />';
+                            s = '<img style="width:60px;height:40px;margin:-5px auto;" src="' + url + '" />';
                         }
                         return s;
                     }
                 },
                 {title: "手机号", field: "phone"},
-                {title: "状态", field: "status", formatter: tableModel.getState},
+                {title: "身份", field: "goodsId", formatter: getUser},
+                // {title: "状态", field: "status", formatter: tableModel.getState},
                 {title: "操作", field: "operate", align: 'center', formatter: operateFormatter}
             ],
         });
@@ -73,22 +74,54 @@
         return params;
     }
 
+    function getUser(value, row, index) {
+        if (value === '0') {
+            return "普通用户"
+        } else {
+            return "店员";
+        }
+
+    }
+
     function operateFormatter(value, row, index) {
         var result = [];
-        if (row.status === 1) {
+        if (row.goodsId === '0') {
             result.push(
-                    '<a callback="storeUserReload();" data-body="确认操作？" target="ajaxTodo" href="activity/user/'+row.userId+'/' + row.goodsId + '/1">',
-                    '<i class="fa fa-lock"></i>设为店员',
+                    /*'<a callback="storeUserReload();" data-body="确认操作？" target="ajaxTodo" href="activity/user/delete/' + row.userId + '/${goodsId!}/1">',
+                    '<i class="fa fa-edit"></i>设为店员',
+                    '</a>',*/
+                    '<a href="#" onclick="updateStoreUser(' + row.userId + ',1,${goodsId!})">',
+                    '<i class="fa fa-edit"></i>设为店员',
                     '</a>',
             );
+
         } else {
             result.push(
-                    '<a callback="storeUserReload();" data-body="确认操作？" target="ajaxTodo" href="activity/user/'+row.userId+'/' + row.goodsId + '/0">',
-                    '<i class="fa fa-unlock"></i>设为普通用户',
+                    '<a href="#" onclick="updateStoreUser(' + row.userId + ',0,0)">',
+                    '<i class="fa fa-edit"></i>设为普通用户',
                     '</a>',
+                    /* '<a callback="storeUserReload();" data-body="确认操作？" target="ajaxTodo" href="activity/user/delete/' + row.userId + '/${goodsId!}/0">',
+                    '<i class="fa fa-edit"></i>设为普通用户',
+                    '</a>',*/
             );
         }
         return result.join('');
+    }
+
+
+    function updateStoreUser(userId, status, goodsId) {
+        var url = 'activity/user/delete';
+        $.post(url, {'userId': userId, 'status': status, 'goodsId': goodsId},
+                function (result) {
+                    console.log(result);
+                    if (result.code === 200) {
+                        alertMsg("操作成功", "success");
+                        storeUserReload();
+                    } else {
+                        alertMsg("操作失败:" + result.msg, "danger");
+                    }
+                }
+        );
     }
 
     function storeUserReload() {

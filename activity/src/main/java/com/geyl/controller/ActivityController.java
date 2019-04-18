@@ -144,9 +144,9 @@ public class ActivityController {
      * @param goodsId
      * @return
      */
-    @RequestMapping(value = "user/delete/{userId}/{goodsId}/{status}")
+    @PostMapping(value = "user/delete")
     public @ResponseBody
-    Result delete(@PathVariable Integer userId, @PathVariable Integer goodsId, @PathVariable Integer status) {
+    Result delete(@RequestParam Integer userId, @RequestParam Integer goodsId, @RequestParam Integer status) {
         activityService.updateStoreUser(userId, goodsId, status);
         return Result.OK();
     }

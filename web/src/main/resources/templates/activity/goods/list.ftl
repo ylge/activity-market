@@ -17,12 +17,12 @@
                         <input type="text" class="form-control" name="storePhone" placeholder="商家手机号...">
                     </div>
                 </div>
-                <#--<div class="col-md-2">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                        <input type="text" class="form-control" name="storeName" placeholder="商家名称...">
-                    </div>
-                </div>-->
+            <#--<div class="col-md-2">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <input type="text" class="form-control" name="storeName" placeholder="商家名称...">
+                </div>
+            </div>-->
                 <div class="col-md-3">
                     <button type="button" onclick="goodsReload()" class="btn btn-primary">搜索</button>
                         <@shiro.hasPermission name="activity/goods/add">
@@ -71,7 +71,7 @@
                     }
                 },
                 {title: "价格", field: "goodsPrice"},
-                {title: "开始时间", field: "beginTime"},
+                {title: "活动时间", field: "beginTime"},
                 {title: "结束时间", field: "endTime"},
                 {title: "参与人数", field: "joinNumber"},
                 {title: "收入", field: "storeIncome"},
@@ -97,24 +97,15 @@
         var result = [
             <@shiro.hasPermission name="activity/goods/edit">
             '<a target="modal"  onclick="goodsToListAjax()" href="activity/goods/edit/' + row.goodsId + '" >',
-            '<i class="fa fa-edit"></i>详情',
+            '<i class="fa fa-edit"></i>修改活动',
             '</a>  ',
             </@shiro.hasPermission>
-            '<a target="modal"  href="activity/report/income/' + row.goodsId + '" >',
-            '<i class="fa fa-edit"></i>收入列表',
-            '</a>  ',
-            '<a target="modal"  href="activity/report/withdraw/' + row.goodsId + '" >',
-            '<i class="fa fa-edit"></i>支出列表',
-            '</a>  ',
-            '<a target="modal"  href="activity/user/manage/' + row.goodsId + '" >',
-            '<i class="fa fa-edit"></i>设置店员',
-            '</a>'
         ];
         if (row.status === 1) {
             <@shiro.hasPermission name="activity/goods/delete">
                 result.push(
                         '<a callback="goodsReload();" data-body="确认要禁用吗？" target="ajaxTodo" href="activity/goods/delete/' + row.goodsId + '/0">',
-                        '<i class="fa fa-lock"></i>禁用',
+                        '<i class="fa fa-lock"></i>关闭活动<br>',
                         '</a>',
                 );
             </@shiro.hasPermission>
@@ -122,11 +113,22 @@
             <@shiro.hasPermission name="activity/goods/delete">
                 result.push(
                         '<a callback="goodsReload();" data-body="确认要启用吗？" target="ajaxTodo" href="activity/goods/delete/' + row.goodsId + '/1">',
-                        '<i class="fa fa-unlock"></i>启用',
+                        '<i class="fa fa-unlock"></i>打开活动<br>',
                         '</a>',
                 );
             </@shiro.hasPermission>
         }
+        result.push(
+                '<a target="modal"  href="activity/report/income/' + row.goodsId + '" >',
+                '<i class="fa fa-edit"></i>收入列表',
+                '</a>  ',
+                '<a target="modal"  href="activity/report/withdraw/' + row.goodsId + '" >',
+                '<i class="fa fa-edit"></i>支出列表',
+                '</a>  ',
+                '<a target="modal"  href="activity/user/manage/' + row.goodsId + '" >',
+                '<i class="fa fa-edit"></i>设置店员',
+                '</a>'
+        )
         return result.join('');
     }
 
