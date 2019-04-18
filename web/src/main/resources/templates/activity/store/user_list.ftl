@@ -87,9 +87,6 @@
         var result = [];
         if (row.goodsId === '0') {
             result.push(
-                    /*'<a callback="storeUserReload();" data-body="确认操作？" target="ajaxTodo" href="activity/user/delete/' + row.userId + '/${goodsId!}/1">',
-                    '<i class="fa fa-edit"></i>设为店员',
-                    '</a>',*/
                     '<a href="#" onclick="updateStoreUser(' + row.userId + ',1,${goodsId!})">',
                     '<i class="fa fa-edit"></i>设为店员',
                     '</a>',
@@ -100,9 +97,6 @@
                     '<a href="#" onclick="updateStoreUser(' + row.userId + ',0,0)">',
                     '<i class="fa fa-edit"></i>设为普通用户',
                     '</a>',
-                    /* '<a callback="storeUserReload();" data-body="确认操作？" target="ajaxTodo" href="activity/user/delete/' + row.userId + '/${goodsId!}/0">',
-                    '<i class="fa fa-edit"></i>设为普通用户',
-                    '</a>',*/
             );
         }
         return result.join('');

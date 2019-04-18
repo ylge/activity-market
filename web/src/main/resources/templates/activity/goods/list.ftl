@@ -119,13 +119,13 @@
             </@shiro.hasPermission>
         }
         result.push(
-                '<a target="modal"  href="activity/report/income/' + row.goodsId + '" >',
+                '<a href="activity/report/income/' + row.goodsId + '" >',
                 '<i class="fa fa-edit"></i>收入列表',
                 '</a>  ',
-                '<a target="modal"  href="activity/report/withdraw/' + row.goodsId + '" >',
+                '<a href="activity/report/withdraw/' + row.goodsId + '" >',
                 '<i class="fa fa-edit"></i>支出列表',
                 '</a>  ',
-                '<a target="modal"  href="activity/user/manage/' + row.goodsId + '" >',
+                '<a href="activity/user/manage/' + row.goodsId + '" >',
                 '<i class="fa fa-edit"></i>设置店员',
                 '</a>'
         )
@@ -139,5 +139,13 @@
     function goodsReload() {
         reloadTable(goods_tab);
     }
+
+    /*function storeIncomeExport(goodsId) {
+        var url = "activity/report/income/export?";
+        if(isEmpty(goodsId)){
+            url = url + "&goodsId=" + goodsId;
+        }
+        window.location.href = url;
+    }*/
 
 </script>

@@ -242,7 +242,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     public void rewardRed(String orderId) {
         OrderInfoVO orderInfoVO = orderInfoMapper.getOrderDetailByNo(orderId);
         int i = userAccountRecordMapper.getGetRewardInfoByOrderNo(orderInfoVO.getOrderNo());
-        if (i > 0) {//以返现
+        if (i > 0) {//已经返现
             return;
         }
         if (orderInfoVO.getPUserId() != null) {
@@ -308,5 +308,13 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             clientUser.setGoodsId(0);
         }
         clientUserMapper.updateByPrimaryKeySelective(clientUser);
+    }
+
+    public List<IncomeVO> getIncomeListByGoodsId(String goodsId) {
+        return orderInfoMapper.getIncomeListByGoodsId(goodsId);
+    }
+
+    public List<RewardVO> getWithdrawListByGoodsId(String goodsId) {
+        return orderInfoMapper.getWithdrawListByGoodsId(goodsId);
     }
 }

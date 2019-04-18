@@ -330,4 +330,33 @@
       where cu.user_id = #{userId}
         and oi.goods_id = #{goodsId}
     </select>
+    <select id="getIncomeListByGoodsId" resultType="com.geyl.vo.IncomeVO">
+        select
+         oi.payment_amount paymentAmount,
+         oi.create_time createTime,
+         oi.status,
+         oi.order_no orderNo,
+         cu.user_id userId,
+         cu.phone,
+         cu.user_name userName,
+         cu.nick_name nickName,
+         si.store_name storeName,
+         ag.goods_name goodsName
+        from
+        order_info oi
+        left join client_user cu on oi.user_id = cu.user_id
+        left join store_info si on oi.store_id = si.store_id
+        left join activity_goods ag on oi.goods_id = ag.goods_id
+        where oi.goods_id = #{goodsId}
+    </select>
+    <select id="getWithdrawListByGoodsId" resultType="com.geyl.vo.RewardVO">
+      select
+       amount rewardAmount,
+       cu.user_name userName,
+       cu.phone
+       from
+      user_account_record uar
+      left join client_user cu on uar.user_id = cu.user_id
+       where remark_1 = #{goodsId}
+    </select>
 </mapper>

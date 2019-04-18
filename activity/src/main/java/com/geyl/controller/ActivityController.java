@@ -1,18 +1,26 @@
 package com.geyl.controller;
 
+import cn.afterturn.easypoi.entity.vo.NormalExcelConstants;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import cn.afterturn.easypoi.view.PoiBaseView;
 import com.geyl.annotation.Log;
 import com.geyl.bean.PageResult;
 import com.geyl.bean.Result;
-import com.geyl.bean.model.ClientUser;
 import com.geyl.service.ActivityService;
 import com.geyl.vo.ActivityGoodsVO;
+import com.geyl.vo.IncomeVO;
+import com.geyl.vo.RewardVO;
 import com.geyl.vo.StoreUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -149,6 +157,41 @@ public class ActivityController {
     Result delete(@RequestParam Integer userId, @RequestParam Integer goodsId, @RequestParam Integer status) {
         activityService.updateStoreUser(userId, goodsId, status);
         return Result.OK();
+    }
+
+    /**
+     * 活动收入列表导出
+     */
+
+    @GetMapping(value = "/report/income/{goodsId}")
+    public void activityIncome(ModelMap modelMap, HttpServletRequest request, @PathVariable String goodsId,
+                                         HttpServletResponse response) {
+        ActivityGoodsVO activityGoodsVO = activityService.getGoodsDetail(goodsId);
+        if(activityGoodsVO!=null){
+            ExportParams params = new ExportParams(activityGoodsVO.getGoodsName()+"-收入列表", null, ExcelType.XSSF);
+            modelMap.put(NormalExcelConstants.DATA_LIST, activityService.getIncomeListByGoodsId(goodsId));
+            modelMap.put(NormalExcelConstants.CLASS, IncomeVO.class);
+            modelMap.put(NormalExcelConstants.PARAMS, params);
+            modelMap.put(NormalExcelConstants.FILE_NAME, activityGoodsVO.getGoodsName()+"-收入列表");
+            PoiBaseView.render(modelMap, request, response, NormalExcelConstants.EASYPOI_EXCEL_VIEW);
+        }
+    }
+    /**
+     * 活动收入列表导出
+     */
+
+    @GetMapping(value = "/report/withdraw/{goodsId}")
+    public void activityWithdraw(ModelMap modelMap, HttpServletRequest request, @PathVariable String goodsId,
+                               HttpServletResponse response) {
+        ActivityGoodsVO activityGoodsVO = activityService.getGoodsDetail(goodsId);
+        if(activityGoodsVO!=null){
+            ExportParams params = new ExportParams(activityGoodsVO.getGoodsName()+"-支出列表", null, ExcelType.XSSF);
+            modelMap.put(NormalExcelConstants.DATA_LIST, activityService.getWithdrawListByGoodsId(goodsId));
+            modelMap.put(NormalExcelConstants.CLASS, RewardVO.class);
+            modelMap.put(NormalExcelConstants.PARAMS, params);
+            modelMap.put(NormalExcelConstants.FILE_NAME, activityGoodsVO.getGoodsName()+"-支出列表");
+            PoiBaseView.render(modelMap, request, response, NormalExcelConstants.EASYPOI_EXCEL_VIEW);
+        }
     }
 
 }

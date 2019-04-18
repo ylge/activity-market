@@ -2,10 +2,7 @@ package com.geyl.dao;
 
 import com.geyl.base.BaseMapper;
 import com.geyl.bean.model.OrderInfo;
-import com.geyl.vo.ActivityManageVO;
-import com.geyl.vo.JoinUserVO;
-import com.geyl.vo.OrderInfoVO;
-import com.geyl.vo.StoreUserVO;
+import com.geyl.vo.*;
 
 import java.util.List;
 import java.util.Map;
@@ -24,4 +21,8 @@ public interface OrderInfoMapper extends BaseMapper<OrderInfo,String> {
     List<OrderInfoVO> getOrderList(String goodsId);
 
     List<StoreUserVO> getStoreUser(Map<String, Object> param);
+
+    List<IncomeVO> getIncomeListByGoodsId(String goodsId);
+
+    List<RewardVO> getWithdrawListByGoodsId(String goodsId);
 }
