@@ -33,6 +33,19 @@
         where goods_id = #{goodsId}
         limit 20
     </select>
+    <select id="getStoreUserList" resultType="com.geyl.vo.StoreUserVO">
+        select
+         cu.user_id userId,
+         cu.phone,
+         cu.status,
+         cu.user_name userName,
+         cu.nick_name nickName,
+         cu.avatar
+        from scan_record sr
+        left join client_user cu
+        on sr.user_id = cu.user_id
+        where sr.goods_id = #{goodsId}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from scan_record
     where id = #{id,jdbcType=BIGINT}

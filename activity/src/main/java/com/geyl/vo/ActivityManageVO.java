@@ -15,6 +15,7 @@ public class ActivityManageVO {
     private String joinNumber;
     private String storeIncome;
     private String storeWithdraw;
+    private Integer status;
     private List<StoreUserVO> store_user;
     private List<OrderInfoVO> order_list;
 

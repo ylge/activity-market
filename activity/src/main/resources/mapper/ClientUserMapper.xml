@@ -3,6 +3,7 @@
 <mapper namespace="com.geyl.dao.ClientUserMapper">
     <resultMap id="BaseResultMap" type="com.geyl.bean.model.ClientUser">
         <id column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="goods_id" jdbcType="VARCHAR" property="goodsId"/>
         <result column="openid" jdbcType="VARCHAR" property="openid"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
@@ -18,7 +19,7 @@
         <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-    user_id, openid, user_name, phone, avatar, nick_name, username, password, salt, status, 
+    user_id,goods_id, openid, user_name, phone, avatar, nick_name, username, password, salt, status,
     gender, age, create_time, last_login_time
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -54,6 +55,9 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">
                 user_id,
+            </if>
+            <if test="goodsId != null">
+                goods_id,
             </if>
             <if test="openid != null">
                 openid,
@@ -98,6 +102,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null">
                 #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsId != null">
+                #{goodsId},
             </if>
             <if test="openid != null">
                 #{openid,jdbcType=VARCHAR},

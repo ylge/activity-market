@@ -106,9 +106,9 @@
             '<a target="modal"  href="activity/report/withdraw/' + row.goodsId + '" >',
             '<i class="fa fa-edit"></i>支出列表',
             '</a>  ',
-            '<a target="modal"  href="activity/report/withdraw/' + row.goodsId + '" >',
-            '<i class="fa fa-edit"></i>兑换券列表',
-            '</a>  ',
+            '<a target="modal"  href="activity/user/manage/' + row.goodsId + '" >',
+            '<i class="fa fa-edit"></i>设置店员',
+            '</a>'
         ];
         if (row.status === 1) {
             <@shiro.hasPermission name="activity/goods/delete">
@@ -116,7 +116,7 @@
                         '<a callback="goodsReload();" data-body="确认要禁用吗？" target="ajaxTodo" href="activity/goods/delete/' + row.goodsId + '/0">',
                         '<i class="fa fa-lock"></i>禁用',
                         '</a>',
-                )
+                );
             </@shiro.hasPermission>
         } else {
             <@shiro.hasPermission name="activity/goods/delete">
@@ -124,7 +124,7 @@
                         '<a callback="goodsReload();" data-body="确认要启用吗？" target="ajaxTodo" href="activity/goods/delete/' + row.goodsId + '/1">',
                         '<i class="fa fa-unlock"></i>启用',
                         '</a>',
-                )
+                );
             </@shiro.hasPermission>
         }
         return result.join('');

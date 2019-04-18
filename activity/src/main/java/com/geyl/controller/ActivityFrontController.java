@@ -59,7 +59,7 @@ public class ActivityFrontController {
      * @throws MyException
      */
     @GetMapping("getOpenid")
-    public Result getOpenId(@RequestParam("code") String code, @RequestParam("goodsId") String goodsId) throws MyException {
+    public Result getOpenId(@RequestParam("code") String code, @RequestParam("goodsId") Integer goodsId) throws MyException {
         return activityService.getOpenId(code, goodsId);
     }
 

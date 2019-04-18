@@ -173,7 +173,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         orderInfo.setStatus(1);
         orderInfo.setPaymentAmount(activityGoods.getGoodsPrice());
         orderInfo.setStoreId(activityGoods.getStoreId());
-        String orderNo = "YSG"+UUID.randomUUID().toString().substring(0,8);
+        String orderNo = "YSG" + UUID.randomUUID().toString().substring(0, 8);
         orderInfo.setOrderNo(orderNo);
         orderInfo.setOrderCode(orderNo);
         orderInfoMapper.insertSelective(orderInfo);
@@ -189,7 +189,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
      * @param goodsId
      * @return
      */
-    public Result getOpenId(String code, String goodsId) {
+    public Result getOpenId(String code, Integer goodsId) {
         WxResponse wxResponse = wxService.getSession(code);
         //判断用户是否新用户
         ClientUser clientUser = clientUserMapper.getUserByOpenid(wxResponse.getOpenid());
@@ -197,13 +197,14 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             clientUser = new ClientUser();
             clientUser.setStatus(1);
             clientUser.setOpenid(wxResponse.getOpenid());
+//            clientUser.setGoodsId(goodsId);
             clientUserMapper.insertSelective(clientUser);
         }
         ScanRecord scanRecord = scanRecordMapper.getRecordByUserId(clientUser.getUserId());
         if (scanRecord == null) {
             //浏览记录
             scanRecord = new ScanRecord();
-            scanRecord.setGoodsId(Integer.parseInt(goodsId));
+            scanRecord.setGoodsId(goodsId);
             scanRecord.setUserId(clientUser.getUserId());
             scanRecord.setCreateTime(new Date());
             scanRecordMapper.insertSelective(scanRecord);
@@ -216,7 +217,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         result.put("userId", clientUser.getUserId());
         OrderInfoVO orderInfoVO = new OrderInfoVO();
         orderInfoVO.setUserId(clientUser.getUserId().toString());
-        orderInfoVO.setGoodsId(goodsId);
+        orderInfoVO.setGoodsId(goodsId.toString());
         result.put("isOrder", orderInfoMapper.checkIsOrder(orderInfoVO));
         result.put("unionid", wxResponse.getUnionid());
         result.put("accessToken", wxResponse.getAccess_token());
@@ -241,7 +242,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     public void rewardRed(String orderId) {
         OrderInfoVO orderInfoVO = orderInfoMapper.getOrderDetailByNo(orderId);
         int i = userAccountRecordMapper.getGetRewardInfoByOrderNo(orderInfoVO.getOrderNo());
-        if(i>0){//以返现
+        if (i > 0) {//以返现
             return;
         }
         if (orderInfoVO.getPUserId() != null) {
@@ -259,7 +260,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     public ActivityManageVO getActivityData(String userId, String goodsId) throws MyException {
         ClientUser clientUser = clientUserMapper.selectByPrimaryKey(userId);
-        if(clientUser==null || clientUser.getPassword()==null){
+        if (clientUser == null || clientUser.getGoodsId() != Integer.parseInt(goodsId)) {
             throw new MyException("用户信息有误");
         }
         ActivityManageVO manageVO = orderInfoMapper.getActivityData(goodsId);
@@ -273,17 +274,39 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     public Result closeOrder(String userId, String orderCode) throws MyException {
         ClientUser clientUser = clientUserMapper.selectByPrimaryKey(userId);
-        if(clientUser==null || clientUser.getPassword()==null){
+        if (clientUser == null || clientUser.getGoodsId() == 0) {
             throw new MyException("用户信息有误");
         }
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setOrderNo(orderCode);
         orderInfo.setStatus(3);
+        orderInfo.setGoodsId(clientUser.getGoodsId().toString());
         orderInfo.setUpdateTime(new Date());
         int i = orderInfoMapper.updateOrderStatusByOrderNo(orderInfo);
-        if(i==0){
+        if (i == 0) {
             throw new MyException("该核销码不存在");
         }
         return Result.OK();
+    }
+
+    public PageResult<StoreUserVO> getStoreUser(StoreUserVO storeUserVO) {
+        Integer offset = storeUserVO.getOffset();
+        Integer limit = storeUserVO.getLimit();
+        String order = storeUserVO.getOrder();
+        String sort = storeUserVO.getSort();
+        PageHelper.startPage(offset / limit + 1, limit, CamelCaseUtil.toUnderlineName(sort + " " + order));
+        List<StoreUserVO> tList = scanRecordMapper.getStoreUserList(storeUserVO);
+        return new PageResult<>(new PageInfo<>(tList));
+    }
+
+    public void updateStoreUser(Integer userId, Integer goodsId, Integer status) {
+        ClientUser clientUser = new ClientUser();
+        clientUser.setUserId(userId);
+        if (status == 1) {
+            clientUser.setGoodsId(goodsId);
+        } else {
+            clientUser.setGoodsId(0);
+        }
+        clientUserMapper.updateByPrimaryKeySelective(clientUser);
     }
 }

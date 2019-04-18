@@ -3,8 +3,10 @@ package com.geyl.controller;
 import com.geyl.annotation.Log;
 import com.geyl.bean.PageResult;
 import com.geyl.bean.Result;
+import com.geyl.bean.model.ClientUser;
 import com.geyl.service.ActivityService;
 import com.geyl.vo.ActivityGoodsVO;
+import com.geyl.vo.StoreUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,7 @@ import java.io.IOException;
  * @date 2019-4-11 9:46
  */
 @Controller
-@RequestMapping("/activity/goods")
+@RequestMapping("/activity")
 public class ActivityController {
     @Autowired
     private ActivityService activityService;
@@ -28,15 +30,14 @@ public class ActivityController {
      * 　* @description:活动列表
      * 　* @author geyl
      * 　* @date 2018-5-22 13:34
-     *
      */
-    @GetMapping(value = "list")
+    @GetMapping(value = "goods/list")
     public ModelAndView list(ModelAndView modelAndView) {
         modelAndView.setViewName("/activity/goods/list");
         return modelAndView;
     }
 
-    @GetMapping(value = "page")
+    @GetMapping(value = "goods/page")
     public @ResponseBody
     PageResult<ActivityGoodsVO> page(ActivityGoodsVO activityGoodsVO) {
         return activityService.getPageList(activityGoodsVO);
@@ -46,9 +47,8 @@ public class ActivityController {
      * 　* @description:活动新增
      * 　* @author geyl
      * 　* @date 2018-5-22 13:35
-     *
      */
-    @GetMapping(value = "add")
+    @GetMapping(value = "goods/add")
     public ModelAndView add(ModelAndView modelAndView) {
         modelAndView.setViewName("/activity/goods/add");
         return modelAndView;
@@ -58,9 +58,8 @@ public class ActivityController {
      * 　* @description:活动编辑
      * 　* @author geyl
      * 　* @date 2018-5-22 13:35
-     *
      */
-    @GetMapping(value = "edit/{goodsId}")
+    @GetMapping(value = "goods/edit/{goodsId}")
     public ModelAndView edit(ModelAndView modelAndView, @PathVariable String goodsId) {
         modelAndView.setViewName("/activity/goods/edit");
         modelAndView.addObject("goods", activityService.getGoodsDetail(goodsId));
@@ -73,9 +72,8 @@ public class ActivityController {
      * 　* @return
      * 　* @author geyl
      * 　* @date 2018-5-22 13:35
-     *
      */
-    @PostMapping(value = "add")
+    @PostMapping(value = "goods/add")
     public @ResponseBody
     Result addgoods(ActivityGoodsVO activityGoods,
                     @RequestParam("goodsFile") MultipartFile goodsFile,
@@ -83,7 +81,7 @@ public class ActivityController {
                     @RequestParam("backgroundImageFile") MultipartFile backgroundImageFile,
                     @RequestParam("activityMusicFile") MultipartFile activityMusicFile,
                     @RequestParam("storeCodeFile") MultipartFile storeCodeFile) throws IOException {
-        return activityService.save(activityGoods,goodsFile,goodsDetailFile,storeCodeFile,activityMusicFile,backgroundImageFile);
+        return activityService.save(activityGoods, goodsFile, goodsDetailFile, storeCodeFile, activityMusicFile, backgroundImageFile);
     }
 
     /**
@@ -92,9 +90,8 @@ public class ActivityController {
      * 　* @return
      * 　* @author geyl
      * 　* @date 2018-5-22 13:35
-     *
      */
-    @PostMapping(value = "update")
+    @PostMapping(value = "goods/update")
     public @ResponseBody
     Result updategoods(ActivityGoodsVO activityGoods,
                        @RequestParam("goodsFile") MultipartFile goodsFile,
@@ -102,18 +99,56 @@ public class ActivityController {
                        @RequestParam("backgroundImageFile") MultipartFile backgroundImageFile,
                        @RequestParam("activityMusicFile") MultipartFile activityMusicFile,
                        @RequestParam("storeCodeFile") MultipartFile storeCodeFile) throws IOException {
-        return activityService.save(activityGoods,goodsFile,goodsDetailFile,storeCodeFile, activityMusicFile,backgroundImageFile);
+        return activityService.save(activityGoods, goodsFile, goodsDetailFile, storeCodeFile, activityMusicFile, backgroundImageFile);
     }
 
     /**
      * 禁用
+     *
      * @return
      */
     @Log(desc = "关闭活动")
-    @GetMapping(value = "delete/{goodsId}/{status}")
+    @GetMapping(value = "goods/delete/{goodsId}/{status}")
     public @ResponseBody
-    Result delete(@PathVariable String goodsId,@PathVariable Integer status) {
-        return activityService.closeActivityById(goodsId,status);
+    Result delete(@PathVariable String goodsId, @PathVariable Integer status) {
+        return activityService.closeActivityById(goodsId, status);
+    }
+
+    /**
+     * 　* @description:活动用户列表
+     * 　* @author geyl
+     * 　* @date 2018-5-22 13:34
+     */
+    @GetMapping(value = "user/manage/{goodsId}")
+    public ModelAndView list(ModelAndView modelAndView, @PathVariable String goodsId) {
+        modelAndView.setViewName("/activity/store/user_list");
+        modelAndView.addObject(goodsId);
+        return modelAndView;
+    }
+
+    /**
+     * 查询活动用户列表
+     *
+     * @param storeUserVO
+     * @return
+     */
+    @GetMapping(value = "user/page")
+    public @ResponseBody
+    PageResult<StoreUserVO> page(StoreUserVO storeUserVO) {
+        return activityService.getStoreUser(storeUserVO);
+    }
+
+    /**
+     * 店员设置
+     *
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping(value = "user/delete/{userId}/{goodsId}/{status}")
+    public @ResponseBody
+    Result delete(@PathVariable Integer userId, @PathVariable Integer goodsId, @PathVariable Integer status) {
+        activityService.updateStoreUser(userId, goodsId, status);
+        return Result.OK();
     }
 
 }

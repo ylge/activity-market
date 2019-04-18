@@ -263,10 +263,26 @@
         update_time =#{updateTime},
         remark_1 = #{remark1}
         where order_no = #{orderNo}
+        <if test="goodsId != null">
+            and goodsId = #{goodsId}
+        </if>
     </update>
 
     <select id="getOrderDetailByNo" resultType="com.geyl.vo.OrderInfoVO">
-      select * from
+      select
+       oi.user_id userId,
+       oi.goods_id goodsId,
+       oi.order_id orderId,
+       oi.order_no orderNo,
+       oi.payment_amount paymentAmount,
+       oi.status,
+       oi.buy_count buyCount,
+       oi.store_id storeId,
+       oi.pay_account payAccount,
+       oi.order_amount orderAmount,
+       oi.pay_time payTime,
+       ag.goods_name goodsName
+       from
        order_info oi
         left join activity_goods ag
         on oi.goods_id = ag.goods_id

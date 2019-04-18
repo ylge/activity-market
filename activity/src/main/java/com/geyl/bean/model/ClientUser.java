@@ -4,10 +4,12 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+
 @Data
 public class ClientUser implements Serializable {
     private Integer userId;
 
+    private Integer goodsId;
     private String openid;
 
     private String userName;
