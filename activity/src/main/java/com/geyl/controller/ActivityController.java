@@ -12,6 +12,7 @@ import com.geyl.vo.ActivityGoodsVO;
 import com.geyl.vo.IncomeVO;
 import com.geyl.vo.RewardVO;
 import com.geyl.vo.StoreUserVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -30,6 +31,7 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping("/activity")
+@Slf4j
 public class ActivityController {
     @Autowired
     private ActivityService activityService;

@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author geyl
  * @Package com.geyl.controller
@@ -106,5 +108,26 @@ public class ActivityFrontController {
             activityService.rewardRed(response.getOrderId());
         }
         log.info("【异步回调】response={}", JsonUtil.toJson(response));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/wxsign", method = RequestMethod.GET, produces = {"application/json;charset=utf-8"})
+    public String getWxUserInfo(HttpServletRequest request,
+                                @RequestParam(required = true) String echostr,
+                                @RequestParam(required = false) String signature,
+                                @RequestParam(required = false) String timestamp,
+                                @RequestParam(required = false) String nonce) {
+        try {
+            //只需要把微信请求的 echostr, 返回给微信就可以了
+            log.info("测试来过===================" + echostr);
+            log.info("测试来过===================" + signature);
+            log.info("测试来过===================" + timestamp);
+            log.info("测试来过===================" + nonce);
+            return echostr;
+        } catch (Exception e) {
+            log.info("测试微信公众号的接口配置信息发生异常：", e);
+            return "错误！！！";
+        }
+
     }
 }
