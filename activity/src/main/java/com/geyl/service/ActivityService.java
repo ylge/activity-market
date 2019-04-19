@@ -6,6 +6,7 @@ import com.geyl.bean.PageResult;
 import com.geyl.bean.Result;
 import com.geyl.bean.model.*;
 import com.geyl.bean.wx.WxResponse;
+import com.geyl.bean.wx.WxUserResponse;
 import com.geyl.dao.*;
 import com.geyl.exception.MyException;
 import com.geyl.util.CamelCaseUtil;
@@ -189,14 +190,19 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
      * @param goodsId
      * @return
      */
-    public Result getOpenId(String code, Integer goodsId) {
+    public Result addUser(String code, Integer goodsId) {
+        //获取ipenid
         WxResponse wxResponse = wxService.getSession(code);
         //判断用户是否新用户
         ClientUser clientUser = clientUserMapper.getUserByOpenid(wxResponse.getOpenid());
         if (clientUser == null) {
+            //获取用户头像
+            WxUserResponse userResponse = wxService.getUserInfo(wxResponse.getOpenid(),wxResponse.getAccess_token());
             clientUser = new ClientUser();
             clientUser.setStatus(1);
             clientUser.setOpenid(wxResponse.getOpenid());
+            clientUser.setNickName(userResponse.getNickname());
+            clientUser.setAvatar(userResponse.getHeadimgurl().replaceAll("\\\\",""));
 //            clientUser.setGoodsId(goodsId);
             clientUserMapper.insertSelective(clientUser);
         }
@@ -317,4 +323,5 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     public List<RewardVO> getWithdrawListByGoodsId(String goodsId) {
         return orderInfoMapper.getWithdrawListByGoodsId(goodsId);
     }
+
 }

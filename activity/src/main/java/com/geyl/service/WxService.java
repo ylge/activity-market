@@ -1,7 +1,7 @@
 package com.geyl.service;
 
-import com.alibaba.nacos.api.config.annotation.NacosValue;
 import com.geyl.bean.wx.WxResponse;
+import com.geyl.bean.wx.WxUserResponse;
 import com.geyl.dao.OrderInfoMapper;
 import com.geyl.vo.OrderInfoVO;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
@@ -11,15 +11,13 @@ import com.lly835.bestpay.service.impl.BestPayServiceImpl;
 import com.lly835.bestpay.utils.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author geyl
@@ -29,16 +27,32 @@ import java.util.Map;
 @Service
 @Slf4j
 public class WxService {
-    @NacosValue(value = "${wx_appid:wx120e0e2cd0abc422}", autoRefreshed = true)
-    private static String wx_appid;
-    @NacosValue(value = "${wx_secret:0c1a156ec46de1943d2bd6b3eb157e79}", autoRefreshed = true)
-    private static String wx_secret;
+    @Value("${wx_appid}")
+    private String wx_appid;
+    @Value(value = "${wx_secret}")
+    private String wx_secret;
+    @Value(value = "${redirectUrl}")
+    private String redirectUrl;
     @Autowired
     private OrderInfoMapper orderInfoMapper;
     @Autowired
     private BestPayServiceImpl bestPayService;
     @Autowired
     private RestTemplate restTemplate;
+
+    /**
+     * 生成用于获取access_token的Code的Url
+     *
+     * @return
+     */
+    public String getRequestCodeUrl(String goodsId, String pid) {
+        String redirect_url = redirectUrl + "?i=" + goodsId;
+        if (pid != null) {
+            redirect_url = redirect_url + "&pid=" + pid;
+        }
+        return String.format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect",
+                wx_appid, redirect_url, "snsapi_userinfo");
+    }
 
     WxResponse getSession(String code) {
         HttpHeaders headers = new HttpHeaders();
@@ -48,14 +62,14 @@ public class WxService {
         String strbody = restTemplate.exchange(info.toString().replace("\"", ""), HttpMethod.GET, entity, String.class)
                 .getBody();
         log.info(strbody);
-        return JsonUtil.toObject(strbody,WxResponse.class);
+        return JsonUtil.toObject(strbody, WxResponse.class);
     }
 
-    private static StringBuffer appendUrl(String code) {
-        StringBuffer info = new StringBuffer("https://api.weixin.qq.com/sns/jscode2session?");
+    private StringBuffer appendUrl(String code) {
+        StringBuffer info = new StringBuffer("https://api.weixin.qq.com/sns/oauth2/access_token?");
         info.append("appid=").append(wx_appid).append("&");
         info.append("secret=").append(wx_secret).append("&");
-        info.append("js_code=").append(code).append("&");
+        info.append("code=").append(code).append("&");
         info.append("grant_type=").append("authorization_code");
         return info;
     }
@@ -80,4 +94,14 @@ public class WxService {
         return response;
     }
 
+    public WxUserResponse getUserInfo(String openid, String access_token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        String info = "https://api.weixin.qq.com/sns/userinfo?access_token="+access_token+"&openid="+openid+"&lang=zh_CN";
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        String strbody = restTemplate.exchange(info, HttpMethod.GET, entity, String.class)
+                .getBody();
+        log.info(strbody);
+        return JsonUtil.toObject(strbody, WxUserResponse.class);
+    }
 }

@@ -291,15 +291,19 @@
       select
        cu.user_name userName,
        cu.avatar,
-       cu.phone,
-       oi.status
+       INSERT(cu.phone, 4, 4, '****') phone,
+       oi.status,
+       oi.create_time createTime
       from order_info oi
       left join client_user cu on oi.user_id = cu.user_id
       where oi.goods_id = #{goodsId}
       limit 20
     </select>
     <select id="checkIsOrder" resultType="java.lang.Integer">
-        select count(order_id) from order_info where user_id = #{userId} and goodsId = #{goodsId} and status in (2,3)
+        select count(order_id) from order_info
+         where user_id = #{userId}
+         and goods_id = #{goodsId}
+         and status in (2,3)
     </select>
     <select id="getActivityData" resultType="com.geyl.vo.ActivityManageVO">
     SELECT
@@ -313,7 +317,7 @@
     <select id="getOrderList" resultType="com.geyl.vo.OrderInfoVO">
       select
         cu.user_name userName,
-        cu.phone,
+        INSERT(cu.phone, 4, 4, '****') phone,
         oi.status,
         oi.order_code orderCode
        from
@@ -337,7 +341,7 @@
          oi.status,
          oi.order_no orderNo,
          cu.user_id userId,
-         cu.phone,
+         INSERT(cu.phone, 4, 4, '****') phone,
          cu.user_name userName,
          cu.nick_name nickName,
          si.store_name storeName,
@@ -353,7 +357,7 @@
       select
        amount rewardAmount,
        cu.user_name userName,
-       cu.phone
+       INSERT(cu.phone, 4, 4, '****') phone
        from
       user_account_record uar
       left join client_user cu on uar.user_id = cu.user_id

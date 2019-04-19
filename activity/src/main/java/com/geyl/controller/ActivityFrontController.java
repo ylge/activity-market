@@ -32,6 +32,13 @@ public class ActivityFrontController {
     private BestPayServiceImpl bestPayService;
 
     /**
+     * 微信授权
+     */
+    @GetMapping("getCode/{goodsId}/{pid}")
+    public Result getCode(@PathVariable String goodsId,@PathVariable String pid){
+        return Result.OK(wxService.getRequestCodeUrl(goodsId,pid));
+    }
+    /**
      * 查询活动页面数据
      *
      * @param goodsId
@@ -60,9 +67,9 @@ public class ActivityFrontController {
      * @return
      * @throws MyException
      */
-    @GetMapping("getOpenid")
-    public Result getOpenId(@RequestParam("code") String code, @RequestParam("goodsId") Integer goodsId) throws MyException {
-        return activityService.getOpenId(code, goodsId);
+    @PostMapping("user/add")
+    public Result addUser(@RequestParam("code") String code, @RequestParam("goodsId") Integer goodsId) {
+        return activityService.addUser(code, goodsId);
     }
 
     /**

@@ -28,7 +28,7 @@
         from client_user
         where user_id = #{userId}
     </select>
-    <select id="getUserByOpenid" resultType="com.geyl.bean.model.ClientUser">
+    <select id="getUserByOpenid" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from client_user

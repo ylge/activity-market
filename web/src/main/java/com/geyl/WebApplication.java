@@ -1,6 +1,5 @@
 package com.geyl;
 
-import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +10,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @SpringBootApplication
-@NacosPropertySource(dataId = "geyl-nacos-config", autoRefreshed = true)
 @ComponentScan("com.geyl")
 @MapperScan("com.geyl.dao")
 public class WebApplication {
