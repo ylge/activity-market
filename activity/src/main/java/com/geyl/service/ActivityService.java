@@ -14,6 +14,7 @@ import com.geyl.util.FileUploadUtil;
 import com.geyl.vo.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lly835.bestpay.model.PayResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -178,7 +179,9 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         orderInfo.setOrderNo(orderNo);
         orderInfo.setOrderCode(orderNo);
         orderInfoMapper.insertSelective(orderInfo);
-        return Result.OK(orderInfo.getOrderNo());
+        //去微信预下单
+        PayResponse payResponse = wxService.getPayInfo(orderNo,clientUser.getOpenid());
+        return Result.OK(payResponse);
     }
 
     /**
@@ -218,16 +221,15 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             scanRecord.setUpdateTime(new Date());
             scanRecordMapper.updateByPrimaryKeySelective(scanRecord);
         }
-        Map<String, Object> result = new HashMap<>();
-        result.put("openid", wxResponse.getOpenid());
-        result.put("userId", clientUser.getUserId());
+        ClientUserVO clientUserVO = new ClientUserVO();
+        clientUserVO.setOpenid(wxResponse.getOpenid());
+        clientUserVO.setUserId(clientUser.getUserId());
         OrderInfoVO orderInfoVO = new OrderInfoVO();
         orderInfoVO.setUserId(clientUser.getUserId().toString());
         orderInfoVO.setGoodsId(goodsId.toString());
-        result.put("isOrder", orderInfoMapper.checkIsOrder(orderInfoVO));
-        result.put("unionid", wxResponse.getUnionid());
-        result.put("accessToken", wxResponse.getAccess_token());
-        return Result.OK(result);
+        int i = orderInfoMapper.checkIsOrder(orderInfoVO);
+        clientUserVO.setOrder(i>=0);
+        return Result.OK(clientUserVO);
     }
 
     /**

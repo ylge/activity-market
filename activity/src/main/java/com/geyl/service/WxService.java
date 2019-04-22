@@ -80,7 +80,7 @@ public class WxService {
      * @param orderNo 订单id
      * @return o
      */
-    public Object getPayInfo(String orderNo, String openid) {
+    public PayResponse getPayInfo(String orderNo, String openid) {
         OrderInfoVO orderInfo = orderInfoMapper.getOrderDetailByNo(orderNo);
         PayRequest request = new PayRequest();
         request.setPayTypeEnum(BestPayTypeEnum.WXPAY_H5);
