@@ -13,4 +13,5 @@ public class ClientUserVO {
     private Integer userId;
     private String openid;
     private boolean isOrder;
+    private boolean isManager;
 }

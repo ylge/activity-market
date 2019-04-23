@@ -65,7 +65,6 @@ public class ActivityFrontController {
      *
      * @param code
      * @return
-     * @throws MyException
      */
     @PostMapping("user/add")
     public Result addUser(@RequestParam("code") String code, @RequestParam("goodsId") Integer goodsId) {
@@ -115,6 +114,16 @@ public class ActivityFrontController {
             activityService.rewardRed(response.getOrderId());
         }
         log.info("【异步回调】response={}", JsonUtil.toJson(response));
+    }
+
+    /**
+     * 商家合作
+     *
+     * @return
+     */
+    @PostMapping("store/add")
+    public Result addStore(@RequestParam("userName") String userName, @RequestParam("phone") String phone) {
+        return activityService.addStore(userName, phone);
     }
 
     @ResponseBody

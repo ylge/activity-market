@@ -192,6 +192,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
      * @return
      */
     public Result addUser(String code, Integer goodsId) {
+        boolean isManager = false;
         //获取ipenid
         WxResponse wxResponse = wxService.getSession(code);
         //判断用户是否新用户
@@ -206,6 +207,10 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             clientUser.setAvatar(userResponse.getHeadimgurl().replaceAll("\\\\",""));
 //            clientUser.setGoodsId(goodsId);
             clientUserMapper.insertSelective(clientUser);
+        }else{
+            if(clientUser.getGoodsId().equals(goodsId)){
+                isManager =true;
+            }
         }
         ScanRecord scanRecord = scanRecordMapper.getRecordByUserId(clientUser.getUserId());
         if (scanRecord == null) {
@@ -227,6 +232,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         orderInfoVO.setGoodsId(goodsId.toString());
         int i = orderInfoMapper.checkIsOrder(orderInfoVO);
         clientUserVO.setOrder(i>=0);
+        clientUserVO.setManager(isManager);
         return Result.OK(clientUserVO);
     }
 
@@ -324,4 +330,12 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         return orderInfoMapper.getWithdrawListByGoodsId(goodsId);
     }
 
+    public Result addStore(String userName, String phone) {
+        StoreCooperate storeCooperate = new StoreCooperate();
+        storeCooperate.setPhone(phone);
+        storeCooperate.setUserName(userName);
+        storeCooperate.setCreateTime(new Date());
+        storeService.addStore(storeCooperate);
+        return Result.OK();
+    }
 }

@@ -146,6 +146,10 @@
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
+    <insert id="addStore">
+        insert into store_cooperte (user_name, phone, create_time)
+         values (#{userName},#{phone},#{createTime})
+    </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.geyl.bean.model.StoreInfo">
         update store_info
         <set>
