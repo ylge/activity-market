@@ -125,8 +125,6 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         List<RewardVO> rewardVOS = userAccountRecordMapper.getActivityUserRed(goodsId);
         rewardVOS.sort(Comparator.comparing(RewardVO::getRewardAmount).reversed());
         activityGoodsVO.setReward_list(rewardVOS);
-        activityGoodsVO.setScanNumber(activityGoodsVO.getScan_user().size());
-        activityGoodsVO.setJoinNumber(activityGoodsVO.getJoin_user().size());
         return activityGoodsVO;
     }
 
