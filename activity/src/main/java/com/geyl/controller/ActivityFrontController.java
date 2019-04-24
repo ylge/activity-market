@@ -126,6 +126,11 @@ public class ActivityFrontController {
         return activityService.addStore(userName, phone);
     }
 
+    @PostMapping("getSign")
+    public Result getSign(@RequestParam("url") String url){
+        return wxService.getSign(url);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/wxsign", method = RequestMethod.GET, produces = {"application/json;charset=utf-8"})
     public String getWxUserInfo(HttpServletRequest request,

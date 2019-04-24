@@ -296,7 +296,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         orderInfo.setUpdateTime(new Date());
         int i = orderInfoMapper.updateOrderStatusByOrderNo(orderInfo);
         if (i == 0) {
-            throw new MyException("该核销码不存在");
+            throw new MyException("无效的核销码");
         }
         return Result.OK();
     }
