@@ -286,6 +286,7 @@
        order_info oi
         left join activity_goods ag
         on oi.goods_id = ag.goods_id
+        where order_no =#{orderNo}
     </select>
     <select id="getJoinUser" resultType="com.geyl.vo.JoinUserVO">
       select

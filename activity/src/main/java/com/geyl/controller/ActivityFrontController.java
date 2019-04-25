@@ -92,6 +92,14 @@ public class ActivityFrontController {
     }
 
     /**
+     * 核销码查看
+     */
+    @GetMapping("order/{orderCode}")
+    public Result closeOrder(@PathVariable("orderCode") String orderCode) throws MyException {
+        return activityService.getOrderInfo(orderCode);
+    }
+
+    /**
      * 核销
      */
     @PostMapping("order/close")

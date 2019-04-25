@@ -338,4 +338,15 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         storeService.addStore(storeCooperate);
         return Result.OK();
     }
+
+    public Result getOrderInfo(String orderCode) throws MyException {
+        OrderInfoVO orderInfoVO = orderInfoMapper.getOrderDetailByNo(orderCode);
+        if(orderInfoVO == null){
+            throw new MyException("无效的核销码");
+        }
+        if(orderInfoVO.getStatus()==3){
+            throw new MyException("该核销码已使用");
+        }
+        return Result.OK(orderInfoVO);
+    }
 }

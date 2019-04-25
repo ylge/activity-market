@@ -1,6 +1,8 @@
 package com.geyl.task;
 
 import com.alibaba.fastjson.JSONObject;
+import com.geyl.dao.ActivityGoodsMapper;
+import com.geyl.vo.ActivityGoodsVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,9 +14,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author geyl
@@ -31,12 +35,13 @@ public class TaskJob {
     private String wx_secret;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private ActivityGoodsMapper activityGoodsMapper;
 
     public static Map<String, String> wx_map = new HashMap<>();
 
     //刷新access_token 100分钟刷新一次,服务器启动的时候刷新一次（access_token有效期是120分钟，我设置的是每100分钟刷新一次）
     @Scheduled(initialDelay = 1000, fixedDelay = 100 * 60 * 1000)
-
     public void get_access_token() {
         try {
             String appid = wx_appid;
@@ -63,5 +68,22 @@ public class TaskJob {
         } catch (Exception e) {
             log.info("更新access_token的过程当中发生了异常，异常的信息是" + e.getMessage());
         }
+    }
+
+    @Scheduled(cron = "0 30 0 ? * *")
+    public void updateActivityStatus(){
+        log.info(" >>开始执行活动状态处理");
+        LocalDate local = LocalDate.now();//获取当前时间
+        ActivityGoodsVO activityGoodsVO = new ActivityGoodsVO();
+        activityGoodsVO.setStatus(1);
+        activityGoodsVO.setEndTime(local.toString());
+        List<ActivityGoodsVO> activityGoodsVOList = activityGoodsMapper.getAcitvityGoodsList(activityGoodsVO);
+        activityGoodsVOList.forEach(activityGoods -> {
+            activityGoods.setStatus(0);
+            activityGoods.setUpdateTime(new Date());
+            activityGoods.setUpdateBy("系统定时");
+            activityGoodsMapper.updateByPrimaryKeySelective(activityGoods);
+        });
+        log.info(" >>结束执行活动状态处理");
     }
 }

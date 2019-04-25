@@ -371,6 +371,7 @@
             <if test="storeName!=null and storeName!=''">and si.store_name like CONCAT('%',#{storeName},'%')</if>
             <if test="storePhone!=null and storePhone!=''">and si.store_phone = #{storePhone}</if>
             <if test="status!=null and status!=''">and ag.status=#{status}</if>
+            <if test="endTime!=null and endTime!=''">and date(ag.end_time)&lt;=#{endTime}</if>
         </where>
     </select>
     <select id="getGoodsDetail" resultType="com.geyl.vo.ActivityGoodsVO">
