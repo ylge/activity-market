@@ -300,8 +300,8 @@
       where oi.goods_id = #{goodsId}
       limit 20
     </select>
-    <select id="checkIsOrder" resultType="java.lang.Integer">
-        select count(order_id) from order_info
+    <select id="checkIsOrder" resultType="java.lang.String">
+        select order_code orderCode from order_info
          where user_id = #{userId}
          and goods_id = #{goodsId}
          and status in (2,3)

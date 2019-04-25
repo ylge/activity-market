@@ -230,8 +230,9 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         OrderInfoVO orderInfoVO = new OrderInfoVO();
         orderInfoVO.setUserId(clientUser.getUserId().toString());
         orderInfoVO.setGoodsId(goodsId.toString());
-        int i = orderInfoMapper.checkIsOrder(orderInfoVO);
-        clientUserVO.setOrder(i>=0);
+        String orderCode = orderInfoMapper.checkIsOrder(orderInfoVO);
+        clientUserVO.setOrder(orderCode!=null);
+        clientUserVO.setOrderCode(orderCode);
         clientUserVO.setManager(isManager);
         return Result.OK(clientUserVO);
     }

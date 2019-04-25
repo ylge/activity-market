@@ -14,7 +14,7 @@ public interface OrderInfoMapper extends BaseMapper<OrderInfo,String> {
 
     List<JoinUserVO> getJoinUser(String goodsId);
 
-    Integer checkIsOrder(OrderInfoVO orderInfoVO);
+    String checkIsOrder(OrderInfoVO orderInfoVO);
 
     ActivityManageVO getActivityData(String goodsId);
 
