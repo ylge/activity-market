@@ -18,6 +18,7 @@ import com.lly835.bestpay.model.PayResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -118,7 +119,10 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         return Result.OK();
     }
 
-    public ActivityGoodsVO getGoodsDetail(String goodsId) {
+    public ActivityGoodsVO getGoodsDetail(String goodsId) throws MyException {
+        if(StringUtils.isEmpty(goodsId)){
+            throw new MyException("请求参数有误");
+        }
         ActivityGoodsVO activityGoodsVO = activityGoodsMapper.getGoodsDetail(goodsId);
         activityGoodsVO.setScan_user(scanRecordMapper.getActivityUser(goodsId));
         activityGoodsVO.setJoin_user(orderInfoMapper.getJoinUser(goodsId));

@@ -45,7 +45,7 @@ public class ActivityFrontController {
      * @return
      */
     @GetMapping("goods/{goodsId}")
-    public Result getActivityGoods(@PathVariable String goodsId) {
+    public Result getActivityGoods(@PathVariable String goodsId) throws MyException {
         return Result.OK(activityService.getGoodsDetail(goodsId));
     }
 

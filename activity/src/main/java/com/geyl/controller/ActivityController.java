@@ -7,6 +7,7 @@ import cn.afterturn.easypoi.view.PoiBaseView;
 import com.geyl.annotation.Log;
 import com.geyl.bean.PageResult;
 import com.geyl.bean.Result;
+import com.geyl.exception.MyException;
 import com.geyl.service.ActivityService;
 import com.geyl.vo.ActivityGoodsVO;
 import com.geyl.vo.IncomeVO;
@@ -70,7 +71,7 @@ public class ActivityController {
      * 　* @date 2018-5-22 13:35
      */
     @GetMapping(value = "goods/edit/{goodsId}")
-    public ModelAndView edit(ModelAndView modelAndView, @PathVariable String goodsId) {
+    public ModelAndView edit(ModelAndView modelAndView, @PathVariable String goodsId) throws MyException {
         modelAndView.setViewName("/activity/goods/edit");
         modelAndView.addObject("goods", activityService.getGoodsDetail(goodsId));
         return modelAndView;
@@ -167,7 +168,7 @@ public class ActivityController {
 
     @GetMapping(value = "/report/income/{goodsId}")
     public void activityIncome(ModelMap modelMap, HttpServletRequest request, @PathVariable String goodsId,
-                                         HttpServletResponse response) {
+                                         HttpServletResponse response) throws MyException {
         ActivityGoodsVO activityGoodsVO = activityService.getGoodsDetail(goodsId);
         if(activityGoodsVO!=null){
             ExportParams params = new ExportParams(activityGoodsVO.getGoodsName()+"-收入列表", null, ExcelType.XSSF);
@@ -184,7 +185,7 @@ public class ActivityController {
 
     @GetMapping(value = "/report/withdraw/{goodsId}")
     public void activityWithdraw(ModelMap modelMap, HttpServletRequest request, @PathVariable String goodsId,
-                               HttpServletResponse response) {
+                               HttpServletResponse response) throws MyException {
         ActivityGoodsVO activityGoodsVO = activityService.getGoodsDetail(goodsId);
         if(activityGoodsVO!=null){
             ExportParams params = new ExportParams(activityGoodsVO.getGoodsName()+"-支出列表", null, ExcelType.XSSF);
