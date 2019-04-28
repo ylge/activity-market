@@ -1,6 +1,6 @@
 <div class="row goods">
     <div class="box">
-        <div class="box-storeer">
+        <div class="box-header">
             <h3 class="box-title">活动管理</h3>
         </div>
         <div class="box-body">
@@ -125,7 +125,7 @@
                 '<a href="activity/report/withdraw/' + row.goodsId + '" >',
                 '<i class="fa fa-edit"></i>支出列表',
                 '</a>  ',
-                '<a href="activity/user/manage/' + row.goodsId + '" >',
+                '<a target="modal"  href="activity/user/manage/' + row.goodsId + '" >',
                 '<i class="fa fa-edit"></i>设置店员',
                 '</a>'
         )

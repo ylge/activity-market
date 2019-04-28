@@ -130,11 +130,12 @@
          cu.user_name userName,
          cu.nick_name nickName,
          cu.avatar
-        from scan_record sr
-        left join client_user cu
+        from client_user cu
+        left join scan_record sr
         on sr.user_id = cu.user_id
         where sr.goods_id = #{goodsId}
         <if test="phone!=null and phone !=''"> and cu.phone = #{phone}</if>
         <if test="nickName!=null and nickName!=''"> and cu.nick_name like concat("%",#{nickName},"%")</if>
+        group by cu.user_id
     </select>
 </mapper>

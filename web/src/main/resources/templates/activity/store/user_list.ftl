@@ -1,6 +1,6 @@
 <div class="row storeUser">
     <div class="box">
-        <div class="box-storeer">
+        <div class="box-header">
             <h3 class="box-title">店员设置</h3>
         </div>
         <div class="box-body">
