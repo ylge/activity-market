@@ -347,7 +347,7 @@
         ag.reward_amount rewardAmount,
         ag.activity_music activityMusic,
         ag.background_image backgroundImage,
-        ag.join_number joinNumber,
+        (select count(1) from order_info where goods_id = ag.goods_id) joinNumber,
         ag.scan_number scanNumber,
         date(ag.begin_time) beginTime,
         date(ag.end_time) endTime,

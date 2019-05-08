@@ -28,6 +28,7 @@
         from store_info
         where store_id = #{storeId}
     </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from store_info
     where store_id = #{storeId,jdbcType=INTEGER}
@@ -216,4 +217,13 @@
       update_by = #{updateBy,jdbcType=VARCHAR}
     where store_id = #{storeId,jdbcType=INTEGER}
   </update>
+
+    <select id="getcoopertePageList" resultType="com.geyl.bean.model.StoreCooperate">
+        select
+        id,
+        phone,
+        user_name userName,
+        create_time createTime
+        from store_cooperte
+    </select>
 </mapper>

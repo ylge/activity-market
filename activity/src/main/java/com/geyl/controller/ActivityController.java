@@ -7,6 +7,7 @@ import cn.afterturn.easypoi.view.PoiBaseView;
 import com.geyl.annotation.Log;
 import com.geyl.bean.PageResult;
 import com.geyl.bean.Result;
+import com.geyl.bean.model.StoreCooperate;
 import com.geyl.exception.MyException;
 import com.geyl.service.ActivityService;
 import com.geyl.vo.ActivityGoodsVO;
@@ -195,6 +196,23 @@ public class ActivityController {
             modelMap.put(NormalExcelConstants.FILE_NAME, activityGoodsVO.getGoodsName()+"-支出列表");
             PoiBaseView.render(modelMap, request, response, NormalExcelConstants.EASYPOI_EXCEL_VIEW);
         }
+    }
+
+    /**
+     * 　* @description:活动列表
+     * 　* @author geyl
+     * 　* @date 2018-5-22 13:34
+     */
+    @GetMapping(value = "cooperte/list")
+    public ModelAndView coopertelist(ModelAndView modelAndView) {
+        modelAndView.setViewName("/activity/store/cooperte_list");
+        return modelAndView;
+    }
+
+    @GetMapping(value = "cooperte/page")
+    public @ResponseBody
+    PageResult<StoreCooperate> coopertePage(StoreCooperate storeCooperate) {
+        return activityService.getcoopertePageList(storeCooperate);
     }
 
 }

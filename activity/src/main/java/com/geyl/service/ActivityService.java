@@ -48,6 +48,8 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     private ScanRecordMapper scanRecordMapper;
     @Autowired
     private UserAccountRecordMapper userAccountRecordMapper;
+    @Autowired
+    private StoreInfoMapper storeInfoMapper;
 
     @Override
     public BaseMapper<ActivityGoods, String> getMappser() {
@@ -353,5 +355,15 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             throw new MyException("该核销码已使用");
         }
         return Result.OK(orderInfoVO);
+    }
+
+    public PageResult<StoreCooperate> getcoopertePageList(StoreCooperate storeCooperate) {
+        Integer offset = storeCooperate.getOffset();
+        Integer limit = storeCooperate.getLimit();
+        String order = storeCooperate.getOrder();
+        String sort = storeCooperate.getSort();
+        PageHelper.startPage(offset / limit + 1, limit, CamelCaseUtil.toUnderlineName(sort + " " + order));
+        List<StoreCooperate> tList = storeInfoMapper.getcoopertePageList(storeCooperate);
+        return new PageResult<>(new PageInfo<>(tList));
     }
 }

@@ -5,12 +5,33 @@
             <input type="text" class="form-control" name="goodsName" maxlength="10"
                    placeholder="最多10个字，不要包含英文标点！" required>
         </div>
-        <div class="form-group">
-            <label><span style="color: red">*</span>活动商品图片</label><br>
-            <img src="/adminlte/dist/img/timg.jpg" style="width: 80px;height: 60px" onclick="imageClick('goodsImg')"
-                 class="goodsImg">
-            <input name="goodsFile" id="goodsImg" type="file" style="display: none" required>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label><span style="color: red">*</span>活动商品图片</label><br>
+                    <img src="/adminlte/dist/img/timg.jpg" style="width: 80px;height: 80px" onclick="imageClick('goodsImg')"
+                         class="goodsImg">
+                    <input name="goodsFile" id="goodsImg" type="file" style="display: none" required>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label><span style="color: red">*</span>活动背景图</label><br>
+                    <img src="/adminlte/dist/img/timg.jpg" style="width: 80px;height: 80px"
+                         onclick="imageClick('backgroundImageImg')" class="backgroundImageImg">
+                    <input id="backgroundImageImg" name="backgroundImageFile" type="file" style="display: none" required>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label><span style="color: red">*</span>活动详情图</label><br>
+                    <img src="/adminlte/dist/img/timg.jpg" style="width: 80px;height: 80px"
+                         onclick="imageClick('goodsDetailImg')" class="goodsDetailImg">
+                    <input id="goodsDetailImg" name="goodsDetailFile" type="file" style="display: none" required>
+                </div>
+            </div>
         </div>
+
         <div class="form-group">
             <label>价格</label><span style="color: red">最多一位小数</span>
             <input type="text" class="form-control" placeholder="最多一位小数" name="goodsPrice" onchange="limitInput(this)">
@@ -22,18 +43,6 @@
                    placeholder="必须正整数"
                    onafterpaste="this.value=this.value.replace(/\D/g,'')"
                    required>
-        </div>
-        <div class="form-group">
-            <label><span style="color: red">*</span>活动背景图</label><br>
-            <img src="/adminlte/dist/img/timg.jpg" style="width: 80px;height: 60px"
-                 onclick="imageClick('backgroundImageImg')" class="backgroundImageImg">
-            <input id="backgroundImageImg" name="backgroundImageFile" type="file" style="display: none" required>
-        </div>
-        <div class="form-group">
-            <label><span style="color: red">*</span>活动详情图</label><br>
-            <img src="/adminlte/dist/img/timg.jpg" style="width: 80px;height: 60px"
-                 onclick="imageClick('goodsDetailImg')" class="goodsDetailImg">
-            <input id="goodsDetailImg" name="goodsDetailFile" type="file" style="display: none" required>
         </div>
         <div class="form-group">
             <label>页面音乐</label>

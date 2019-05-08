@@ -65,19 +65,16 @@
                         var s;
                         if (row.goodsImage != null) {
                             var url = row.goodsImage;
-                            s = '<img onclick="imageView(\'' + url + '\')" style="width:60px;height:40px;margin:-5px auto;" src="' + url + '" />';
+                            s = '<img onclick="imageView(\'' + url + '\')" style="width:60px;height:60px;margin:-5px auto;" src="' + url + '" />';
                         }
                         return s;
                     }
                 },
                 {title: "价格", field: "goodsPrice"},
-                {title: "活动时间", field: "beginTime"},
-                {title: "结束时间", field: "endTime"},
+                {title: "活动时间", field: "beginTime", formatter: activityTime},
                 {title: "参与人数", field: "joinNumber"},
-                {title: "收入", field: "storeIncome"},
-                {title: "支出", field: "storeWithdraw"},
-                {title: "商家", field: "storeName"},
-                {title: "商家联系方式", field: "storePhone"},
+                {title: "交易统计", field: "storeIncome", formatter: dataCount},
+                {title: "商家信息", field: "storeName", formatter: storeInfo},
                 {title: "状态", field: "status", formatter: tableModel.getState},
                 {title: "操作", field: "operate", align: 'center', formatter: operateFormatter}
             ],
@@ -100,7 +97,18 @@
             '<i class="fa fa-edit"></i>修改活动',
             '</a>  ',
             </@shiro.hasPermission>
+            '<a target="modal"  href="activity/user/manage/' + row.goodsId + '" >',
+            '<i class="fa fa-edit"></i>设置店员',
+            '</a> <br>'
         ];
+        result.push(
+                '<a href="activity/report/income/' + row.goodsId + '" >',
+                '<i class="fa fa-line-chart"></i>收入列表',
+                '</a>  ',
+                '<a href="activity/report/withdraw/' + row.goodsId + '" >',
+                '<i class="fa fa-line-chart"></i>支出列表',
+                '</a> <br>'
+        );
         if (row.status === 1) {
             <@shiro.hasPermission name="activity/goods/delete">
                 result.push(
@@ -118,17 +126,6 @@
                 );
             </@shiro.hasPermission>
         }
-        result.push(
-                '<a href="activity/report/income/' + row.goodsId + '" >',
-                '<i class="fa fa-edit"></i>收入列表',
-                '</a>  ',
-                '<a href="activity/report/withdraw/' + row.goodsId + '" >',
-                '<i class="fa fa-edit"></i>支出列表',
-                '</a>  ',
-                '<a target="modal"  href="activity/user/manage/' + row.goodsId + '" >',
-                '<i class="fa fa-edit"></i>设置店员',
-                '</a>'
-        )
         return result.join('');
     }
 
@@ -138,6 +135,19 @@
 
     function goodsReload() {
         reloadTable(goods_tab);
+    }
+
+    function activityTime(value, row, index) {
+        return "开始：" + row.beginTime + "<br>结束：" + row.endTime;
+    }
+
+    function storeInfo(value, row, index) {
+        return "名称：" + row.storeName + "<br>电话：" + row.storePhone;
+    }
+
+    function dataCount(value, row, index) {
+        return '<span style="color: green">收入：' + row.storeIncome + '</span><br>' +
+                '<span style="color: red">支出：' + row.storeWithdraw + '</span>';
     }
 
     /*function storeIncomeExport(goodsId) {

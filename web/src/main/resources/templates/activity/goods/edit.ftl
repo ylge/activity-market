@@ -8,12 +8,37 @@
                    maxlength="10" value="${goods.goodsName!}"
                    placeholder="最多10个字，不要包含英文标点！" required>
         </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label><span style="color: red">*</span>活动商品图片</label><br>
+                    <img src="${goods.goodsImage!'/adminlte/dist/img/timg.jpg'}" style="width: 80px;height: 80px"
+                         onclick="imageClick('goodsImg')"
+                         class="goodsImg">
+                    <input name="goodsFile" id="goodsImg" type="file" style="display: none" required>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label><span style="color: red">*</span>活动详情图</label><br>
+                    <img src="${goods.goodsDetail!'/adminlte/dist/img/timg.jpg'}" style="width: 80px;height: 80px"
+                         onclick="imageClick('goodsDetailImg')" class="goodsDetailImg">
+                    <input id="goodsDetailImg" name="goodsDetailFile" type="file" style="display: none" required>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label><span style="color: red">*</span>活动背景图</label><br>
+                    <img src="${goods.backgroundImage!'/adminlte/dist/img/timg.jpg'}" style="width: 80px;height: 80px"
+                         onclick="imageClick('backgroundImageImg')" class="backgroundImageImg">
+                    <input id="backgroundImageImg" name="backgroundImageFile" type="file" style="display: none" required>
+                </div>
+            </div>
+        </div>
         <div class="form-group">
-            <label><span style="color: red">*</span>活动商品图片</label><br>
-            <img src="${goods.goodsImage!'/adminlte/dist/img/timg.jpg'}" style="width: 80px;height: 60px"
-                 onclick="imageClick('goodsImg')"
-                 class="goodsImg">
-            <input name="goodsFile" id="goodsImg" type="file" style="display: none" required>
+            <label>页面音乐</label>
+            <a href="${goods.activityMusic!}" target="_Blank">点击播放</a>
+            <input type="file" class="form-control" name="activityMusicFile">
         </div>
         <div class="form-group">
             <label>价格</label><span style="color: red">最多一位小数</span>
@@ -30,26 +55,10 @@
                    required>
         </div>
         <div class="form-group">
-            <label><span style="color: red">*</span>活动详情图</label><br>
-            <img src="${goods.goodsDetail!'/adminlte/dist/img/timg.jpg'}" style="width: 80px;height: 60px"
-                 onclick="imageClick('goodsDetailImg')" class="goodsDetailImg">
-            <input id="goodsDetailImg" name="goodsDetailFile" type="file" style="display: none" required>
-        </div>
-        <div class="form-group">
-            <label><span style="color: red">*</span>活动背景图</label><br>
-            <img src="${goods.backgroundImage!'/adminlte/dist/img/timg.jpg'}" style="width: 80px;height: 60px"
-                 onclick="imageClick('backgroundImageImg')" class="backgroundImageImg">
-            <input id="backgroundImageImg" name="backgroundImageFile" type="file" style="display: none" required>
-        </div>
-        <div class="form-group">
-            <label>页面音乐</label>
-            <input type="file" class="form-control" name="activityMusicFile">
-        </div>
-        <div class="form-group">
             <label><span style="color: red">*</span>商家二维码</label><br>
             <img src="${goods.storeCode!'/adminlte/dist/img/timg.jpg'}" class="storeCodeImage"
                  onclick="imageClick('storeCodeImage')"
-                 style="width: 80px;height: 60px">
+                 style="width: 80px;height: 80px">
             <input type="file" name="storeCodeFile" id="storeCodeImage" style="display: none">
         </div>
         <div class="form-group">
