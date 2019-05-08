@@ -74,6 +74,7 @@
                 {title: "活动时间", field: "beginTime", formatter: activityTime},
                 {title: "参与人数", field: "joinNumber"},
                 {title: "交易统计", field: "storeIncome", formatter: dataCount},
+                {title: "活动连接", field: "activityUrl", formatter: activityUrl},
                 {title: "商家信息", field: "storeName", formatter: storeInfo},
                 {title: "状态", field: "status", formatter: tableModel.getState},
                 {title: "操作", field: "operate", align: 'center', formatter: operateFormatter}
@@ -127,6 +128,17 @@
             </@shiro.hasPermission>
         }
         return result.join('');
+    }
+
+    function activityUrl(value, row, index) {
+        return '<a href="#" onclick="copy()">点击复制</a><br>' + '<input id="copy" style="opacity: 0;width: 10px" value="www.hbysg.club/marketing/?i=' + row.goodsId + '">';
+    }
+
+    function copy() {
+        var e = document.getElementById("copy");
+        e.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        alertMsg("复制成功！", "success");
     }
 
     function goodsToListAjax() {
