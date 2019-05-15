@@ -24,10 +24,10 @@
                 </div>
             </div>-->
                 <div class="col-md-3">
-                    <button type="button" onclick="goodsReload()" class="btn btn-primary">搜索</button>
+                    <button type="button" onclick="goodsReload()" class="btn btn-primary">查询</button>
                         <@shiro.hasPermission name="activity/goods/add">
                         <a class="btn btn-primary" onclick="goodsToListAjax()" target="modal"
-                           href="activity/goods/add">添加活动</a>
+                           href="activity/goods/add">新建活动</a>
                         </@shiro.hasPermission>
                 </div>
             </div>
@@ -57,8 +57,15 @@
             sortName: "goodsId",
             sortOrder: "desc",
             columns: [
-                {title: "活动Id", field: "goodsId"},
-                {title: "活动商品名称", field: "goodsName"},
+                {
+                    title: "活动信息", field: "goodsName",
+                    formatter: function (value, row, index) {
+                        return '活动ID : ' + row.goodsId +
+                                '<br>名称 : ' + row.goodsName +
+                                '<br>价格 : ' + row.goodsPrice +
+                                '<br>连接 : <a href="#" onclick="copy()">点击复制</a><br>' + '<input id="copy" style="opacity: 0;width: 10px" value="www.hbysg.club/marketing/?i=' + row.goodsId + '">';
+                    }
+                },
                 {
                     title: "活动图片", field: "goodsImage",
                     formatter: function (value, row, index) {
@@ -70,15 +77,12 @@
                         return s;
                     }
                 },
-                {title: "价格", field: "goodsPrice"},
                 {title: "活动时间", field: "beginTime", formatter: activityTime},
-                {title: "参与人数", field: "joinNumber"},
-                {title: "交易统计", field: "storeIncome", formatter: dataCount},
-                {title: "活动连接", field: "activityUrl", formatter: activityUrl},
+                {title: "数据统计", field: "storeIncome", formatter: dataCount},
                 {title: "商家信息", field: "storeName", formatter: storeInfo},
                 {title: "状态", field: "status", formatter: tableModel.getState},
                 {title: "操作", field: "operate", align: 'center', formatter: operateFormatter}
-            ],
+            ]
         });
     });
 
@@ -95,26 +99,26 @@
         var result = [
             <@shiro.hasPermission name="activity/goods/edit">
             '<a target="modal"  onclick="goodsToListAjax()" href="activity/goods/edit/' + row.goodsId + '" >',
-            '<i class="fa fa-edit"></i>修改活动',
-            '</a>  ',
+            '<i class="fa fa-edit"></i> 修改活动',
+            '</a><br>',
             </@shiro.hasPermission>
             '<a target="modal"  href="activity/user/manage/' + row.goodsId + '" >',
-            '<i class="fa fa-edit"></i>设置店员',
-            '</a> <br>'
+            '<i class="fa fa-user"></i> 设置店员',
+            '</a><br>'
         ];
         result.push(
                 '<a href="activity/report/income/' + row.goodsId + '" >',
-                '<i class="fa fa-line-chart"></i>收入列表',
-                '</a>  ',
+                '<i class="fa fa-line-chart"></i> 收入列表',
+                '</a><br>',
                 '<a href="activity/report/withdraw/' + row.goodsId + '" >',
-                '<i class="fa fa-line-chart"></i>支出列表',
-                '</a> <br>'
+                '<i class="fa fa-line-chart"></i> 支出列表',
+                '</a><br>'
         );
         if (row.status === 1) {
             <@shiro.hasPermission name="activity/goods/delete">
                 result.push(
                         '<a callback="goodsReload();" data-body="确认要禁用吗？" target="ajaxTodo" href="activity/goods/delete/' + row.goodsId + '/0">',
-                        '<i class="fa fa-lock"></i>关闭活动<br>',
+                        '<i class="fa fa-lock"></i> 关闭活动<br>',
                         '</a>',
                 );
             </@shiro.hasPermission>
@@ -122,7 +126,7 @@
             <@shiro.hasPermission name="activity/goods/delete">
                 result.push(
                         '<a callback="goodsReload();" data-body="确认要启用吗？" target="ajaxTodo" href="activity/goods/delete/' + row.goodsId + '/1">',
-                        '<i class="fa fa-unlock"></i>打开活动<br>',
+                        '<i class="fa fa-unlock"></i> 打开活动<br>',
                         '</a>',
                 );
             </@shiro.hasPermission>
@@ -150,16 +154,19 @@
     }
 
     function activityTime(value, row, index) {
-        return "开始：" + row.beginTime + "<br>结束：" + row.endTime;
+        return "创建时间 ：" + row.createTime + "<br>开始时间 ：" + row.beginTime + "<br>结束时间 ：" + row.endTime;
     }
 
     function storeInfo(value, row, index) {
-        return "名称：" + row.storeName + "<br>电话：" + row.storePhone;
+        return "名称 ：" + row.storeName +
+                "<br>电话 ：" + row.storePhone +
+                "<br>联系人 ：" + row.linkName;
     }
 
     function dataCount(value, row, index) {
-        return '<span style="color: green">收入：' + row.storeIncome + '</span><br>' +
-                '<span style="color: red">支出：' + row.storeWithdraw + '</span>';
+        return '参与人数：<span class="label label-primary">' + row.joinNumber + '</span><br>' +
+                '收入金额：<span class="label label-success">' + row.storeIncome + '</span><br>' +
+                '支出金额：<span class="label label-danger">' + row.storeWithdraw + '</span>';
     }
 
     /*function storeIncomeExport(goodsId) {

@@ -361,6 +361,7 @@
         si.store_phone storePhone,
         si.store_address storeAddress,
         si.store_code storeCode,
+        si.link_name linkName,
         (select sum(payment_amount) from order_info where goods_id = ag.goods_id and status in(2,3) ) storeIncome,
         (select sum(amount) from user_account_record where remark_1 = ag.goods_id) storeWithdraw
         from activity_goods ag

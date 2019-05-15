@@ -55,6 +55,16 @@
                    required>
         </div>
         <div class="form-group">
+            <label><span style="color: red">*</span>商家名称</label>
+            <input type="text" class="form-control" name="storeName" placeholder="店铺名称" value="${goods.storeName!}" required>
+        </div>
+        <div class="form-group">
+            <label><span style="color: red">*</span>商家电话</label>
+            <input type="text" class="form-control" name="storePhone" value="${goods.storePhone!}"
+                   placeholder="只能输入数字"
+                   onblur="isPoneAvailable(this)" required>
+        </div>
+        <div class="form-group">
             <label><span style="color: red">*</span>商家二维码</label><br>
             <img src="${goods.storeCode!'/adminlte/dist/img/timg.jpg'}" class="storeCodeImage"
                  onclick="imageClick('storeCodeImage')"
@@ -67,20 +77,11 @@
                    placeholder="详细地址" required>
         </div>
         <div class="form-group">
-            <label><span style="color: red">*</span>商家电话</label>
-            <input type="text" class="form-control" name="storePhone" value="${goods.storePhone!}"
-                   placeholder="只能输入数字"
-                   onblur="isPoneAvailable(this)" required>
-        </div>
-        <div class="form-group">
             <label><span style="color: red">*</span>联系人</label>
             <input type="text" class="form-control" name="linkName" value="${goods.linkName!}" placeholder="联系人姓名"
                    required>
         </div>
-        <div class="form-group">
-            <label><span style="color: red">*</span>商家名称</label>
-            <input type="text" class="form-control" name="storeName" placeholder="店铺名称" value="${goods.storeName!}" required>
-        </div>
+
         <div class="form-group">
             <label>活动时间</label><br>
             <button type="button" class="btn btn-default" id="daterange_btn1">
