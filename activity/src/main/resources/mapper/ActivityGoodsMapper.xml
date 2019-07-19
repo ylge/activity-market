@@ -305,7 +305,7 @@
                 activity_rule = #{activityRule,jdbcType=LONGVARCHAR},
             </if>
         </set>
-        where goods_id = #{goodsId,jdbcType=INTEGER}
+        where goods_id = #{goodsId}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.geyl.bean.model.ActivityGoods">
     update activity_goods
@@ -331,7 +331,7 @@
       create_by = #{createBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=VARCHAR}
-    where goods_id = #{goodsId,jdbcType=INTEGER}
+    where goods_id = #{goodsId}
   </update>
 
     <select id="getAcitvityGoodsList" resultType="com.geyl.vo.ActivityGoodsVO">
