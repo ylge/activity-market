@@ -20,6 +20,8 @@ import java.io.InputStream;
 @Component
 @Slf4j
 public class QinNiuUtil {
+    private final static String url = "http://qianniu.hebiysg.cn/";
+
     public String uploadFile(InputStream input) {
         //构造一个带指定Zone对象的配置类
         Configuration cfg = new Configuration(Zone.autoZone());
@@ -37,7 +39,7 @@ public class QinNiuUtil {
             //解析上传成功的结果
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
             log.info(putRet.hash);
-            return "http://ppqnam2qx.bkt.clouddn.com/" + putRet.hash;
+            return url + putRet.hash;
         } catch (QiniuException ex) {
             Response r = ex.response;
             log.error(r.toString());

@@ -13,6 +13,7 @@ import com.lly835.bestpay.model.PayRequest;
 import com.lly835.bestpay.model.PayResponse;
 import com.lly835.bestpay.service.impl.BestPayServiceImpl;
 import com.lly835.bestpay.utils.JsonUtil;
+import com.wxpay.WXPayConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -116,6 +117,23 @@ public class WxService {
         request.setOpenid(openid);
 
         PayResponse response = bestPayService.pay(request);
+
+        /*Map<String, String> data = new HashMap<>();
+        data.put("body", "亿时光");
+        data.put("out_trade_no", orderNo);
+        data.put("fee_type", "CNY");
+        data.put("total_fee", orderInfo.getOrderAmount().toString());
+        data.put("spbill_create_ip", "123.12.12.123");
+        data.put("notify_url", "http://www.example.com/wxpay/notify");
+        data.put("trade_type", WXPayConstants.TRADE_TYPE);  // 此处指定为扫码支付
+        data.put("openid", openid);
+
+        try {
+            Map<String, String> resp = Wxpay.unifiedOrder(data);
+            System.out.println(resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
         log.info(JsonUtil.toJson(response));
         return response;
     }
@@ -161,7 +179,12 @@ public class WxService {
         return parseParam.get("ticket");
     }
 
-    private String getWxToken() {
+    /**
+     * 获取token
+     *
+     * @return
+     */
+    public String getWxToken() {
         String requestUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
         requestUrl = requestUrl.replace("APPID", wx_appid).replace("APPSECRET", wx_secret);
         HttpHeaders headers = new HttpHeaders();

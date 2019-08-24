@@ -6,9 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="activity" />
-        <module name="common" />
         <module name="system" />
+        <module name="common" />
+        <module name="activity" />
         <module name="web" />
       </profile>
     </annotationProcessing>
