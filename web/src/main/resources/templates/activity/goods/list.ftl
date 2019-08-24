@@ -63,7 +63,7 @@
                         return '活动ID : ' + row.goodsId +
                                 '<br>名称 : ' + row.goodsName +
                                 '<br>价格 : ' + row.goodsPrice +
-                                '<br>连接 : <a href="#" onclick="copy()">点击复制</a><br>' + '<input id="copy" style="opacity: 0;width: 10px" value="www.hbysg.club/marketing/?i=' + row.goodsId + '">';
+                                '<br>连接 : <a href="#" onclick="copy()">点击复制</a><br>' + '<input id="copy" style="opacity: 0;width: 10px" value="www.hebiysg.cn/marketing/?i=' + row.goodsId + '">';
                     }
                 },
                 {
@@ -135,7 +135,7 @@
     }
 
     function activityUrl(value, row, index) {
-        return '<a href="#" onclick="copy()">点击复制</a><br>' + '<input id="copy" style="opacity: 0;width: 10px" value="www.hbysg.club/marketing/?i=' + row.goodsId + '">';
+        return '<a href="#" onclick="copy()">点击复制</a><br>' + '<input id="copy" style="opacity: 0;width: 10px" value="www.hebiysg.cn/marketing/?i=' + row.goodsId + '">';
     }
 
     function copy() {
