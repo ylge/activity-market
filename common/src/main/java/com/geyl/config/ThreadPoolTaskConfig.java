@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Configuration
 public class ThreadPoolTaskConfig {
-    @Bean(name = "presellThreadPoolTask")
+    @Bean(name = "ysgThreadPoolTask")
     @Primary
     public ThreadPoolTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
@@ -24,7 +24,7 @@ public class ThreadPoolTaskConfig {
         threadPoolTaskExecutor.setMaxPoolSize(20);
         //线程池所使用的缓冲队列
         threadPoolTaskExecutor.setQueueCapacity(64);
-        threadPoolTaskExecutor.setThreadNamePrefix("EHU-PRESELL-THREAD");
+        threadPoolTaskExecutor.setThreadNamePrefix("YSG-THREAD");
         threadPoolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
         return threadPoolTaskExecutor;
     }
