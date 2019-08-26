@@ -3,9 +3,11 @@ package com.geyl.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.geyl.bean.Result;
+import com.geyl.bean.model.ActivityGoods;
+import com.geyl.bean.model.OrderInfo;
 import com.geyl.bean.wx.WxResponse;
 import com.geyl.bean.wx.WxUserResponse;
-import com.geyl.dao.OrderInfoMapper;
+import com.geyl.dao.ActivityGoodsMapper;
 import com.geyl.task.TaskJob;
 import com.geyl.vo.OrderInfoVO;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
@@ -13,14 +15,10 @@ import com.lly835.bestpay.model.PayRequest;
 import com.lly835.bestpay.model.PayResponse;
 import com.lly835.bestpay.service.impl.BestPayServiceImpl;
 import com.lly835.bestpay.utils.JsonUtil;
+import com.wxpay.WXPay;
+import com.wxpay.WXPayConfigImpl;
 import com.wxpay.WXPayConstants;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -53,7 +51,7 @@ public class WxService {
     @Value(value = "${redirectUrl}")
     private String redirectUrl;
     @Autowired
-    private OrderInfoMapper orderInfoMapper;
+    private ActivityGoodsMapper goodsMapper;
     @Autowired
     private BestPayServiceImpl bestPayService;
     @Autowired
@@ -104,36 +102,35 @@ public class WxService {
     /**
      * 获取支付信息
      *
-     * @param orderNo 订单id
+     * @param order 订单
      * @return o
      */
-    public PayResponse getPayInfo(String orderNo, String openid) {
-        OrderInfoVO orderInfo = orderInfoMapper.getOrderDetailByNo(orderNo);
-        PayRequest request = new PayRequest();
-        request.setPayTypeEnum(BestPayTypeEnum.WXPAY_H5);
-        request.setOrderId(orderNo);
-        request.setOrderAmount(orderInfo.getOrderAmount().doubleValue());
-        request.setOrderName(orderInfo.getGoodsName());
-        request.setOpenid(openid);
-
-        PayResponse response = bestPayService.pay(request);
-
-        /*Map<String, String> data = new HashMap<>();
+    public PayResponse getPayInfo(OrderInfo order, String openid) throws Exception {
+        ActivityGoods activityGoods = goodsMapper.getGoodsDetail(order.getGoodsId());
+        if (activityGoods.getStatus() != 1) {
+            return null;
+        }
+        /*WXPay wxPay = new WXPay(WXPayConfigImpl.getInstance());
+        Map<String, String> data = new HashMap<>();
         data.put("body", "亿时光");
-        data.put("out_trade_no", orderNo);
+        data.put("out_trade_no", order.getOrderNo());
         data.put("fee_type", "CNY");
-        data.put("total_fee", orderInfo.getOrderAmount().toString());
+        data.put("total_fee", order.getOrderAmount().toString());
         data.put("spbill_create_ip", "123.12.12.123");
         data.put("notify_url", "http://www.example.com/wxpay/notify");
         data.put("trade_type", WXPayConstants.TRADE_TYPE);  // 此处指定为扫码支付
         data.put("openid", openid);
 
-        try {
-            Map<String, String> resp = Wxpay.unifiedOrder(data);
-            System.out.println(resp);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
+        Map<String, String> resp = wxPay.unifiedOrder(data);
+        System.out.println(resp);*/
+        PayRequest request = new PayRequest();
+        request.setPayTypeEnum(BestPayTypeEnum.WXPAY_H5);
+        request.setOrderId(order.getOrderNo());
+        request.setOrderAmount(order.getOrderAmount().doubleValue());
+        request.setOrderName(activityGoods.getGoodsName());
+        request.setOpenid(openid);
+
+        PayResponse response = bestPayService.pay(request);
         log.info(JsonUtil.toJson(response));
         return response;
     }

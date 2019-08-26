@@ -86,7 +86,7 @@ public class WXPayConstants {
     /**
      * API密钥，在商户平台设置
      */
-    public static final String API_KEY = "xxx"; // 真实
+    public static final String API_KEY = "b7da078e4a8aed1aa0f9bcba473ba0bc"; // 真实
     public static final String API_KEY_XXX = "xxx"; // 测试/第二个账号
     public static final String API_KEY_SANDBOX = "xxx"; // sandbox_signkey
 

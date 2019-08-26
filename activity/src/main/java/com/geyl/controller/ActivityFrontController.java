@@ -75,20 +75,8 @@ public class ActivityFrontController {
      * 下单
      */
     @PostMapping("order/add")
-    public Result addOrder(@RequestBody OrderAdd orderAdd) {
+    public Result addOrder(@RequestBody OrderAdd orderAdd) throws Exception {
         return activityService.addOrder(orderAdd);
-    }
-
-    /**
-     * 微信支付参数获取
-     *
-     * @param orderNo
-     * @param openid
-     * @return
-     */
-    @GetMapping(value = "payInfo/{orderNo}/{openid}")
-    public Object getPayInfo(@PathVariable String orderNo, @PathVariable String openid) {
-        return wxService.getPayInfo(orderNo, openid);
     }
 
     /**
