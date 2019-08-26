@@ -71,7 +71,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li class="user-header">
-                            <img src="${user.avatar!'adminlte/dist/img/ehulogo.png'}" class="img-circle">
+                            <img src="${user.avatar!'${request.contextPath}/adminlte/dist/img/ehulogo.png'}" class="img-circle">
                             <p>
                                 ${user.username!}
                                 <small>${user.createTime?string('yyyy-MM-dd HH:mm:ss')}加入</small>
@@ -111,42 +111,42 @@
 <#macro style>
 <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-<link rel="shortcut icon" type="image/x-icon" href="adminlte/dist/img/ehulogo.png">
+<link rel="shortcut icon" type="image/x-icon" href="${request.contextPath}/adminlte/dist/img/ehulogo.png">
 <!-- Bootstrap 3.3.6 -->
-<link rel="stylesheet" type=text/css href="adminlte/plugins/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type=text/css href="${request.contextPath}/adminlte/plugins/bootstrap/css/bootstrap.min.css">
 <!-- Font Awesome -->
 <link rel="stylesheet" type=text/css href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <!-- Theme style -->
-<link rel="stylesheet" type=text/css href="adminlte/dist/css/AdminLTE.min.css">
+<link rel="stylesheet" type=text/css href="${request.contextPath}/adminlte/dist/css/AdminLTE.min.css">
 <!-- AdminLTE Skins. Choose a skin from the css/skins
    folder instead of downloading all of them to reduce the load. -->
-<link rel="stylesheet" type=text/css href="adminlte/dist/css/skins/_all-skins.min.css">
+<link rel="stylesheet" type=text/css href="${request.contextPath}/adminlte/dist/css/skins/_all-skins.min.css">
 <!-- 以上为公共css -->
 
 <!-- iCheck for checkboxes and radio inputs -->
-<link rel="stylesheet" type=text/css href="adminlte/plugins/iCheck/all.css">
+<link rel="stylesheet" type=text/css href="${request.contextPath}/adminlte/plugins/iCheck/all.css">
 <!-- Bootstrap Color Picker -->
-<link rel="stylesheet" type=text/css href="adminlte/plugins/colorpicker/bootstrap-colorpicker.min.css">
+<link rel="stylesheet" type=text/css href="${request.contextPath}/adminlte/plugins/colorpicker/bootstrap-colorpicker.min.css">
 <!-- Bootstrap time Picker -->
-<#--<link rel="stylesheet" href="adminlte/plugins/timepicker/bootstrap-timepicker.min.css">-->
+<#--<link rel="stylesheet" href="${request.contextPath}/adminlte/plugins/timepicker/bootstrap-timepicker.min.css">-->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" type=text/css rel="stylesheet">
 <link href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.css" type=text/css rel="stylesheet">
 <!-- Bootstrap select -->
-<link rel="stylesheet" type=text/css href="adminlte/plugins/bootstrap-select/bootstrap-select.min.css">
+<link rel="stylesheet" type=text/css href="${request.contextPath}/adminlte/plugins/bootstrap-select/bootstrap-select.min.css">
 <!-- bootstrap wysihtml5 - text editor -->
-<link rel="stylesheet" type=text/css href="adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+<link rel="stylesheet" type=text/css href="${request.contextPath}/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 <!-- iCheck -->
-<link rel="stylesheet" type=text/css href="adminlte/plugins/iCheck/flat/blue.css">
+<link rel="stylesheet" type=text/css href="${request.contextPath}/adminlte/plugins/iCheck/flat/blue.css">
 <!-- treeview-->
 <link rel="stylesheet" type=text/css href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css">
 
-<link rel="stylesheet" type=text/css href="adminlte/plugins/jquery-treegrid-master/css/jquery.treegrid.css">
+<link rel="stylesheet" type=text/css href="${request.contextPath}/adminlte/plugins/jquery-treegrid-master/css/jquery.treegrid.css">
 <!-- bootstrap slider -->
-<link rel="stylesheet" type=text/css href="adminlte/plugins/bootstrap-slider/slider.css">
+<link rel="stylesheet" type=text/css href="${request.contextPath}/adminlte/plugins/bootstrap-slider/slider.css">
 <!-- bootstrap-table -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
 <#--bootstrap-iconpicker-->
-<link rel="stylesheet" type=text/css href="adminlte/plugins/bootstrap-iconpicker/bootstrap-iconpicker.min.css">
+<link rel="stylesheet" type=text/css href="${request.contextPath}/adminlte/plugins/bootstrap-iconpicker/bootstrap-iconpicker.min.css">
 <#--ladda-->
 <link type=text/css href="https://cdnjs.cloudflare.com/ajax/libs/ladda-bootstrap/0.9.4/ladda.min.css" rel="stylesheet">
 <link type=text/css href="https://cdnjs.cloudflare.com/ajax/libs/ladda-bootstrap/0.9.4/ladda-themeless.min.css" rel="stylesheet">
@@ -163,68 +163,68 @@
 
 <#macro jsFile>
 <!-- jQuery 2.2.3 -->
-<#--<script src="adminlte/plugins/jQuery/jquery-2.2.3.min.js"></script>-->
+<#--<script src="${request.contextPath}/adminlte/plugins/jQuery/jquery-2.2.3.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 <!-- jQuery UI 1.11.bootstrap-select -->
-<script src="adminlte/plugins/jQueryUI/jquery-ui.min.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/jQueryUI/jquery-ui.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
-<script src="adminlte/plugins/bootstrap/js/bootstrap.min.js"></script>
-<#--<script src="adminlte/plugins/fastclick/fastclick.js"></script>-->
+<script src="${request.contextPath}/adminlte/plugins/bootstrap/js/bootstrap.min.js"></script>
+<#--<script src="${request.contextPath}/adminlte/plugins/fastclick/fastclick.js"></script>-->
 <!-- Slimscroll -->
-<script src="adminlte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- AdminLTE App -->
-<script src="adminlte/dist/js/common.js"></script>
-<script src="adminlte/dist/js/AjaxFileUpload.js"></script>
-<script src="adminlte/dist/js/app.js"></script>
+<script src="${request.contextPath}/adminlte/dist/js/common.js"></script>
+<script src="${request.contextPath}/adminlte/dist/js/AjaxFileUpload.js"></script>
+<script src="${request.contextPath}/adminlte/dist/js/app.js"></script>
 <!-- 以上JS为页面必须 -->
 
 <!-- Bootstrap WYSIHTML5 -->
-<script src="adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 <!-- iCheck -->
-<script src="adminlte/plugins/iCheck/icheck.min.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/iCheck/icheck.min.js"></script>
 <!-- InputMask -->
-<script src="adminlte/plugins/input-mask/jquery.inputmask.js"></script>
-<script src="adminlte/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-<script src="adminlte/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/input-mask/jquery.inputmask.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/input-mask/jquery.inputmask.extensions.js"></script>
 <!-- bootstrap daterangepicker -->
 <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/moment.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.js"></script>
 <!-- bootstrap color picker -->
-<script src="adminlte/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 <!-- bootstrap time picker -->
-<#--<script src="adminlte/plugins/timepicker/bootstrap-timepicker.min.js"></script>-->
+<#--<script src="${request.contextPath}/adminlte/plugins/timepicker/bootstrap-timepicker.min.js"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 <!-- bootstrap select -->
-<script src="adminlte/plugins/bootstrap-select/bootstrap-select.min.js"></script>
-<script src="adminlte/plugins/bootstrap-select/i18n/defaults-zh_CN.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/bootstrap-select/i18n/defaults-zh_CN.js"></script>
 <!-- Bootstrap slider -->
-<script src="adminlte/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/bootstrap-slider/bootstrap-slider.js"></script>
 <!-- bootstrap-table -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.0/extensions/treegrid/bootstrap-table-treegrid.js"></script>
 <#--table treegrid-->
-<script src="adminlte/plugins/jquery-treegrid-master/js/jquery.treegrid.min.js"></script>
-<script src="adminlte/plugins/jquery-treegrid-master/js/jquery.treegrid.bootstrap3.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/jquery-treegrid-master/js/jquery.treegrid.min.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/jquery-treegrid-master/js/jquery.treegrid.bootstrap3.js"></script>
 <#--bootstrap-iconpicker-->
 <script type="text/javascript"
-        src="adminlte/plugins/bootstrap-iconpicker/bootstrap-iconpicker-iconset-all.min.js"></script>
-<script type="text/javascript" src="adminlte/plugins/bootstrap-iconpicker/bootstrap-iconpicker.min.js"></script>
+        src="${request.contextPath}/adminlte/plugins/bootstrap-iconpicker/bootstrap-iconpicker-iconset-all.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/adminlte/plugins/bootstrap-iconpicker/bootstrap-iconpicker.min.js"></script>
 <!-- treeview 角色管理用-->
-<script type="text/javascript" src="adminlte/plugins/tree/treeview.js"></script>z
+<script type="text/javascript" src="${request.contextPath}/adminlte/plugins/tree/treeview.js"></script>z
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
 <#--datepicker-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.zh-CN.min.js"></script>
 <!-- validate-->
-<script type="text/javascript" src="adminlte/plugins/validate/jquery.validate.js"></script>
+<script type="text/javascript" src="${request.contextPath}/adminlte/plugins/validate/jquery.validate.js"></script>
 <#--防止按钮重复组建-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ladda-bootstrap/0.9.4/ladda.jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ladda-bootstrap/0.9.4/spin.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ladda-bootstrap/0.9.4/ladda.min.js"></script>
 <#--表可编辑-->
-<script type="text/javascript" src="adminlte/plugins/table-edit/bootstrap-table-editable.js"></script>
-<script type="text/javascript" src="adminlte/plugins/table-edit/bootstrap-editable.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/adminlte/plugins/table-edit/bootstrap-table-editable.js"></script>
+<script type="text/javascript" src="${request.contextPath}/adminlte/plugins/table-edit/bootstrap-editable.min.js"></script>
 
 <#-- 文本搜索-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>

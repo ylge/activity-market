@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
     <title>营销策划后台管理系统</title>
-    <link rel="shortcut icon" type="image/x-icon" href="adminlte/dist/img/ehulogo.png">
-    <link rel="stylesheet" href="/adminlte/dist/css/login2.css">
+    <link rel="shortcut icon" type="image/x-icon" href="${request.contextPath}/adminlte/dist/img/ehulogo.png">
+    <link rel="stylesheet" href="${request.contextPath}/adminlte/dist/css/login2.css">
     <style type="text/css">
         #Stage {
             background-color: rgb(57, 173, 205) !important;
@@ -33,9 +33,9 @@
     <div class="demo">
         <div class="login">
             <div class="login__check">
-                <img src="/adminlte/dist/img/ehulogo.png" alt="">
+                <img src="${request.contextPath}/adminlte/dist/img/ehulogo.png" alt="">
             </div>
-            <form action="/postLogin" class="login__form" method="post">
+            <form action="${request.contextPath}/postLogin" class="login__form" method="post">
                 <div class="login__row">
                     <svg class="login__icon name svg-icon" viewBox="0 0 20 20">
                         <path d="M0,20 a10,8 0 0,1 20,0z M10,0 a4,4 0 0,1 0,8 a4,4 0 0,1 0,-8"/>
@@ -61,9 +61,9 @@
     </div>
 </div>
 
-<script src="/adminlte/dist/js/pages/login2.js"></script>
+<script src="${request.contextPath}/adminlte/dist/js/pages/login2.js"></script>
 <!-- jQuery 2.2.3 -->
-<script src="/adminlte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="${request.contextPath}/adminlte/plugins/jQuery/jquery-2.2.3.min.js"></script>
 
 <script>
     $(document).ready(function () {

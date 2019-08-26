@@ -6,7 +6,7 @@
     <artifactId>web</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>ysg-web</name>
+    <name>web</name>
 
     <parent>
         <artifactId>activity-market</artifactId>
