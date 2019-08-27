@@ -12,7 +12,7 @@ import lombok.Data;
 public class ClientUserVO {
     private Integer userId;
     private String openid;
-    private Integer isOrder;
-    private Integer isManager;
+    private boolean isOrder;
+    private boolean isManager;
     private String orderCode;
 }
