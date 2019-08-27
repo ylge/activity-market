@@ -262,7 +262,7 @@
         status = #{status},
         update_time =#{updateTime},
         remark_1 = #{remark1}
-        where order_no = #{orderNo} and status = 2
+        where order_no = #{orderNo}
         <if test="goodsId != null">
             and goods_id = #{goodsId}
         </if>
