@@ -122,7 +122,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     }
 
     public ActivityGoodsVO getGoodsDetail(String goodsId) throws MyException {
-        if(StringUtils.isEmpty(goodsId)){
+        if (StringUtils.isEmpty(goodsId)) {
             throw new MyException("请求参数有误");
         }
         ActivityGoodsVO activityGoodsVO = activityGoodsMapper.getGoodsDetail(goodsId);
@@ -184,7 +184,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         orderInfo.setOrderCode(orderNo);
         orderInfoMapper.insertSelective(orderInfo);
         //去微信预下单
-        PayResponse payResponse = wxService.getPayInfo(orderInfo,clientUser.getOpenid());
+        PayResponse payResponse = wxService.getPayInfo(orderInfo, clientUser.getOpenid());
         return Result.OK(payResponse);
     }
 
@@ -198,24 +198,24 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
      * @return
      */
     public Result addUser(String code, Integer goodsId) {
-        boolean isManager = false;
+        int isManager = 0;
         //获取ipenid
         WxResponse wxResponse = wxService.getSession(code);
         //判断用户是否新用户
         ClientUser clientUser = clientUserMapper.getUserByOpenid(wxResponse.getOpenid());
         if (clientUser == null) {
             //获取用户头像
-            WxUserResponse userResponse = wxService.getUserInfo(wxResponse.getOpenid(),wxResponse.getAccess_token());
+            WxUserResponse userResponse = wxService.getUserInfo(wxResponse.getOpenid(), wxResponse.getAccess_token());
             clientUser = new ClientUser();
             clientUser.setStatus(1);
             clientUser.setOpenid(wxResponse.getOpenid());
             clientUser.setNickName(userResponse.getNickname());
-            clientUser.setAvatar(userResponse.getHeadimgurl().replaceAll("\\\\",""));
-            clientUser.setGoodsId(goodsId);
+            clientUser.setAvatar(userResponse.getHeadimgurl().replaceAll("\\\\", ""));
+//            clientUser.setGoodsId(goodsId);
             clientUserMapper.insertSelective(clientUser);
-        }else{
-            if(clientUser.getGoodsId().equals(goodsId)){
-                isManager =true;
+        } else {
+            if (clientUser.getGoodsId().equals(goodsId)) {
+                isManager = 1;
             }
         }
         ScanRecord scanRecord = scanRecordMapper.getRecordByUserId(clientUser.getUserId());
@@ -237,9 +237,9 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         orderInfoVO.setUserId(clientUser.getUserId().toString());
         orderInfoVO.setGoodsId(goodsId.toString());
         String orderCode = orderInfoMapper.checkIsOrder(orderInfoVO);
-        clientUserVO.setOrder(orderCode!=null);
+        clientUserVO.setIsOrder(orderCode == null ? 0 : 1);
         clientUserVO.setOrderCode(orderCode);
-        clientUserVO.setManager(isManager);
+        clientUserVO.setIsManager(isManager);
         return Result.OK(clientUserVO);
     }
 
@@ -279,7 +279,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     public ActivityManageVO getActivityData(String userId, String goodsId) throws MyException {
         ClientUser clientUser = clientUserMapper.selectByPrimaryKey(userId);
-        if (clientUser == null || clientUser.getGoodsId()==null|| clientUser.getGoodsId() != Integer.parseInt(goodsId)) {
+        if (clientUser == null || clientUser.getGoodsId() == null || clientUser.getGoodsId() != Integer.parseInt(goodsId)) {
             throw new MyException("用户信息有误");
         }
         ActivityManageVO manageVO = orderInfoMapper.getActivityData(goodsId);
@@ -348,10 +348,10 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     public Result getOrderInfo(String orderCode) throws MyException {
         OrderInfoVO orderInfoVO = orderInfoMapper.getOrderDetailByNo(orderCode);
-        if(orderInfoVO == null){
+        if (orderInfoVO == null) {
             throw new MyException("无效的核销码");
         }
-        if(orderInfoVO.getStatus()==3){
+        if (orderInfoVO.getStatus() == 3) {
             throw new MyException("该核销码已使用");
         }
         return Result.OK(orderInfoVO);
