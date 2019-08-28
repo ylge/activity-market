@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * @author geyl
@@ -123,8 +124,8 @@ public class ActivityFrontController {
     }
 
     @PostMapping("getSign")
-    public Result getSign(@RequestBody String url){
-        return wxService.getSign(url);
+    public Result getSign(@RequestBody Map map){
+        return wxService.getSign(map.get("url").toString());
     }
 
     @ResponseBody
