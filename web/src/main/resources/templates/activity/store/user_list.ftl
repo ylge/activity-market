@@ -1,4 +1,4 @@
-<div class="row storeUser">
+<div class="row storeUser width-100">
     <div class="box">
         <div class="box-header">
             <h3 class="box-title">店员设置</h3>
@@ -85,17 +85,17 @@
 
     function operateFormatter(value, row, index) {
         var result = [];
-        if (row.goodsId === '0') {
+        if (row.goodsId !== '0' && row.goodsId != null) {
             result.push(
-                '<a href="#" onclick="updateStoreUser(' + row.userId + ',1,${goodsId!})">',
-                '<i class="fa fa-edit"></i>设为店员',
+                '<a href="#" onclick="updateStoreUser(' + row.userId + ',0,0)">',
+                '<i class="fa fa-edit"></i>设为普通用户',
                 '</a>',
             );
 
         } else {
             result.push(
-                '<a href="#" onclick="updateStoreUser(' + row.userId + ',0,0)">',
-                '<i class="fa fa-edit"></i>设为普通用户',
+                '<a href="#" onclick="updateStoreUser(' + row.userId + ',1,${goodsId!})">',
+                '<i class="fa fa-edit"></i>设为店员',
                 '</a>',
             );
         }
