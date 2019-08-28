@@ -123,7 +123,7 @@ public class ActivityFrontController {
     }
 
     @PostMapping("getSign")
-    public Result getSign(@RequestParam("url") String url){
+    public Result getSign(@RequestBody String url){
         return wxService.getSign(url);
     }
 

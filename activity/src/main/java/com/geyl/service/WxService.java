@@ -231,10 +231,8 @@ public class WxService {
     }
 
     public Result getSign(String url) {
-        log.info("请求的url:" + url);
         String ticket = (String) getJsapiTicket();
         Map map = sign(ticket, url);
-        log.info("返回数据" + map);
         return Result.OK(map);
     }
 
