@@ -326,15 +326,16 @@
       where oi.goods_id = #{goodsId}
     </select>
     <select id="getStoreUser" resultType="com.geyl.vo.StoreUserVO">
-      select
-        cu.user_name userName,
-        count(oi.order_id) countNum
-      from
-      order_info oi
-       left join client_user cu
-        on oi.p_user_id = cu.user_id
-        and oi.goods_id = cu.goods_id
-      where oi.goods_id = #{goodsId}
+        SELECT
+          cu.user_name userName,
+          (SELECT
+            COUNT(1)
+          FROM
+            order_info
+          WHERE p_user_id = cu.user_id) countNum
+        FROM
+          client_user cu
+        WHERE cu.goods_id = #{goodsId}
     </select>
     <select id="getIncomeListByGoodsId" resultType="com.geyl.vo.IncomeVO">
         select
