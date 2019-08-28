@@ -212,7 +212,6 @@ public class WxService {
                 "&noncestr=" + nonce_str +
                 "&timestamp=" + timestamp +
                 "&url=" + url;
-        log.info("string1="+string1);
         try {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
             crypt.reset();

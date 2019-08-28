@@ -75,10 +75,10 @@
     }
 
     function getUser(value, row, index) {
-        if (value === '0') {
-            return "普通用户"
-        } else {
+        if (value !== '0' && value != null) {
             return "店员";
+        } else {
+            return "普通用户"
         }
 
     }
@@ -87,16 +87,16 @@
         var result = [];
         if (row.goodsId === '0') {
             result.push(
-                    '<a href="#" onclick="updateStoreUser(' + row.userId + ',1,${goodsId!})">',
-                    '<i class="fa fa-edit"></i>设为店员',
-                    '</a>',
+                '<a href="#" onclick="updateStoreUser(' + row.userId + ',1,${goodsId!})">',
+                '<i class="fa fa-edit"></i>设为店员',
+                '</a>',
             );
 
         } else {
             result.push(
-                    '<a href="#" onclick="updateStoreUser(' + row.userId + ',0,0)">',
-                    '<i class="fa fa-edit"></i>设为普通用户',
-                    '</a>',
+                '<a href="#" onclick="updateStoreUser(' + row.userId + ',0,0)">',
+                '<i class="fa fa-edit"></i>设为普通用户',
+                '</a>',
             );
         }
         return result.join('');
@@ -106,15 +106,15 @@
     function updateStoreUser(userId, status, goodsId) {
         var url = 'activity/user/delete';
         $.post(url, {'userId': userId, 'status': status, 'goodsId': goodsId},
-                function (result) {
-                    console.log(result);
-                    if (result.code === 200) {
-                        alertMsg("操作成功", "success");
-                        storeUserReload();
-                    } else {
-                        alertMsg("操作失败:" + result.msg, "danger");
-                    }
+            function (result) {
+                console.log(result);
+                if (result.code === 200) {
+                    alertMsg("操作成功", "success");
+                    storeUserReload();
+                } else {
+                    alertMsg("操作失败:" + result.msg, "danger");
                 }
+            }
         );
     }
 
