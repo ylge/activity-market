@@ -67,8 +67,10 @@ public class WxService {
         if (pid != null) {
             redirect_url = redirect_url + "&pid=" + pid;
         }
-        return String.format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect",
+        String return_url = String.format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect",
                 wx_appid, redirect_url, "snsapi_userinfo");
+        log.info(return_url);
+        return return_url;
     }
 
     /**
