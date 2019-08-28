@@ -284,7 +284,6 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         ActivityManageVO manageVO = orderInfoMapper.getActivityData(goodsId);
         manageVO.setOrder_list(orderInfoMapper.getOrderList(goodsId));
         Map<String, Object> param = new HashMap<>();
-        param.put("userId", userId);
         param.put("goodsId", goodsId);
         manageVO.setStore_user(orderInfoMapper.getStoreUser(param));
         return manageVO;
