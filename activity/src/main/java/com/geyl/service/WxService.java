@@ -133,6 +133,7 @@ public class WxService {
         request.setOpenid(openid);
 
         PayResponse response = bestPayService.pay(request);
+        response.setOrderId(order.getOrderNo());
         log.info(JsonUtil.toJson(response));
         return response;
     }
