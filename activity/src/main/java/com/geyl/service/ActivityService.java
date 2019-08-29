@@ -208,7 +208,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             clientUser.setAvatar(userResponse.getHeadimgurl().replaceAll("\\\\", ""));
             clientUserMapper.insertSelective(clientUser);
         } else {
-            if (clientUser.getGoodsId().equals(goodsId)) {
+            if (clientUser.getGoodsId()!=null && clientUser.getGoodsId().equals(goodsId)) {
                 isManager = true;
             }
         }
