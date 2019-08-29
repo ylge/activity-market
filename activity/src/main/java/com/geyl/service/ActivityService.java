@@ -158,7 +158,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
      * @return
      */
     public Result addOrder(OrderAdd orderAdd) throws Exception {
-        log.info("下单"+orderAdd);
+        log.info("下单:"+orderAdd);
         ActivityGoods activityGoods = activityGoodsMapper.selectByPrimaryKey(orderAdd.getGoodsId());
         //更新用户信息
         ClientUser clientUser = clientUserMapper.selectByPrimaryKey(orderAdd.getUserId());
@@ -167,6 +167,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         clientUserMapper.updateByPrimaryKeySelective(clientUser);
         OrderInfo orderInfo = new OrderInfo();
         BeanUtils.copyProperties(orderAdd, orderInfo);
+        orderInfo.setPUserId(orderAdd.getPid());
         orderInfo.setBuyCount(1);
         orderInfo.setOrderAmount(activityGoods.getGoodsPrice());
         orderInfo.setCreateTime(new Date());
@@ -176,7 +177,6 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         String orderNo = "YSG" + UUID.randomUUID().toString().substring(0, 8);
         orderInfo.setOrderNo(orderNo);
         orderInfo.setOrderCode(orderNo);
-        log.info("下单"+orderInfo.toString());
         orderInfoMapper.insertSelective(orderInfo);
         //去微信预下单
         PayResponse payResponse = wxService.getPayInfo(orderInfo, clientUser.getOpenid());
