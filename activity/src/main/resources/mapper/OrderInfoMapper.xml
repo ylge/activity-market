@@ -310,7 +310,7 @@
     SELECT
         COUNT(order_id) joinNumber,
         SUM(payment_amount) storeIncome,
-        (SELECT SUM(amount) FROM user_account_record WHERE remark_1 = oi.goods_id ) storeWithdraw,
+        IFNULL((SELECT SUM(amount) FROM user_account_record WHERE remark_1 = oi.goods_id ),0) storeWithdraw,
         (select count(id) from scan_record where goods_id = oi.goods_id ) scanNumber
         FROM order_info oi
         where oi.goods_id = #{goodsId}
