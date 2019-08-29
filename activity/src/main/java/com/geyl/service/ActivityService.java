@@ -15,6 +15,7 @@ import com.geyl.vo.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lly835.bestpay.model.PayResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ import java.util.*;
  * @date 2019-4-11 10:07
  */
 @Service
+@Slf4j
 public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
 
     @Autowired
@@ -157,20 +159,11 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
      */
     public Result addOrder(OrderAdd orderAdd) throws Exception {
         ActivityGoods activityGoods = activityGoodsMapper.selectByPrimaryKey(orderAdd.getGoodsId());
+        //更新用户信息
         ClientUser clientUser = clientUserMapper.selectByPrimaryKey(orderAdd.getUserId());
-        if (clientUser == null) {//新建用户
-            clientUser = new ClientUser();
-            clientUser.setUserName(orderAdd.getUserName());
-            clientUser.setPhone(orderAdd.getPhone());
-            clientUser.setStatus(1);
-            clientUser.setOpenid(orderAdd.getOpenid());
-            clientUserMapper.insertSelective(clientUser);
-            orderAdd.setUserId(clientUser.getUserId().toString());
-        } else {
-            clientUser.setUserName(orderAdd.getUserName());
-            clientUser.setPhone(orderAdd.getPhone());
-            clientUserMapper.updateByPrimaryKeySelective(clientUser);
-        }
+        clientUser.setUserName(orderAdd.getUserName());
+        clientUser.setPhone(orderAdd.getPhone());
+        clientUserMapper.updateByPrimaryKeySelective(clientUser);
         OrderInfo orderInfo = new OrderInfo();
         BeanUtils.copyProperties(orderAdd, orderInfo);
         orderInfo.setBuyCount(1);
@@ -182,6 +175,8 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         String orderNo = "YSG" + UUID.randomUUID().toString().substring(0, 8);
         orderInfo.setOrderNo(orderNo);
         orderInfo.setOrderCode(orderNo);
+        log.info("下单"+orderInfo.toString());
+        log.info("下单"+orderInfo);
         orderInfoMapper.insertSelective(orderInfo);
         //去微信预下单
         PayResponse payResponse = wxService.getPayInfo(orderInfo, clientUser.getOpenid());
