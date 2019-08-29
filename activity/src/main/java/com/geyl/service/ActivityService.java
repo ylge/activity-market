@@ -167,7 +167,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         clientUserMapper.updateByPrimaryKeySelective(clientUser);
         OrderInfo orderInfo = new OrderInfo();
         BeanUtils.copyProperties(orderAdd, orderInfo);
-        orderInfo.setPUserId(orderAdd.getPid());
+        orderInfo.setPUserId(orderAdd.getParentId());
         orderInfo.setBuyCount(1);
         orderInfo.setOrderAmount(activityGoods.getGoodsPrice());
         orderInfo.setCreateTime(new Date());

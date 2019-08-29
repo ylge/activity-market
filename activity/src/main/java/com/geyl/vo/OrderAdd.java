@@ -16,5 +16,5 @@ public class OrderAdd implements Serializable {
     private String userId;
     private String userName;
     private String openid;
-    private String pid;
+    private String parentId;
 }
