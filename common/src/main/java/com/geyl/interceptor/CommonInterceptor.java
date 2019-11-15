@@ -16,7 +16,12 @@ public class CommonInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         //请求参数
-        Map<String,String[]> param = httpServletRequest.getParameterMap();
+        Map<String, String[]> param = httpServletRequest.getParameterMap();
+        if (request.getMethod().equalsIgnoreCase(String.valueOf(HttpMethod.OPTIONS))) {
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Headers", "Content-Type,guid,token,source,appType,os,version");
+            return false;
+        }
         return true;
     }
 

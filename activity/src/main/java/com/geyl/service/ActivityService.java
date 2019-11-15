@@ -5,6 +5,7 @@ import com.geyl.base.impl.BaseServiceImpl;
 import com.geyl.bean.PageResult;
 import com.geyl.bean.Result;
 import com.geyl.bean.model.*;
+import com.geyl.bean.model.redpack.SendRedPack;
 import com.geyl.bean.wx.WxResponse;
 import com.geyl.bean.wx.WxUserResponse;
 import com.geyl.dao.*;
@@ -158,7 +159,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
      * @return
      */
     public Result addOrder(OrderAdd orderAdd) throws Exception {
-        log.info("下单:"+orderAdd);
+        log.info("下单:" + orderAdd);
         ActivityGoods activityGoods = activityGoodsMapper.selectByPrimaryKey(orderAdd.getGoodsId());
         //更新用户信息
         ClientUser clientUser = clientUserMapper.selectByPrimaryKey(orderAdd.getUserId());
@@ -208,7 +209,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             clientUser.setAvatar(userResponse.getHeadimgurl().replaceAll("\\\\", ""));
             clientUserMapper.insertSelective(clientUser);
         } else {
-            if (clientUser.getGoodsId()!=null && clientUser.getGoodsId().equals(goodsId)) {
+            if (clientUser.getGoodsId() != null && clientUser.getGoodsId().equals(goodsId)) {
                 isManager = true;
             }
         }
@@ -255,11 +256,30 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     public void rewardRed(String orderId) {
         OrderInfoVO orderInfoVO = orderInfoMapper.getOrderDetailByNo(orderId);
         int i = userAccountRecordMapper.getGetRewardInfoByOrderNo(orderInfoVO.getOrderNo());
-        if (i > 0) {//已经返现
+        if (i > 0) {
+            log.info("已返现");
             return;
         }
         if (orderInfoVO.getPUserId() != null) {
-            //TODO 发现金红包
+            log.info("发红包" + orderInfoVO.getPUserId());
+            ActivityGoods activityGoods = activityGoodsMapper.getGoodsDetail(orderInfoVO.getGoodsId());
+            if (activityGoods.getRewardAmount() == null) {
+                return;
+            }
+            ClientUser clientUser = clientUserMapper.selectByPrimaryKey(orderInfoVO.getPUserId());
+            SendRedPack sendRedPack = new SendRedPack();
+            sendRedPack.setMch_billno(orderInfoVO.getOrderNo());
+            sendRedPack.setRemark(orderInfoVO.getPUserId());
+            sendRedPack.setRe_openid(clientUser.getOpenid());
+            sendRedPack.setSend_name("鹤壁亿时光文化传播公司");
+            sendRedPack.setTotal_amount(Integer.parseInt(activityGoods.getRewardAmount().toString()) * 100;
+            sendRedPack.setAct_name(activityGoods.getGoodsName());
+            try {
+                wxService.sendRedPack(sendRedPack);
+            } catch (MyException e) {
+                log.error("返送红包失败" + orderInfoVO.getPUserId());
+                e.printStackTrace();
+            }
             UserAccountRecord userAccountRecord = new UserAccountRecord();
             userAccountRecord.setAmount(BigDecimal.ONE);
             userAccountRecord.setCreateTime(new Date());
@@ -268,6 +288,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             userAccountRecord.setRemark1(orderInfoVO.getGoodsId());
             userAccountRecord.setRemark2(orderInfoVO.getUserId());
             userAccountRecordMapper.insert(userAccountRecord);
+            log.info("返红包完成");
         }
     }
 

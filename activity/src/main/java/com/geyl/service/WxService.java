@@ -5,10 +5,20 @@ import com.alibaba.fastjson.JSONObject;
 import com.geyl.bean.Result;
 import com.geyl.bean.model.ActivityGoods;
 import com.geyl.bean.model.OrderInfo;
+import com.geyl.bean.model.paywallet.TransPayWallet;
+import com.geyl.bean.model.paywallet.TransPayWalletInfo;
+import com.geyl.bean.model.paywallet.TransPayWalletResult;
+import com.geyl.bean.model.redpack.SendRedPack;
+import com.geyl.bean.model.redpack.SendRedPackResult;
+import com.geyl.bean.model.redpack.SendRedpackInfo;
 import com.geyl.bean.wx.WxResponse;
 import com.geyl.bean.wx.WxUserResponse;
 import com.geyl.dao.ActivityGoodsMapper;
+import com.geyl.exception.MyException;
 import com.geyl.task.TaskJob;
+import com.geyl.util.SignUtil;
+import com.geyl.util.http.HttpsClient;
+import com.geyl.util.http.Response;
 import com.geyl.vo.OrderInfoVO;
 import com.lly835.bestpay.enums.BestPayTypeEnum;
 import com.lly835.bestpay.model.PayRequest;
@@ -28,6 +38,13 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -50,6 +67,12 @@ public class WxService {
     private String wx_secret;
     @Value(value = "${redirectUrl}")
     private String redirectUrl;
+    @Value(value = "${wechat.mchId}")
+    private String wx_mchId;
+    @Value(value = "${wechat.mchKey}")
+    private String wx_mchKey;
+    @Value(value = "${wechat.keyPath}")
+    private String wx_keyPath;
     @Autowired
     private ActivityGoodsMapper goodsMapper;
     @Autowired
@@ -126,7 +149,7 @@ public class WxService {
         Map<String, String> resp = wxPay.unifiedOrder(data);
         System.out.println(resp);*/
         PayRequest request = new PayRequest();
-        request.setPayTypeEnum(BestPayTypeEnum.WXPAY_H5);
+        request.setPayTypeEnum(BestPayTypeEnum.WXPAY_MWEB);
         request.setOrderId(order.getOrderNo());
         request.setOrderAmount(order.getOrderAmount().doubleValue());
         request.setOrderName(activityGoods.getGoodsName());
@@ -256,4 +279,259 @@ public class WxService {
         return Long.toString(System.currentTimeMillis() / 1000);
     }
 
+    /**
+     * 企业付款到零钱
+     */
+    /**
+     * 企业付款到零钱
+     *
+     * @param transPayWallet 企业付款到零钱信息
+     * @return 企业付款到零钱结果
+     */
+    public TransPayWalletResult transPayWallet(TransPayWallet transPayWallet) throws MyException {
+        //获取微信支付配置
+        //创建RSA公钥请求对象
+        String nonceStr = UUID.randomUUID().toString().replaceAll("-", "");
+        //数据签名
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("mch_appid", wx_appid);
+        map.put("mchid", wx_mchId);
+        map.put("nonce_str", nonceStr);
+        map.put("partner_trade_no", transPayWallet.getPartner_trade_no());
+        map.put("openid", transPayWallet.getOpenid());
+        //不校验真实姓名
+        map.put("check_name", "NO_CHECK");
+        map.put("amount", transPayWallet.getAmount() + "");
+        map.put("desc", transPayWallet.getDesc());
+        map.put("spbill_create_ip", transPayWallet.getSpbill_create_ip());
+        //数据签名
+        String sign = SignUtil.getSign(map, wx_mchKey);
+        //封装提交数据
+        StringBuilder sb = new StringBuilder();
+        sb.append("<xml>");
+        sb.append("<mch_appid>").append(transPayWallet.getMch_appid()).append("</mch_appid>");
+        sb.append("<mchid>").append(wx_mchId).append("</mchid>");
+        sb.append("<nonce_str>").append(nonceStr).append("</nonce_str>");
+        sb.append("<partner_trade_no>").append(transPayWallet.getPartner_trade_no()).append("</partner_trade_no>");
+        sb.append("<openid>").append(transPayWallet.getOpenid()).append("</openid>");
+        sb.append("<check_name>NO_CHECK</check_name>");
+        sb.append("<amount>").append(transPayWallet.getAmount()).append("</amount>");
+        sb.append("<desc>").append(transPayWallet.getDesc()).append("</desc>");
+        sb.append("<spbill_create_ip>").append(transPayWallet.getSpbill_create_ip()).append("</spbill_create_ip>");
+        sb.append("<sign>").append(sign).append("</sign>");
+        sb.append("</xml>");
+        String xml = sb.toString();
+        System.out.println("调试模式_企业付款到零钱接口 提交XML数据：" + xml);
+        HttpsClient httpsClient = new HttpsClient();
+        //发起请求，企业付款到零钱API
+        Response response = httpsClient.postXmlWithCert("https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers", xml, wx_mchId, wx_keyPath, wx_secret);
+        //获取返回内容
+        String xmlResult = response.asString();
+        System.out.println("调试模式_企业付款到零钱接口 返回XML数据：" + xmlResult);
+        try {
+            //创建XML解析对象
+            JAXBContext context = JAXBContext.newInstance(TransPayWalletResult.class);
+            XMLInputFactory xif = XMLInputFactory.newFactory();
+            xif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+            xif.setProperty(XMLInputFactory.SUPPORT_DTD, true);
+            //防XXE攻击
+            XMLStreamReader xsr = xif.createXMLStreamReader(new StringReader(xmlResult));
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            //解析XML对象
+            TransPayWalletResult transPayWalletResult = (TransPayWalletResult) unmarshaller.unmarshal(xsr);
+            if (!"SUCCESS".equals(transPayWalletResult.getReturn_code())) {
+                log.info("微信返回：" + transPayWalletResult.getReturn_msg());
+                throw new MyException(transPayWalletResult.getReturn_msg());
+            }
+            return transPayWalletResult;
+        } catch (JAXBException | XMLStreamException ex) {
+            return null;
+        }
+    }
+
+    /**
+     * 查询企业付款到零钱信息
+     *
+     * @param partnerTradeNo 商户企业付款单号
+     * @param appid          微信公众帐号ID
+     * @return 企业付款到零钱信息
+     */
+    public TransPayWalletInfo getTransferInfo(String partnerTradeNo, String appid) throws MyException {
+        //获取微信支付配置
+        String nonceStr = UUID.randomUUID().toString().replaceAll("-", "");
+        //数据签名
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("mch_id", wx_mchId);
+        map.put("nonce_str", nonceStr);
+        map.put("partner_trade_no", partnerTradeNo);
+        map.put("appid", appid);
+        //数据签名
+        String sign = SignUtil.getSign(map, wx_mchKey);
+        //封装提交数据
+        String xml = "<xml>"
+                + "<mch_id>" + wx_mchId + "</mch_id>"
+                + "<nonce_str>" + nonceStr + "</nonce_str>"
+                + "<partner_trade_no>" + partnerTradeNo + "</partner_trade_no>"
+                + "<appid>" + appid + "</appid>"
+                + "<sign>" + sign + "</sign>"
+                + "</xml>";
+        //发起请求，查询企业付款到零钱结果
+        HttpsClient httpsClient = new HttpsClient();
+        System.out.println("调试模式_查询企业付款到零钱接口 提交XML数据：" + xml);
+        //发起请求，查询企业付款到零钱API
+        Response response = httpsClient.postXmlWithCert("https://api.mch.weixin.qq.com/mmpaymkttransfers/gettransferinfo", xml, wx_mchId, wx_keyPath, wx_secret);
+        //获取返回内容
+        String xmlResult = response.asString();
+        System.out.println("调试模式_查询企业付款到零钱接口 返回XML数据：" + xmlResult);
+        try {
+            //创建XML解析对象
+            JAXBContext context = JAXBContext.newInstance(TransPayWalletInfo.class);
+            XMLInputFactory xif = XMLInputFactory.newFactory();
+            xif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+            xif.setProperty(XMLInputFactory.SUPPORT_DTD, true);
+            //防XXE攻击
+            XMLStreamReader xsr = xif.createXMLStreamReader(new StringReader(xmlResult));
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            //解析XML对象
+            TransPayWalletInfo transPayWalletInfo = (TransPayWalletInfo) unmarshaller.unmarshal(xsr);
+            if (!"SUCCESS".equals(transPayWalletInfo.getReturn_code())) {
+                log.info("微信返回：" + transPayWalletInfo.getReturn_msg());
+                throw new MyException(transPayWalletInfo.getReturn_msg());
+            }
+            return transPayWalletInfo;
+        } catch (JAXBException | XMLStreamException ex) {
+            return null;
+        }
+    }
+
+    /**
+     * 发放普通红包
+     *
+     * @param sendRedPack 现金红包对象
+     * @return 发放普通红包返回结果对象
+     */
+    public SendRedPackResult sendRedPack(SendRedPack sendRedPack) throws MyException {
+        //获取微信支付配置
+        String nonceStr = UUID.randomUUID().toString().replaceAll("-", "");
+        //签名数据
+        sendRedPack.setWxappid(wx_appid);
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("nonce_str", nonceStr);
+        map.put("mch_billno", sendRedPack.getMch_billno());
+        map.put("mch_id", wx_mchId);
+        map.put("wxappid", sendRedPack.getWxappid());
+        map.put("send_name", sendRedPack.getSend_name());
+        map.put("re_openid", sendRedPack.getRe_openid());
+        map.put("total_amount", sendRedPack.getTotal_amount() + "");
+        map.put("total_num", "1");
+        map.put("wishing", sendRedPack.getWishing());
+        map.put("client_ip", sendRedPack.getClient_ip());
+        map.put("act_name", sendRedPack.getAct_name());
+        map.put("remark", sendRedPack.getRemark());
+        //进行数据签名
+        String sign = SignUtil.getSign(map, wx_mchKey);
+        //将统一下单对象转成XML
+        StringBuilder sb = new StringBuilder();
+        sb.append("<xml>");
+        sb.append("<sign><![CDATA[").append(sign).append("]]></sign>");
+        sb.append("<mch_billno><![CDATA[").append(sendRedPack.getMch_billno()).append("]]></mch_billno>");
+        sb.append("<mch_id><![CDATA[").append(wx_mchId).append("]]></mch_id>");
+        sb.append("<wxappid><![CDATA[").append(sendRedPack.getWxappid()).append("]]></wxappid>");
+        sb.append("<send_name><![CDATA[").append(sendRedPack.getSend_name()).append("]]></send_name>");
+        sb.append("<re_openid><![CDATA[").append(sendRedPack.getRe_openid()).append("]]></re_openid>");
+        sb.append("<total_amount><![CDATA[").append(sendRedPack.getTotal_amount()).append("]]></total_amount>");
+        sb.append("<total_num><![CDATA[").append(1).append("]]></total_num>");
+        sb.append("<wishing><![CDATA[").append(sendRedPack.getWishing()).append("]]></wishing>");
+        sb.append("<client_ip><![CDATA[").append(sendRedPack.getClient_ip()).append("]]></client_ip>");
+        sb.append("<act_name><![CDATA[").append(sendRedPack.getAct_name()).append("]]></act_name>");
+        sb.append("<remark><![CDATA[").append(sendRedPack.getRemark()).append("]]></remark>");
+        sb.append("<nonce_str><![CDATA[").append(nonceStr).append("]]></nonce_str>");
+        sb.append("</xml>");
+        String xml = sb.toString();
+        System.out.println("调试模式_发送普通红包接口 提交XML数据：" + xml);
+        //创建请求对象
+        HttpsClient httpsClient = new HttpsClient();
+        //发起请求，发送普通红包
+        Response response = httpsClient.postXmlWithCert("https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack", xml, wx_mchId, wx_keyPath, wx_secret);
+        //获取微信平台下单接口返回数据
+        String xmlResult = response.asString();
+        try {
+            //创建XML解析对象
+            JAXBContext context = JAXBContext.newInstance(SendRedPackResult.class);
+            XMLInputFactory xif = XMLInputFactory.newFactory();
+            xif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+            xif.setProperty(XMLInputFactory.SUPPORT_DTD, true);
+            //防XXE攻击
+            XMLStreamReader xsr = xif.createXMLStreamReader(new StringReader(xmlResult));
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            //解析XML对象
+            SendRedPackResult sendRedPackResult = (SendRedPackResult) unmarshaller.unmarshal(xsr);
+            if (!"SUCCESS".equals(sendRedPackResult.getReturn_code())) {
+                log.error("微信返回" + sendRedPackResult.getReturn_msg());
+                throw new MyException(sendRedPackResult.getReturn_msg());
+            }
+            return sendRedPackResult;
+        } catch (JAXBException | XMLStreamException ex) {
+            return null;
+        }
+    }
+
+    /**
+     * 查询红包记录
+     *
+     * @param mch_billno 商户订单号
+     * @param appid      微信公众帐号ID
+     * @return 红包发送记录
+     * @throws MyException 微信服务异常
+     */
+    public SendRedpackInfo gethbinfo(String mch_billno, String appid) throws MyException {
+        //获取微信支付配置
+        String nonceStr = UUID.randomUUID().toString().replaceAll("-", "");
+        //签名数据
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("nonce_str", nonceStr);
+        map.put("mch_billno", mch_billno);
+        map.put("mch_id", wx_mchId);
+        map.put("appid", appid);
+        map.put("bill_type", "MCHT");
+        //进行数据签名
+        String sign = SignUtil.getSign(map, wx_mchKey);
+        //将统一下单对象转成XML
+        StringBuilder sb = new StringBuilder();
+        sb.append("<xml>");
+        sb.append("<sign><![CDATA[").append(sign).append("]]></sign>");
+        sb.append("<mch_billno><![CDATA[").append(mch_billno).append("]]></mch_billno>");
+        sb.append("<mch_id><![CDATA[").append(wx_appid).append("]]></mch_id>");
+        sb.append("<appid><![CDATA[").append(appid).append("]]></appid>");
+        sb.append("<bill_type><![CDATA[").append("MCHT").append("]]></bill_type>");
+        sb.append("<nonce_str><![CDATA[").append(nonceStr).append("]]></nonce_str>");
+        sb.append("</xml>");
+        String xml = sb.toString();
+        System.out.println("调试模式_查询红包记录接口 提交XML数据：" + xml);
+        //创建请求对象
+        HttpsClient httpsClient = new HttpsClient();
+        //发起请求，查询红包记录
+        Response response = httpsClient.postXmlWithCert("https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo", xml, wx_mchId, wx_keyPath, wx_secret);
+        //获取微信平台下单接口返回数据
+        String xmlResult = response.asString();
+        try {
+            //创建XML解析对象
+            JAXBContext context = JAXBContext.newInstance(SendRedpackInfo.class);
+            XMLInputFactory xif = XMLInputFactory.newFactory();
+            xif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+            xif.setProperty(XMLInputFactory.SUPPORT_DTD, true);
+            //防XXE攻击
+            XMLStreamReader xsr = xif.createXMLStreamReader(new StringReader(xmlResult));
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            //解析XML对象
+            SendRedpackInfo sendRedpackInfo = (SendRedpackInfo) unmarshaller.unmarshal(xsr);
+            if (!"SUCCESS".equals(sendRedpackInfo.getReturn_code())) {
+                log.error("微信返回" + sendRedpackInfo.getReturn_msg());
+                throw new MyException(sendRedpackInfo.getReturn_msg());
+            }
+            return sendRedpackInfo;
+        } catch (JAXBException | XMLStreamException ex) {
+            return null;
+        }
+    }
 }

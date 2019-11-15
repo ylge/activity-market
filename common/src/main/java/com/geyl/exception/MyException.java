@@ -1,5 +1,8 @@
 package com.geyl.exception;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+
 /**
 　* @description:
 　* @author geyl
@@ -11,4 +14,12 @@ public class MyException extends Exception {
         super(message);
     }
 
+    public MyException(String message, NoSuchAlgorithmException ex) {
+    }
+
+    public MyException(String message, NullPointerException npe) {
+    }
+
+    public MyException(String message, IOException ioe) {
+    }
 }

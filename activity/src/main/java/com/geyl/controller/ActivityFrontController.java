@@ -105,7 +105,7 @@ public class ActivityFrontController {
         log.info("【异步回调】request={}", notifyData);
         PayResponse response = bestPayService.asyncNotify(notifyData);
         if (response != null) {
-            //TODO 更新订单状态
+            log.info("更新订单状态");
             activityService.updateOrderStatus(response.getOrderId(), response.getOutTradeNo());
             //判断是否返现
             activityService.rewardRed(response.getOrderId());
