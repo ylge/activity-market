@@ -281,8 +281,9 @@
        oi.pay_account payAccount,
        oi.order_amount orderAmount,
        oi.pay_time payTime,
-       ag.goods_name goodsName
-       from
+       ag.goods_name goodsName,
+       oi.p_user_id pUserId
+    from
        order_info oi
         left join activity_goods ag
         on oi.goods_id = ag.goods_id
