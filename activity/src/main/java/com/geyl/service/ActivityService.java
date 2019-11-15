@@ -272,7 +272,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             sendRedPack.setRemark(orderInfoVO.getPUserId());
             sendRedPack.setRe_openid(clientUser.getOpenid());
             sendRedPack.setSend_name("鹤壁亿时光文化传播公司");
-            sendRedPack.setTotal_amount(Integer.parseInt(activityGoods.getRewardAmount().toString()) * 100;
+            sendRedPack.setTotal_amount(Integer.parseInt(activityGoods.getRewardAmount().toString()) * 100);
             sendRedPack.setAct_name(activityGoods.getGoodsName());
             try {
                 wxService.sendRedPack(sendRedPack);
