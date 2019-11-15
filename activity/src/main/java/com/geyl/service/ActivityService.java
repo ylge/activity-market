@@ -6,6 +6,7 @@ import com.geyl.bean.PageResult;
 import com.geyl.bean.Result;
 import com.geyl.bean.model.*;
 import com.geyl.bean.model.redpack.SendRedPack;
+import com.geyl.bean.model.redpack.SendRedPackResult;
 import com.geyl.bean.wx.WxResponse;
 import com.geyl.bean.wx.WxUserResponse;
 import com.geyl.dao.*;
@@ -272,15 +273,9 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             sendRedPack.setMch_billno(orderInfoVO.getOrderNo());
             sendRedPack.setRemark(orderInfoVO.getPUserId());
             sendRedPack.setRe_openid(clientUser.getOpenid());
-            sendRedPack.setSend_name("鹤壁亿时光文化传播公司");
+            sendRedPack.setSend_name("鹤壁亿时光");
             sendRedPack.setTotal_amount(activityGoods.getRewardAmount().intValue() * 100);
             sendRedPack.setAct_name(activityGoods.getGoodsName());
-            try {
-                wxService.sendRedPack(sendRedPack);
-            } catch (MyException e) {
-                log.error("返送红包失败" + orderInfoVO.getPUserId());
-                e.printStackTrace();
-            }
             UserAccountRecord userAccountRecord = new UserAccountRecord();
             userAccountRecord.setAmount(activityGoods.getRewardAmount());
             userAccountRecord.setCreateTime(new Date());
@@ -291,6 +286,12 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             userAccountRecord.setRemark1(orderInfoVO.getGoodsId());
             userAccountRecord.setRemark2(orderInfoVO.getPUserId());
             userAccountRecordMapper.insert(userAccountRecord);
+            try {
+                SendRedPackResult redPackResult = wxService.sendRedPack(sendRedPack);
+            } catch (MyException e) {
+                log.error("返送红包失败" + orderInfoVO.getPUserId());
+                e.printStackTrace();
+            }
             log.info("返红包完成");
         }
     }

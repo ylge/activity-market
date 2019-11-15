@@ -449,6 +449,7 @@ public class WxService {
         sb.append("<nonce_str><![CDATA[").append(nonceStr).append("]]></nonce_str>");
         sb.append("</xml>");
         String xml = sb.toString();
+        log.info(xml);
         //创建请求对象
         HttpsClient httpsClient = new HttpsClient();
         //发起请求，发送普通红包
@@ -469,7 +470,6 @@ public class WxService {
             log.info("微信返回:ErrCode:" + sendRedPackResult.getErr_code() + ",ErrCodeDes:" + sendRedPackResult.getErr_code_des() + ",returnCode:" + sendRedPackResult.getReturn_code() + ",returnMsg:" + sendRedPackResult.getReturn_msg() + ",resultCode:" + sendRedPackResult.getResult_code());
             if (!"SUCCESS".equals(sendRedPackResult.getReturn_code())) {
                 log.error("微信返回" + sendRedPackResult.getReturn_msg());
-                throw new MyException(sendRedPackResult.getReturn_msg());
             }
             return sendRedPackResult;
         } catch (JAXBException | XMLStreamException ex) {
