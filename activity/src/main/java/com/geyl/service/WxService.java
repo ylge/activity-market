@@ -73,6 +73,7 @@ public class WxService {
     private String wx_mchKey;
     @Value(value = "${wechat.keyPath}")
     private String wx_keyPath;
+
     @Autowired
     private ActivityGoodsMapper goodsMapper;
     @Autowired
@@ -149,7 +150,7 @@ public class WxService {
         Map<String, String> resp = wxPay.unifiedOrder(data);
         System.out.println(resp);*/
         PayRequest request = new PayRequest();
-        request.setPayTypeEnum(BestPayTypeEnum.WXPAY_MWEB);
+        request.setPayTypeEnum(BestPayTypeEnum.WXPAY_H5);
         request.setOrderId(order.getOrderNo());
         request.setOrderAmount(order.getOrderAmount().doubleValue());
         request.setOrderName(activityGoods.getGoodsName());
