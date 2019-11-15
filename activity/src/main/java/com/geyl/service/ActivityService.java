@@ -282,12 +282,14 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
                 e.printStackTrace();
             }
             UserAccountRecord userAccountRecord = new UserAccountRecord();
-            userAccountRecord.setAmount(BigDecimal.ONE);
+            userAccountRecord.setAmount(activityGoods.getRewardAmount());
             userAccountRecord.setCreateTime(new Date());
+            userAccountRecord.setType(1);
+            userAccountRecord.setAccount(clientUser.getOpenid());
             userAccountRecord.setTradeNo(orderInfoVO.getOrderNo());
             userAccountRecord.setUserId(orderInfoVO.getPUserId());
             userAccountRecord.setRemark1(orderInfoVO.getGoodsId());
-            userAccountRecord.setRemark2(orderInfoVO.getUserId());
+            userAccountRecord.setRemark2(orderInfoVO.getPUserId());
             userAccountRecordMapper.insert(userAccountRecord);
             log.info("返红包完成");
         }

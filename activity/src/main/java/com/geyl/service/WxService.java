@@ -466,11 +466,10 @@ public class WxService {
             Unmarshaller unmarshaller = context.createUnmarshaller();
             //解析XML对象
             SendRedPackResult sendRedPackResult = (SendRedPackResult) unmarshaller.unmarshal(xsr);
+            log.info("微信返回:ErrCode:" + sendRedPackResult.getErr_code() + ",ErrCodeDes:" + sendRedPackResult.getErr_code_des() + ",returnCode:" + sendRedPackResult.getReturn_code() + ",returnMsg:" + sendRedPackResult.getReturn_msg() + ",resultCode:" + sendRedPackResult.getResult_code());
             if (!"SUCCESS".equals(sendRedPackResult.getReturn_code())) {
                 log.error("微信返回" + sendRedPackResult.getReturn_msg());
                 throw new MyException(sendRedPackResult.getReturn_msg());
-            } else {
-                log.info("微信返回" + sendRedPackResult);
             }
             return sendRedPackResult;
         } catch (JAXBException | XMLStreamException ex) {
@@ -527,6 +526,7 @@ public class WxService {
             Unmarshaller unmarshaller = context.createUnmarshaller();
             //解析XML对象
             SendRedpackInfo sendRedpackInfo = (SendRedpackInfo) unmarshaller.unmarshal(xsr);
+            log.info("微信返回:ErrCode:" + sendRedpackInfo.getErr_code() + ",ErrCodeDes:" + sendRedpackInfo.getErr_code_des() + ",returnCode:" + sendRedpackInfo.getReturn_code() + ",returnMsg:" + sendRedpackInfo.getReturn_msg() + ",resultCode:" + sendRedpackInfo.getResult_code());
             if (!"SUCCESS".equals(sendRedpackInfo.getReturn_code())) {
                 log.error("微信返回" + sendRedpackInfo.getReturn_msg());
                 throw new MyException(sendRedpackInfo.getReturn_msg());
