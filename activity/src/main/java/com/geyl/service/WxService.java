@@ -325,7 +325,7 @@ public class WxService {
         System.out.println("调试模式_企业付款到零钱接口 提交XML数据：" + xml);
         HttpsClient httpsClient = new HttpsClient();
         //发起请求，企业付款到零钱API
-        Response response = httpsClient.postXmlWithCert("https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers", xml, wx_mchId, wx_keyPath, wx_secret);
+        Response response = httpsClient.postXmlWithCert("https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers", xml, wx_mchId, wx_keyPath, wx_mchKey);
         //获取返回内容
         String xmlResult = response.asString();
         System.out.println("调试模式_企业付款到零钱接口 返回XML数据：" + xmlResult);
@@ -380,7 +380,7 @@ public class WxService {
         HttpsClient httpsClient = new HttpsClient();
         System.out.println("调试模式_查询企业付款到零钱接口 提交XML数据：" + xml);
         //发起请求，查询企业付款到零钱API
-        Response response = httpsClient.postXmlWithCert("https://api.mch.weixin.qq.com/mmpaymkttransfers/gettransferinfo", xml, wx_mchId, wx_keyPath, wx_secret);
+        Response response = httpsClient.postXmlWithCert("https://api.mch.weixin.qq.com/mmpaymkttransfers/gettransferinfo", xml, wx_mchId, wx_keyPath, wx_mchKey);
         //获取返回内容
         String xmlResult = response.asString();
         System.out.println("调试模式_查询企业付款到零钱接口 返回XML数据：" + xmlResult);
@@ -453,7 +453,7 @@ public class WxService {
         //创建请求对象
         HttpsClient httpsClient = new HttpsClient();
         //发起请求，发送普通红包
-        Response response = httpsClient.postXmlWithCert("https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack", xml, wx_mchId, wx_keyPath, wx_secret);
+        Response response = httpsClient.postXmlWithCert("https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack", xml, wx_mchId, wx_keyPath, wx_mchKey);
         //获取微信平台下单接口返回数据
         String xmlResult = response.asString();
         try {
@@ -512,7 +512,7 @@ public class WxService {
         //创建请求对象
         HttpsClient httpsClient = new HttpsClient();
         //发起请求，查询红包记录
-        Response response = httpsClient.postXmlWithCert("https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo", xml, wx_mchId, wx_keyPath, wx_secret);
+        Response response = httpsClient.postXmlWithCert("https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo", xml, wx_mchId, wx_keyPath, wx_mchKey);
         //获取微信平台下单接口返回数据
         String xmlResult = response.asString();
         try {
