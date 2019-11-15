@@ -21,7 +21,7 @@ public class UserAccountRecord implements Serializable {
 
     private String tradeNo;
 
-    private String desc;
+    private String content;
 
     private Date createTime;
 

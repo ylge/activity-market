@@ -449,7 +449,6 @@ public class WxService {
         sb.append("<nonce_str><![CDATA[").append(nonceStr).append("]]></nonce_str>");
         sb.append("</xml>");
         String xml = sb.toString();
-        System.out.println("调试模式_发送普通红包接口 提交XML数据：" + xml);
         //创建请求对象
         HttpsClient httpsClient = new HttpsClient();
         //发起请求，发送普通红包
@@ -470,6 +469,8 @@ public class WxService {
             if (!"SUCCESS".equals(sendRedPackResult.getReturn_code())) {
                 log.error("微信返回" + sendRedPackResult.getReturn_msg());
                 throw new MyException(sendRedPackResult.getReturn_msg());
+            } else {
+                log.info("微信返回" + sendRedPackResult);
             }
             return sendRedPackResult;
         } catch (JAXBException | XMLStreamException ex) {
