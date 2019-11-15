@@ -254,6 +254,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     }
 
     public void rewardRed(String orderId) {
+        log.info("发红包流程");
         OrderInfoVO orderInfoVO = orderInfoMapper.getOrderDetailByNo(orderId);
         int i = userAccountRecordMapper.getGetRewardInfoByOrderNo(orderInfoVO.getOrderNo());
         if (i > 0) {
