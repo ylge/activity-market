@@ -274,6 +274,9 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
             sendRedPack.setRemark(orderInfoVO.getPUserId());
             sendRedPack.setRe_openid(clientUser.getOpenid());
             sendRedPack.setSend_name("鹤壁亿时光");
+            sendRedPack.setWishing("感谢您的参与");
+            sendRedPack.setClient_ip("115.29.65.129");
+            sendRedPack.setRemark("快分享给好友，领取更多红包！！！");
             sendRedPack.setTotal_amount(activityGoods.getRewardAmount().intValue() * 100);
             sendRedPack.setAct_name(activityGoods.getGoodsName());
             UserAccountRecord userAccountRecord = new UserAccountRecord();
