@@ -389,6 +389,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
     }
 
     public Result getUserInfoById(String userId, String goodsId) {
+        log.info("测试测试测试");
         boolean isManager = false;
         ClientUser clientUser = clientUserMapper.selectByPrimaryKey(userId);
         if (clientUser.getGoodsId() != null && clientUser.getGoodsId().equals(goodsId)) {
