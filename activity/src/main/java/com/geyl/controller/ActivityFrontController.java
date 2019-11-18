@@ -79,7 +79,7 @@ public class ActivityFrontController {
      * @param userId
      * @return
      */
-    @PostMapping("user")
+    @PostMapping("user/info")
     public Result getUserInfo(@RequestParam("userId") String userId, @RequestParam("goodsId") Integer goodsId) {
         return activityService.getUserInfoById(userId, goodsId);
     }
