@@ -388,7 +388,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         return new PageResult<>(new PageInfo<>(tList));
     }
 
-    public Result getUserInfoById(String userId, String goodsId) {
+    public Result getUserInfoById(String userId, Integer goodsId) {
         log.info("测试测试测试");
         boolean isManager = false;
         ClientUser clientUser = clientUserMapper.selectByPrimaryKey(userId);
@@ -399,7 +399,7 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         BeanUtils.copyProperties(clientUser, clientUserVO);
         OrderInfoVO orderInfoVO = new OrderInfoVO();
         orderInfoVO.setUserId(clientUser.getUserId().toString());
-        orderInfoVO.setGoodsId(goodsId);
+        orderInfoVO.setGoodsId(goodsId.toString());
         String orderCode = orderInfoMapper.checkIsOrder(orderInfoVO);
         clientUserVO.setOrder(orderCode != null);
         clientUserVO.setOrderCode(orderCode);
