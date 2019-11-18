@@ -387,4 +387,22 @@ public class ActivityService extends BaseServiceImpl<ActivityGoods, String> {
         List<StoreCooperate> tList = storeInfoMapper.getcoopertePageList(storeCooperate);
         return new PageResult<>(new PageInfo<>(tList));
     }
+
+    public Result getUserInfoById(String userId, String goodsId) {
+        boolean isManager = false;
+        ClientUser clientUser = clientUserMapper.selectByPrimaryKey(userId);
+        if (clientUser.getGoodsId() != null && clientUser.getGoodsId().equals(goodsId)) {
+            isManager = true;
+        }
+        ClientUserVO clientUserVO = new ClientUserVO();
+        BeanUtils.copyProperties(clientUser, clientUserVO);
+        OrderInfoVO orderInfoVO = new OrderInfoVO();
+        orderInfoVO.setUserId(clientUser.getUserId().toString());
+        orderInfoVO.setGoodsId(goodsId);
+        String orderCode = orderInfoMapper.checkIsOrder(orderInfoVO);
+        clientUserVO.setOrder(orderCode != null);
+        clientUserVO.setOrderCode(orderCode);
+        clientUserVO.setManager(isManager);
+        return Result.OK(clientUserVO);
+    }
 }

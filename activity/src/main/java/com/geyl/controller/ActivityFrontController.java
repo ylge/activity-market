@@ -36,9 +36,10 @@ public class ActivityFrontController {
      * 微信授权
      */
     @GetMapping("getCode/{goodsId}/{pid}")
-    public Result getCode(@PathVariable String goodsId,@PathVariable String pid){
-        return Result.OK(wxService.getRequestCodeUrl(goodsId,pid));
+    public Result getCode(@PathVariable String goodsId, @PathVariable String pid) {
+        return Result.OK(wxService.getRequestCodeUrl(goodsId, pid));
     }
+
     /**
      * 查询活动页面数据
      *
@@ -62,7 +63,7 @@ public class ActivityFrontController {
     }
 
     /**
-     * 获取用户信息
+     * 用户新增
      *
      * @param code
      * @return
@@ -70,6 +71,17 @@ public class ActivityFrontController {
     @PostMapping("user/add")
     public Result addUser(@RequestParam("code") String code, @RequestParam("goodsId") Integer goodsId) {
         return activityService.addUser(code, goodsId);
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @param userId
+     * @return
+     */
+    @PostMapping("user")
+    public Result getUserInfo(@RequestParam("userId") String userId, @RequestParam("goodsId") String goodsId) {
+        return activityService.getUserInfoById(userId, goodsId);
     }
 
     /**
@@ -124,7 +136,7 @@ public class ActivityFrontController {
     }
 
     @PostMapping("getSign")
-    public Result getSign(@RequestBody Map map){
+    public Result getSign(@RequestBody Map map) {
         return wxService.getSign(map.get("url").toString());
     }
 
